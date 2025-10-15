@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+const playbooks = await getCollection('playbooks');
+---
+<Layout>
+  <h1 class="text-3xl font-bold mb-4">Playbooks</h1>
+  <div class="grid gap-6 md:grid-cols-2">
+    {playbooks.map(pb => (
+      <a href={`/playbooks/${pb.slug}`} class="card group p-4">
+        <h2 class="text-xl font-bold">{pb.data.title}</h2>
+        <p class="mt-2 text-gray-600">{pb.data.description}</p>
+        <div class="mt-2 flex flex-wrap gap-2">
+          {pb.data.tags.map(tag => (
+            <span class="pill">{tag}</span>
+          ))}
+        </div>
+      </a>
+    ))}
+  </div>
+</Layout>

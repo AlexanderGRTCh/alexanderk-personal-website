@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout>
+  <h1 class="text-3xl font-bold mb-4">Contact</h1>
+  <form action="https://usebasin.com/f/9cc815c9e668" method="POST" class="max-w-md mx-auto">
+    <input type="text" name="name" placeholder="Name" required class="input mb-2" />
+    <input type="email" name="email" placeholder="Email" required class="input mb-2" />
+    <textarea name="message" placeholder="Message" required class="input mb-2"></textarea>
+    <button type="submit" class="btn">Send</button>
+  </form>
+  <div class="mt-4 flex gap-4 justify-center">
+    <a href="https://github.com/AlexanderGRTCh" class="btn">GitHub</a>
+    <a href="https://www.linkedin.com/in/alexanderkemos" class="btn">LinkedIn</a>
+  </div>
+</Layout>

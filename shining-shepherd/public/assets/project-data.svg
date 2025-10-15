@@ -1,0 +1,38 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient-bg-data" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#052E16"/>
+      <stop offset="50%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+    <linearGradient id="chart-fill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ECFDF5" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#A7F3D0" stop-opacity="0.75"/>
+    </linearGradient>
+    <linearGradient id="chart-line" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#gradient-bg-data)"/>
+  <rect x="160" y="140" width="880" height="520" rx="46" fill="rgba(6, 95, 70, 0.8)" stroke="rgba(16, 185, 129, 0.35)" stroke-width="3"/>
+  <rect x="220" y="210" width="760" height="360" rx="28" fill="rgba(4, 120, 87, 0.6)"/>
+  <g opacity="0.35" stroke="#99F6E4" stroke-width="2">
+    <path d="M260 260H960" stroke-dasharray="16 14"/>
+    <path d="M260 320H960" stroke-dasharray="16 14"/>
+    <path d="M260 380H960" stroke-dasharray="16 14"/>
+    <path d="M260 440H960" stroke-dasharray="16 14"/>
+  </g>
+  <rect x="300" y="300" width="80" height="210" rx="16" fill="url(#chart-fill)"/>
+  <rect x="410" y="260" width="80" height="250" rx="16" fill="url(#chart-fill)" opacity="0.85"/>
+  <rect x="520" y="220" width="80" height="290" rx="16" fill="url(#chart-fill)" opacity="0.75"/>
+  <rect x="630" y="340" width="80" height="170" rx="16" fill="url(#chart-fill)"/>
+  <rect x="740" y="280" width="80" height="230" rx="16" fill="url(#chart-fill)" opacity="0.8"/>
+  <rect x="850" y="240" width="80" height="270" rx="16" fill="url(#chart-fill)" opacity="0.9"/>
+  <path d="M300 360C360 300 410 340 450 300C490 260 520 280 560 240C600 200 640 300 660 320C680 340 720 310 750 320C780 330 820 280 860 290C900 300 940 260 960 240" stroke="url(#chart-line)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <g opacity="0.55">
+    <circle cx="310" cy="620" r="44" stroke="#99F6E4" stroke-width="4" stroke-dasharray="12 18"/>
+    <circle cx="1030" cy="190" r="58" stroke="#6EE7B7" stroke-width="4" stroke-dasharray="16 18"/>
+    <path d="M210 190L280 240L210 290" stroke="#6EE7B7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

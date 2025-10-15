@@ -1,1 +1,152 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition duration-150 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 dark:bg-indigo-500 dark:hover:bg-indigo-400;
+  }
+
+  .nav-item {
+    @apply relative flex h-full items-center justify-center;
+  }
+
+  .nav-container {
+    @apply relative flex h-full items-center justify-center gap-2 rounded-full border border-white/10 bg-gradient-to-r from-[#0b1021]/85 via-[#0e1529]/75 to-[#0b1021]/85 px-3 py-1 shadow-[0_18px_36px_-18px_rgba(11,15,35,0.85)] backdrop-blur-lg transition dark:border-white/10 dark:from-slate-950/70 dark:via-slate-900/60 dark:to-slate-950/70;
+  }
+
+  .nav-link {
+    @apply relative z-10 flex h-10 items-center justify-center whitespace-nowrap rounded-full px-5 text-sm font-medium text-gray-200 transition-colors duration-150 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 dark:text-gray-300 dark:hover:text-white;
+  }
+
+  .nav-link-active {
+    @apply text-white;
+  }
+
+  .nav-pill {
+    @apply pointer-events-none absolute left-0 top-0 h-10 rounded-full bg-white/10 opacity-0 shadow-[0_20px_36px_-20px_rgba(17,23,41,0.85)] transition duration-200 ease-out dark:bg-white/10 dark:shadow-[0_20px_40px_-22px_rgba(15,23,42,0.9)];
+    transition-property: opacity, transform, width, height;
+  }
+
+  .nav-pill-active {
+    @apply opacity-100;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-gray-900 px-6 py-3 text-sm font-semibold text-white shadow-md transition duration-200 hover:scale-[1.02] hover:bg-gray-950 hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 dark:bg-indigo-500 dark:shadow-lg dark:hover:bg-indigo-400;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-900 shadow-md transition duration-200 hover:border-gray-400 hover:bg-gray-100 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 dark:border-gray-700 dark:text-gray-100 dark:shadow-lg dark:hover:border-gray-500 dark:hover:bg-gray-800;
+  }
+
+  .btn-tertiary {
+    @apply inline-flex items-center justify-center rounded-full bg-gray-100 px-5 py-2 text-sm font-medium text-gray-700 shadow-md transition hover:bg-gray-200 hover:shadow-lg dark:bg-gray-800 dark:text-gray-200 dark:shadow-lg dark:hover:bg-gray-700;
+  }
+
+  .btn-text {
+    @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium text-gray-700 transition hover:text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 dark:text-gray-300 dark:hover:text-white;
+  }
+
+  .card {
+    @apply flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition duration-150 hover:-translate-y-1 hover:shadow-md dark:border-gray-700 dark:bg-gray-900;
+  }
+
+  .card-img {
+    @apply h-52 w-full object-cover;
+  }
+
+  .pill {
+    @apply inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-200;
+  }
+
+  .input {
+    @apply w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-sm transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200;
+  }
+
+  .form-label {
+    @apply text-sm font-semibold text-gray-600 dark:text-gray-300;
+  }
+
+  .section {
+    @apply scroll-mt-24 py-16;
+  }
+
+  .section-heading {
+    @apply mx-auto mb-10 max-w-3xl text-center;
+  }
+
+  .section-kicker {
+    @apply text-xs font-semibold uppercase tracking-[0.35em] text-indigo-500;
+  }
+
+  .section-title {
+    @apply mt-3 text-3xl font-semibold text-gray-900 dark:text-white sm:text-4xl;
+  }
+
+  .section-description {
+    @apply mt-4 text-base text-gray-600 dark:text-gray-300;
+  }
+
+  .avatar-placeholder {
+    @apply relative z-10 flex h-28 w-28 items-center justify-center rounded-full bg-gray-900 text-3xl font-semibold text-white shadow-lg shadow-indigo-200/40 dark:bg-indigo-500;
+  }
+
+  .avatar-ring {
+    @apply pointer-events-none absolute inset-0 m-auto h-36 w-36 rounded-full border border-gray-200/70 blur-[1px] dark:border-gray-700/70;
+  }
+
+  .avatar-gradient {
+    @apply pointer-events-none absolute inset-0 m-auto h-32 w-32 rounded-full bg-gradient-to-br from-indigo-500/30 via-purple-400/20 to-pink-400/20 blur-3xl;
+  }
+
+  .timeline-item {
+    @apply relative pb-10;
+  }
+
+  .timeline-dot {
+    @apply absolute -left-3.5 top-2.5 h-3 w-3 rounded-full border-4 border-white bg-indigo-500 dark:border-gray-900;
+  }
+
+  .timeline-content {
+    @apply ml-6 overflow-hidden rounded-xl border border-transparent bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-gray-700 dark:bg-gray-900;
+  }
+}
+
+@layer utilities {
+  .prose {
+    @apply space-y-4 leading-relaxed text-gray-700 dark:text-gray-200;
+  }
+
+  .prose h2,
+  .prose h3 {
+    @apply font-semibold text-gray-900 dark:text-white;
+  }
+
+  /* Improve readability of content sections on project pages */
+  .prose h2 {
+    @apply mt-6 text-2xl sm:text-3xl;
+  }
+
+  .prose h3 {
+    @apply mt-4 text-xl sm:text-2xl;
+  }
+
+  .prose ul {
+    @apply list-disc pl-5 space-y-2;
+  }
+
+  .prose a {
+    @apply text-indigo-600 underline hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent;
+  }
+}

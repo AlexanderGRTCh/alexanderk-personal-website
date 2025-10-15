@@ -1,0 +1,49 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient-bg-engine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="50%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <linearGradient id="gear-stroke" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FACC15"/>
+      <stop offset="100%" stop-color="#F97316"/>
+    </linearGradient>
+    <linearGradient id="gear-fill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FDE68A" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#F97316" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="pulse" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#gradient-bg-engine)"/>
+  <rect x="160" y="120" width="880" height="560" rx="48" fill="rgba(30, 41, 59, 0.75)" stroke="rgba(148, 163, 184, 0.25)" stroke-width="3"/>
+  <rect x="210" y="180" width="780" height="430" rx="36" fill="#020617" opacity="0.35"/>
+  <g opacity="0.25">
+    <rect x="240" y="210" width="720" height="370" rx="28" stroke="#22D3EE" stroke-width="2" stroke-dasharray="18 20"/>
+    <path d="M280 250H920" stroke="#22D3EE" stroke-width="2" stroke-dasharray="12 12"/>
+    <path d="M280 320H920" stroke="#22D3EE" stroke-width="2" stroke-dasharray="12 12"/>
+    <path d="M280 390H920" stroke="#22D3EE" stroke-width="2" stroke-dasharray="12 12"/>
+    <path d="M280 460H920" stroke="#22D3EE" stroke-width="2" stroke-dasharray="12 12"/>
+  </g>
+  <circle cx="600" cy="410" r="200" fill="url(#pulse)"/>
+  <g transform="translate(480 290)">
+    <circle cx="120" cy="120" r="116" fill="url(#gear-fill)" opacity="0.85"/>
+    <path d="M120 8L144 36L180 32L188 66L222 78L210 112L240 136L210 160L222 194L188 206L180 240L144 236L120 264L96 236L60 240L52 206L18 194L30 160L0 136L30 112L18 78L52 66L60 32L96 36L120 8Z" stroke="url(#gear-stroke)" stroke-width="8" stroke-linejoin="round" fill="none"/>
+    <circle cx="120" cy="120" r="48" fill="#1E293B" opacity="0.6" stroke="#F97316" stroke-width="6"/>
+    <circle cx="120" cy="120" r="14" fill="#F97316"/>
+  </g>
+  <g transform="translate(750 360)" opacity="0.6">
+    <rect x="0" y="0" width="180" height="96" rx="18" fill="rgba(14, 116, 144, 0.55)" stroke="#22D3EE" stroke-width="3"/>
+    <rect x="20" y="24" width="40" height="48" rx="8" fill="#A5F3FC"/>
+    <rect x="72" y="24" width="40" height="48" rx="8" fill="#22D3EE"/>
+    <rect x="124" y="24" width="40" height="48" rx="8" fill="#0EA5E9"/>
+  </g>
+  <g opacity="0.45">
+    <circle cx="330" cy="620" r="48" stroke="#F97316" stroke-width="4" stroke-dasharray="10 14"/>
+    <circle cx="960" cy="210" r="54" stroke="#38BDF8" stroke-width="4" stroke-dasharray="16 16"/>
+    <path d="M950 620C970 590 1010 590 1030 620C1050 650 1090 650 1110 620" stroke="#38BDF8" stroke-width="4" stroke-linecap="round" stroke-dasharray="20 18"/>
+  </g>
+</svg>
