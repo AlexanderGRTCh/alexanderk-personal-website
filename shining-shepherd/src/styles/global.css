@@ -18,7 +18,7 @@
   }
 
   .nav-container {
-    @apply relative flex h-full items-center justify-center gap-2 rounded-full border border-white/10 bg-gradient-to-r from-[#0b1021]/85 via-[#0e1529]/75 to-[#0b1021]/85 px-3 py-1 shadow-[0_18px_36px_-18px_rgba(11,15,35,0.85)] backdrop-blur-lg transition dark:border-white/10 dark:from-slate-950/70 dark:via-slate-900/60 dark:to-slate-950/70;
+    @apply relative flex items-center justify-center gap-2 rounded-full border border-white/10 bg-gradient-to-r from-[#0b1021]/85 via-[#0e1529]/75 to-[#0b1021]/85 px-3 py-1 shadow-[0_18px_36px_-18px_rgba(11,15,35,0.85)] backdrop-blur-lg transition dark:border-white/15 dark:from-slate-800/80 dark:via-slate-700/70 dark:to-slate-800/80 sm:h-full;
   }
 
   .nav-link {
@@ -30,7 +30,7 @@
   }
 
   .nav-pill {
-    @apply pointer-events-none absolute left-0 top-0 h-10 rounded-full bg-white/10 opacity-0 shadow-[0_20px_36px_-20px_rgba(17,23,41,0.85)] transition duration-200 ease-out dark:bg-white/10 dark:shadow-[0_20px_40px_-22px_rgba(15,23,42,0.9)];
+    @apply pointer-events-none absolute left-0 top-0 h-10 rounded-full bg-white/10 opacity-0 shadow-[0_20px_36px_-20px_rgba(17,23,41,0.85)] transition duration-200 ease-out dark:bg-white/20 dark:shadow-[0_20px_40px_-22px_rgba(15,23,42,0.9)];
     transition-property: opacity, transform, width, height;
   }
 
