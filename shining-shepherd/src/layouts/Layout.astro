@@ -110,9 +110,10 @@ const getHref = (id: string) => {
             const listRect = navList.getBoundingClientRect();
             const linkRect = link.getBoundingClientRect();
             const fullyVisible = linkRect.left >= listRect.left && linkRect.right <= listRect.right;
-            if (fullyVisible) return;
-            const targetLeft = link.offsetLeft - (navList.clientWidth - link.clientWidth) / 2;
-            navList.scrollTo({ left: Math.max(0, targetLeft), behavior });
+            const linkLeftInList = linkRect.left - listRect.left + navList.scrollLeft;
+            const targetLeft = Math.max(0, linkLeftInList - (navList.clientWidth - linkRect.width) / 2);
+            if (fullyVisible && Math.abs(navList.scrollLeft - targetLeft) < 2) return;
+            navList.scrollTo({ left: targetLeft, behavior });
           };
 
           const setPillForLink = (link) => {
