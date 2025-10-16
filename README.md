@@ -1,4 +1,4 @@
-# Alexander Kemos — Personal Website
+# Alexander Kemos Personal Website
 
 A clean, fast portfolio that showcases projects, skills, and contact details in a focused way. Built for clarity, approachability, and responsive behavior on every device. Developed with Astro and Tailwind, leveraging AI-assisted coding for efficiency and modern workflows.
 
@@ -25,12 +25,12 @@ Public assets such as the avatar image live in shining-shepherd/public/assets
 Site pages and layout are in shining-shepherd/src
 
 Notable Paths
-shining-shepherd/src/pages — route files including the homepage, projects, playbooks, contact, and request CV
-shining-shepherd/src/layouts/Layout.astro — global page frame and navigation behavior
-shining-shepherd/src/styles/global.css — Tailwind layers and custom utilities
-shining-shepherd/src/content/config.ts — content collection schemas
-shining-shepherd/src/content/projects — project entries in MDX
-shining-shepherd/src/content/playbooks — playbook entries in MDX
+shining-shepherd/src/pages: route files including the homepage, projects, playbooks, contact, and request CV
+shining-shepherd/src/layouts/Layout.astro: global page frame and navigation behavior
+shining-shepherd/src/styles/global.css: Tailwind layers and custom utilities
+shining-shepherd/src/content/config.ts: content collection schemas
+shining-shepherd/src/content/projects: project entries in MDX
+shining-shepherd/src/content/playbooks: playbook entries in MDX
 
 Getting Started
 1. Ensure Node.js 18 or newer is installed.
@@ -69,7 +69,7 @@ Build command npm ci && npm run build
 Output directory dist
 Node version 18 or 20
 Production branch main
-Preview deployments enabled for non‑main branches
+Preview deployments enabled for non main branches
 
 Notes
 Using a subfolder as the project root lets the repository keep documentation and meta files at the top level while Cloudflare builds only the app code. No extra CI workflow is required.
@@ -79,4 +79,3 @@ This project demonstrates modern front end tooling, content modeling, accessibil
 
 License
 MIT License. See the LICENSE file at the project root for details.
-
