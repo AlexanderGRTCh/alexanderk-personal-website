@@ -200,7 +200,7 @@ const getHref = (id: string) => {
                 }
               });
 
-              activate(targetId);
+              activate(targetId, isMobile() ? 'smooth' : 'auto');
             });
           };
 
@@ -216,7 +216,7 @@ const getHref = (id: string) => {
                 }
 
                 const targetId = visibleEntries[0].target.id;
-                activate(targetId, 'auto');
+                activate(targetId, isMobile() ? 'smooth' : 'auto');
               },
               {
                 rootMargin: '-45% 0px -45% 0px',
