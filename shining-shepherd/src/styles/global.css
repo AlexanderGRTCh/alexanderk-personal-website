@@ -18,7 +18,7 @@
   }
 
   .nav-container {
-    @apply relative flex items-center justify-center gap-2 rounded-full border border-white/10 bg-gradient-to-r from-[#0b1021]/85 via-[#0e1529]/75 to-[#0b1021]/85 px-3 py-1 shadow-[0_18px_36px_-18px_rgba(11,15,35,0.85)] backdrop-blur-lg transition dark:border-white/15 dark:from-slate-800/80 dark:via-slate-700/70 dark:to-slate-800/80 sm:h-full;
+    @apply relative flex items-center justify-center gap-2 rounded-full border border-white/10 bg-gradient-to-r from-[#0b1021]/85 via-[#0e1529]/75 to-[#0b1021]/85 px-3 py-1 shadow-[0_18px_36px_-18px_rgba(11,15,35,0.85)] backdrop-blur-lg transition dark:border-white/15 dark:from-slate-800/80 dark:via-slate-700/70 dark:to-slate-800/80 sm:h-full w-[92vw] overflow-hidden sm:w-auto;
   }
 
   .nav-link {

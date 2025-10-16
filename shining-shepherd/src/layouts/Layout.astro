@@ -51,7 +51,7 @@ const getHref = (id: string) => {
       <nav class="fixed top-2 left-1/2 flex -translate-x-1/2 items-center px-3 h-auto sm:top-6 sm:h-[3.25rem]">
         <div class="nav-container" data-nav-container data-is-home={isHome ? 'true' : 'false'}>
           <span class="nav-pill" data-nav-pill></span>
-          <ul class="flex h-10 flex-nowrap items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap no-scrollbar snap-x snap-mandatory text-sm font-medium text-gray-600 sm:h-full sm:justify-center sm:gap-4 dark:text-gray-300">
+          <ul class="flex h-10 w-full flex-nowrap items-center justify-start gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap no-scrollbar snap-x snap-mandatory text-sm font-medium text-gray-600 sm:h-full sm:justify-center sm:gap-4 dark:text-gray-300">
             {navItems.map((item) => (
               <li class="nav-item snap-start" key={item.id}>
                 <a
