@@ -100,6 +100,21 @@ const getHref = (id: string) => {
           let scrollFrame = null;
           let pillFrame = null;
 
+          const isMobile = () => {
+            // Tailwind sm breakpoint: 640px
+            return window.matchMedia('(max-width: 639px)').matches || (navList && navList.scrollWidth > navList.clientWidth);
+          };
+
+          const scrollLinkIntoView = (link, behavior = 'auto') => {
+            if (!navList || !link) return;
+            const listRect = navList.getBoundingClientRect();
+            const linkRect = link.getBoundingClientRect();
+            const fullyVisible = linkRect.left >= listRect.left && linkRect.right <= listRect.right;
+            if (fullyVisible) return;
+            const targetLeft = link.offsetLeft - (navList.clientWidth - link.clientWidth) / 2;
+            navList.scrollTo({ left: Math.max(0, targetLeft), behavior });
+          };
+
           const setPillForLink = (link) => {
             const linkRect = link.getBoundingClientRect();
             const containerRect = navContainer.getBoundingClientRect();
@@ -111,7 +126,7 @@ const getHref = (id: string) => {
             navPill.classList.add('nav-pill-active');
           };
 
-          const activate = (id) => {
+          const activate = (id, behavior = 'auto') => {
             if (!id || currentActive === id || !navIds.includes(id)) {
               return;
             }
@@ -124,6 +139,7 @@ const getHref = (id: string) => {
               link.setAttribute('aria-current', isActive ? 'true' : 'false');
               if (isActive) {
                 setPillForLink(link);
+                if (isMobile()) scrollLinkIntoView(link, behavior);
               }
             });
           };
@@ -148,7 +164,7 @@ const getHref = (id: string) => {
             link.addEventListener('click', () => {
               const { section } = link.dataset;
               if (section) {
-                activate(section);
+                activate(section, 'smooth');
               }
             });
           });
@@ -200,7 +216,7 @@ const getHref = (id: string) => {
                 }
 
                 const targetId = visibleEntries[0].target.id;
-                activate(targetId);
+                activate(targetId, 'auto');
               },
               {
                 rootMargin: '-45% 0px -45% 0px',
@@ -216,7 +232,7 @@ const getHref = (id: string) => {
           window.addEventListener('hashchange', () => {
             const newHash = window.location.hash.replace('#', '');
             if (newHash && navIds.includes(newHash)) {
-              activate(newHash);
+              activate(newHash, 'smooth');
             }
           });
 
@@ -227,6 +243,7 @@ const getHref = (id: string) => {
             const activeLink = navLinks.find((link) => link.dataset.section === currentActive);
             if (activeLink) {
               setPillForLink(activeLink);
+              if (isMobile()) scrollLinkIntoView(activeLink, 'auto');
             }
           });
 
