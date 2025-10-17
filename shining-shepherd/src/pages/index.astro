@@ -9,15 +9,37 @@ const highlightedProjects = (featuredProjects.length > 0 ? featuredProjects : so
 const skills = [
   {
     title: 'Languages',
-    items: ['Python', 'C++', 'JavaScript', 'TypeScript'],
+    items: [
+      'Python',
+      'C++',
+      'Java',
+      'SQL',
+      'HTML & CSS (basic)',
+      'Bash/Shell',
+    ],
   },
   {
     title: 'Frameworks & Tools',
-    items: ['React', 'Astro', 'Node.js', 'Tailwind CSS'],
+    items: [
+      'Git/GitHub · VSCode · Eclipse',
+      'Docker · Terraform · GitHub Actions',
+      'AWS (EC2, S3, IAM, CloudTrail, GuardDuty)',
+      'Linux · Windows',
+      'Security Scanning (Trivy, Bandit) · Active Directory (basic) · Zoom/Teams',
+    ],
   },
   {
     title: 'Core Strengths',
-    items: ['System Design', 'Algorithms', 'Testing', 'DevOps Basics'],
+    items: [
+      'Object-Oriented Programming (OOP)',
+      'Algorithms, Recursion & Debugging',
+      'Data Structures & Optimization',
+      'Testing & Documentation',
+      'CI/CD & DevOps Fundamentals',
+      'Operating System Management (Linux/Windows)',
+      'Networking (VPN, DNS, LAN/Wi-Fi setup)',
+      'Automation & Scripting',
+    ],
   },
 ];
 
@@ -171,7 +193,7 @@ const experience = [
           <ul class="mt-4 space-y-2 text-gray-600 dark:text-gray-300">
             {group.items.map((item) => (
               <li key={item} class="flex items-center gap-2">
-                <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
+                <span class="h-2 w-2 shrink-0 rounded-full bg-indigo-500"></span>
                 {item}
               </li>
             ))}
