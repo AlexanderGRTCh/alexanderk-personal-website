@@ -37,6 +37,70 @@ This pipeline removes that risk by integrating security validation directly into
 ### Technical Explanation
 GitHub Actions YAML workflows orchestrate testing and scanning in sequence, then deploy using Terraform commands. Boto3 manages secret retrieval from AWS Secrets Manager. Terraform automates EC2 provisioning and network setup. The port tester Python script validates network security after deployment.
 
+## Workflow Story: From Commit to Protection
+
+The pipeline moves a change through clear gates. These snapshots walk through a typical run, showing how unsafe changes get stopped early and safe changes proceed.
+
+### 1) Push triggers security gates
+On every push to `main`, GitHub Actions starts the `deploy` job. If a gate fails, the job halts and nothing is deployed.
+
+<figure>
+  <a href="/assets/bandit-block.png" target="_blank" rel="noopener">
+    <img src="/assets/bandit-block.png" alt="GitHub Actions run halted at 'Run Bandit' step" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  </a>
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Bandit fails → pipeline blocks deploy before any infra changes.</figcaption>
+</figure>
+
+### 2) Bandit pinpoints risky code
+Static analysis finds issues like starting a shell with user input (`B605`). The report includes file, line, CWE, and severity.
+
+<figure>
+  <a href="/assets/bandit_report.png" target="_blank" rel="noopener">
+    <img src="/assets/bandit_report.png" alt="Bandit JSON report with HIGH severity finding and file/line reference" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  </a>
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Bandit diagnostics guide quick remediation.</figcaption>
+</figure>
+
+### 3) Trivy catches secrets and image issues
+Trivy scans the repository and container images. Secret exposures or critical CVEs fail the run.
+
+<figure>
+  <a href="/assets/trivy_report.png" target="_blank" rel="noopener">
+    <img src="/assets/trivy_report.png" alt="Trivy scan highlighting a detected secret in the repository" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  </a>
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Secret detected → release blocked until fixed.</figcaption>
+</figure>
+
+### 4) Preview infra with Terraform plan
+After issues are fixed and scans pass, the job generates a Terraform plan so reviewers can see the exact infrastructure delta.
+
+<figure>
+  <a href="/assets/terraform_plan_create.txt.png" target="_blank" rel="noopener">
+    <img src="/assets/terraform_plan_create.txt.png" alt="Terraform plan showing creation of CloudTrail resources" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  </a>
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Plan reviewed before apply to prevent surprises.</figcaption>
+</figure>
+
+### 5) Preserve evidence for audits
+Reports and logs are saved for reproducibility and compliance.
+
+<figure>
+  <a href="/assets/reports_folder.png" target="_blank" rel="noopener">
+    <img src="/assets/reports_folder.png" alt="Reports directory containing Bandit, Trivy, and Terraform artifacts" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  </a>
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Artifacts live under <code>reports/</code>.</figcaption>
+</figure>
+
+### 6) Green build after remediation
+When all gates pass and the plan is approved, deployment finishes cleanly.
+
+<figure>
+  <a href="/assets/ApprovedCL.png" target="_blank" rel="noopener">
+    <img src="/assets/ApprovedCL.png" alt="Successful GitHub Actions run showing green check for the deploy job" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  </a>
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Security gates passed → deploy succeeds.</figcaption>
+</figure>
+
 ## Results
 
 - Every build is tested, scanned, and verified before deployment.
