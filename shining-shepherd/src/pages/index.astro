@@ -66,6 +66,59 @@ const experience = [
       'Delivered small-business websites and API integrations with a focus on accessibility, performance, and maintainability.',
   },
 ];
+const myExperience = [
+  {
+    title: 'Software Developer',
+    company: 'Portfolio Projects',
+    period: '2019 - present',
+    bullets: [
+      'Recent CS grad. Built CI/CD with Python, Terraform, Docker, and AWS, secured with Bandit and Trivy, tested with pytest',
+      'Delivered a PHP and MySQL app with normalized schema and triggers',
+      'Built a classic Snake game in Python and a Java tennis match simulator with momentum based scoring',
+      'Completed 40 plus OOP and algorithm assignments in C++, Java, and Python',
+    ],
+  },
+  {
+    title: 'IT Support and Systems Lab',
+    company: 'Self directed',
+    period: '2020 - present',
+    bullets: [
+      'Configured Windows and Linux installs, imaging, drivers, and troubleshooting',
+      'Basic networking with home routers and VPN clients, plus printer and file sharing',
+      'Wrote small Bash and Python scripts for health checks and log collection',
+      'Built and tuned custom PCs and repaired a Samsung monitor power board',
+    ],
+  },
+  {
+    title: 'Fine Dining Server',
+    company: "Riley's",
+    period: '2025 - present',
+    bullets: [
+      'Awarded Up and Coming Star 2025 for most named five star reviews among more than fifteen new hires',
+      'Excelled in high pressure service and built real meaningful guest connections',
+    ],
+  },
+  {
+    title: 'FOH Manager',
+    company: 'Robba Da Matti',
+    period: 'May 2023 - Feb 2025',
+    bullets: [
+      'Managed floor operations and staffing and ensured POS and network uptime',
+      'Upsell program increased product sales 25 to 35 percent',
+      'Managed transparent tip outs, evaluated new hires, and resolved escalations',
+    ],
+  },
+  {
+    title: 'Server',
+    company: 'Robba Da Matti',
+    period: 'Aug 2021 - Apr 2023',
+    bullets: [
+      'Top sales driven by clear persuasive communication',
+      'Handled two to four thousand dollars in orders per shift with consistent five star feedback',
+      'Built repeat guest relationships and maintained accuracy under pressure',
+    ],
+  },
+];
 ---
 
 <Layout>
@@ -211,7 +264,7 @@ const experience = [
         Roles that shaped my craft, strengthening engineering instincts, communication, and product intuition.
     </div>
     <div class="relative border-l border-gray-200 pl-8 dark:border-gray-700">
-      {experience.map((item, index) => (
+      {myExperience.map((item, index) => (
         <div class="timeline-item" key={item.title}>
           <div class="timeline-dot"></div>
           <div class="timeline-content card">
@@ -219,7 +272,15 @@ const experience = [
               <span class="text-sm font-semibold uppercase tracking-wide text-indigo-500">{item.period}</span>
               <h3 class="mt-2 text-xl font-semibold text-gray-900 dark:text-white">{item.title}</h3>
               <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{item.company}</p>
-              <p class="mt-3 text-gray-600 dark:text-gray-300">{item.description}</p>
+              {item.bullets ? (
+                <ul class="mt-3 list-disc pl-5 space-y-1 text-gray-600 dark:text-gray-300">
+                  {item.bullets.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="mt-3 text-gray-600 dark:text-gray-300">{item.description}</p>
+              )}
             </div>
           </div>
         </div>
