@@ -1,12 +1,94 @@
 ---
-title: "Cpp Game Engine (Demo)"
-description: "A lightweight 2D game engine in C++."
+title: "Tennis Momentum Match Engine"
+description: "A compact simulator that models bias-based chance for the next point and proves it with exact visual replays by seed."
 thumbnail: "/assets/project-engine.svg"
-tags: ["Cpp", "OOP"]
-githubUrl: "https://github.com/youruser/cpp-engine"
+tags: ["Python", "Simulation", "Pygame", "Determinism", "GUI"]
+demoUrl: "/no-demo"
+githubUrl: "https://github.com/AlexanderGRTCh/tennis-match-scorekeeper"
 featured: true
 ---
-Used SDL2, ECS pattern, modular design.
+
+A hands-on probabilistic simulation that models tennis match dynamics with momentum‑shifting bias, rendering a full GUI court view that's fully deterministic and replayable from a seed. It bundles engine logic, adapter streaming, animation planning, and user interaction in a compact project.
+
+### Technical Explanation
+Engine samples each point using an effective bias. Bias updates from momentum and server advantage with clamping for safety. A seeded planner turns outcomes into the same visual path every time. An adapter streams engine events to the viewer. Pygame renders a meter‑based court with stable scaling. The build covers assignment goals: input validation, methods, loops, randomness, and style.
+
+## Problem
+Fixed probabilities feel static, while real matches breathe and small wins tilt the next point. In software simulations, static models lack the dynamic realism of real‑world scenarios, making them less engaging and harder to debug without reproducible visuals.
+
+### Technical Explanation
+This engine addresses that by owning scoring, momentum, bias, and sampling; converting events to a compact point stream via an adapter; building timed animation plans; and advancing points on user input. Determinism enables exact replays, highlighting value in creating reliable, interactive simulations for gaming, education, or data modeling.
+
+## Approach
+- Engine owns scoring, momentum, bias, clamping, server advantage, and sampling to drive realistic point outcomes.
+- Adapter converts events to a clean point stream and terminal reasons for efficient data flow.
+- Animator builds a two‑second plan at 1.0× speed with seeded timing, including serve and rally plans with normalization.
+- Viewer advances points on user input, rendering full singles geometry with correct serve sides.
+- Bias model integrates momentum net nudges toward the last winner (steps of 0.5 for points, 1 for games, 2.5 for sets), with base bias as starting bias plus 0.8× momentum net, clamped 10–90. Just before sampling, subtract 3 if A serves or add 3 if B serves, then draw once.
+- Visuals: diagonal serves into the correct box; SECOND SERVE banner on faults; straight segments with light trail, contact ring, small bounce pop; top‑center OUT/NET/MISS labels; HUD with names, scores, set tallies, numeric bias, and a live bias bar.
+- Determinism: seed controls all visual planning; last point plan cached for exact replay; same seed reproduces the match on any machine.
+
+### Technical Explanation
+The bias is the chance that Player B wins the next point before server advantage. The GUI is fully deterministic from a seed, so visuals replay exactly. The engine decides winners using effective bias, updating from momentum and server advantage with clamping. The adapter streams to the viewer; Pygame handles rendering. This bundles simulation, UI, event loops, and reproducibility, proving behavior with seed‑based evidence.
+
+## Workflow Story: From Launch to Replay
+Watch a real‑time court view while confidence shifts change the chance to win the next point. Press Space or click to play the next point and press R to see the same rally again. Second serve is clear and results are labeled at the top. These snapshots show how user inputs drive dynamic yet reproducible outcomes.
+
+### 1) Launch and setup
+Launch prompts for Player A name, Player B name, number of sets, and starting bias; optional seed and window size via flags. Input validation ensures safe parameters.
+<figure>
+  <img src="/assets/project1.png" alt="Launch prompt with example inputs" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Validated inputs initialize a deterministic session.</figcaption>
+  </figure>
+
+### 2) Play the next point
+Press Space or click to play the next point. If first serve faults, a SECOND SERVE banner appears, then play continues. Outcome flashes, momentum updates, and the bias bar shifts.
+<figure>
+  <img src="/assets/project2.png" alt="Court view during a point with ball trail and bias bar" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Momentum visibly nudges point‑by‑point probabilities.</figcaption>
+</figure>
+
+### 3) Handle faults and visuals
+Serve faults trigger a large SECOND SERVE banner with a short pause. Ball paths use straight segments with light trail, contact ring, and bounce pop; errors display OUT, NET, or MISS at top center.
+<figure>
+  <img src="/assets/project3.png" alt="SECOND SERVE banner and error labels" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Clear feedback strengthens learnability and debugging.</figcaption>
+</figure>
+
+### 4) Replay for verification
+Press R to replay exactly the last point, leveraging the cached plan and seed for determinism. This proves reproducibility across runs and machines.
+<figure>
+  <img src="/assets/project1.png" alt="Side‑by‑side replay confirmation" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Exact replays enable audit‑like verification.</figcaption>
+</figure>
+
+### 5) Adjust and control
+Press S to cycle speeds (starts at 0.25×). Esc or Q exits. Controls maintain the simulation's integrity.
+<figure>
+  <img src="/assets/project2.png" alt="HUD overview with scores, bias bar, and controls" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">HUD surfaces state, bias, and controls accessibly.</figcaption>
+</figure>
+
+### 6) Seeded example run
+For consistency, e.g.: <code>python -m gui.app --no-prompt --player-a Alice --player-b Bob --sets 3 --bias 55 --seed 42</code>. This reproduces the exact match every time.
+<figure>
+  <img src="/assets/project3.png" alt="Terminal output of a seeded run" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Seeds make behavior portable and testable.</figcaption>
+</figure>
 
 ## Results
-Released 3 games, open-sourced.
+- Clean probabilistic modeling with a visible bias signal makes simulations feel alive and realistic.
+- Seed‑based reproducibility is ideal for debugging, testing, and educational demos.
+- Bundles simulation, UI, event loops, and reproducibility in a compact, modular project.
+- Engine and visuals cover full match logic, from bias clamping to server advantage, ensuring safe and engaging outcomes.
+- Every run is traceable via seeds, with cached replays for audit‑style verification.
+
+## Tech Stack
+- Languages: Python (core simulation and GUI)
+- GUI and Rendering: Pygame for meter‑based court, stable scaling, sprites, and event handling
+- Simulation: Seeded randomness for determinism; probabilistic bias modeling with clamping
+- Automation and Structure: Input validation, loops, methods, and randomness handling
+- Reproducibility: Seed‑based planning and caching for exact replays
+
+### Technical Explanation
+Components include: Engine (scoring, momentum, bias clamping, server advantage, sampling); Adapter (clean point stream and terminal reasons); Animator (serve plan, rally plan, timing normalization); Court renderer (meters to pixels, single scale); HUD (scores, bias, and hints); App (event loop, speed control, replay cache); Sprites (ball, players, small chair umpire tower). Controls: Space or mouse click plays next point, R replays last point, S changes speed, Esc or Q quits.
