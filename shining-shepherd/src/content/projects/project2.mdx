@@ -16,6 +16,11 @@ Engine samples each point using an effective bias. Bias updates from momentum an
 ## Problem
 Fixed probabilities feel static, while real matches breathe and small wins tilt the next point. In software simulations, static models lack the dynamic realism of real‑world scenarios, making them less engaging and harder to debug without reproducible visuals.
 
+<figure>
+  <img src="/assets/MomentumBias.png" alt="Infographic comparing Fixed Bias Model (static 50%) vs Momentum-Based Bias Model" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Infographic comparing Fixed Bias Model (static 50%) vs Momentum-Based Bias Model</figcaption>
+</figure>
+
 ### Technical Explanation
 This engine addresses that by owning scoring, momentum, bias, and sampling; converting events to a compact point stream via an adapter; building timed animation plans; and advancing points on user input. Determinism enables exact replays, highlighting value in creating reliable, interactive simulations for gaming, education, or data modeling.
 
@@ -37,27 +42,33 @@ Watch a real‑time court view while confidence shifts change the chance to win 
 ### 1) Launch and setup
 Launch prompts for Player A name, Player B name, number of sets, and starting bias; optional seed and window size via flags. Input validation ensures safe parameters.
 <figure>
-  <img src="/assets/project1.png" alt="Launch prompt with example inputs" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <img src="/assets/MainMenu.png" alt="Launch prompt with example inputs" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
   <figcaption class="text-sm text-gray-600 dark:text-gray-400">Validated inputs initialize a deterministic session.</figcaption>
   </figure>
 
 ### 2) Play the next point
 Press Space or click to play the next point. If first serve faults, a SECOND SERVE banner appears, then play continues. Outcome flashes, momentum updates, and the bias bar shifts.
 <figure>
-  <img src="/assets/project2.png" alt="Court view during a point with ball trail and bias bar" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <img src="/assets/1st.png" alt="Court view during a point with ball trail and bias bar" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
   <figcaption class="text-sm text-gray-600 dark:text-gray-400">Momentum visibly nudges point‑by‑point probabilities.</figcaption>
 </figure>
 
 ### 3) Handle faults and visuals
 Serve faults trigger a large SECOND SERVE banner with a short pause. Ball paths use straight segments with light trail, contact ring, and bounce pop; errors display OUT, NET, or MISS at top center.
 <figure>
-  <img src="/assets/project3.png" alt="SECOND SERVE banner and error labels" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <img src="/assets/BannerNet.png" alt="SECOND SERVE banner and error labels" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
   <figcaption class="text-sm text-gray-600 dark:text-gray-400">Clear feedback strengthens learnability and debugging.</figcaption>
 </figure>
 
 ### 4) Replay for verification
 Press R to replay exactly the last point, leveraging the cached plan and seed for determinism. This proves reproducibility across runs and machines.
+
 <figure>
+  <img src="/assets/Replay2.png" alt="Replay view 1" loading="lazy" class="inline-block w-1/2 rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <img src="/assets/replay3.png" alt="Replay view 2" loading="lazy" class="inline-block w-1/2 rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Exact replays enable audit-like verification.</figcaption>
+</figure>
+<figure class="hidden">
   <img src="/assets/project1.png" alt="Side‑by‑side replay confirmation" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
   <figcaption class="text-sm text-gray-600 dark:text-gray-400">Exact replays enable audit‑like verification.</figcaption>
 </figure>
@@ -74,6 +85,12 @@ For consistency, e.g.: <code>python -m gui.app --no-prompt --player-a Alice --pl
 <figure>
   <img src="/assets/project3.png" alt="Terminal output of a seeded run" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
   <figcaption class="text-sm text-gray-600 dark:text-gray-400">Seeds make behavior portable and testable.</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/CLI1.png" alt="CLI output example 1" loading="lazy" class="inline-block w-1/2 rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <img src="/assets/Cli2.png" alt="CLI output example 2" loading="lazy" class="inline-block w-1/2 rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Command-line views prior to results.</figcaption>
 </figure>
 
 ## Results
