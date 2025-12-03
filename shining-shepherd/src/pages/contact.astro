@@ -7,6 +7,9 @@ import Layout from '../layouts/Layout.astro';
     <input type="text" name="name" placeholder="Name" required class="input mb-2" />
     <input type="email" name="email" placeholder="Email" required class="input mb-2" />
     <textarea name="message" placeholder="Message" required class="input mb-2"></textarea>
+    <div class="mb-3">
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAACEaBeyP2pMmy3_x"></div>
+    </div>
     <button type="submit" class="btn">Send</button>
   </form>
   <div class="mt-4 flex gap-4 justify-center">
@@ -14,3 +17,4 @@ import Layout from '../layouts/Layout.astro';
     <a href="https://www.linkedin.com/in/alexanderkemos" class="btn">LinkedIn</a>
   </div>
 </Layout>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
