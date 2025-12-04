@@ -19,6 +19,8 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const projectSlug = slugMap[slug];
 const project = projectSlug ? await getEntryBySlug('projects', projectSlug) : null;
+const resolvedDemoUrl =
+  projectSlug === 'project3' ? 'https://brightpath-studio.pages.dev/' : project?.data.demoUrl;
 
 if (!project) {
   throw new Response('Not found', { status: 404 });
@@ -30,12 +32,15 @@ const { Content } = await project.render();
 <Layout>
   <a href="/projects" class="btn-secondary mb-4 inline-flex items-center gap-2">&larr; Back to Projects</a>
   <article class="mx-auto max-w-3xl space-y-6">
-    <img
-      src={project.data.thumbnail}
-      alt={project.data.title}
-      class="w-full rounded-lg shadow-sm"
-      loading="lazy"
-    />
+    <figure class="space-y-3">
+      <img
+        src={project.data.thumbnail}
+        alt={project.data.title}
+        class="w-full rounded-lg shadow-sm"
+        loading="lazy"
+      />
+      <figcaption class="text-sm text-center text-gray-600 dark:text-gray-400">Desktop View</figcaption>
+    </figure>
 
     <header>
       <h1 class="text-3xl font-bold">{project.data.title}</h1>
@@ -51,10 +56,10 @@ const { Content } = await project.render();
       <Content />
     </div>
 
-    {(project.data.demoUrl || project.data.githubUrl) && (
+    {(resolvedDemoUrl || project.data.githubUrl) && (
       <div class="flex flex-wrap gap-4">
-        {project.data.demoUrl && (
-          <a href={project.data.demoUrl} class="btn-secondary" target="_blank" rel="noopener">
+        {resolvedDemoUrl && (
+          <a href={resolvedDemoUrl} class="btn-secondary" target="_blank" rel="noopener">
             View Demo
           </a>
         )}

@@ -1,12 +1,81 @@
 ---
-title: "Python Data Pipeline (Demo)"
-description: "Automated ETL pipeline for analytics."
-thumbnail: "/assets/project-data.svg"
-tags: ["Python"]
-demoUrl: "https://demo.example.com"
+title: "Brightpath Studio Fast, Clean Static Website in Astro"
+description: "Single-page marketing site for service pros and local businesses who want a trustworthy, low-fuss web presence."
+thumbnail: "/assets/BrightPath1.png"
+tags: ["Astro", "Static Site", "JavaScript", "CSS", "Cloudflare Pages"]
+demoUrl: "https://brightpath-studio.pages.dev/"
 featured: true
 ---
-Built modular pipeline with Pandas, Airflow.
+
+Brightpath Studio is a static, responsive marketing site that showcases services, proof, and clear calls to action. Built to load quickly on any device, it guides visitors from hero to offers, work samples, pricing, FAQ, and a contact form. The structure stays focused on bookings and inquiries with a mobile-friendly layout and frictionless CTA flow for small businesses and creators who want a premium feel without maintenance overhead.
+
+### Technical Explanation
+The site ships as a single-page Astro build (`src/pages/index.astro`) that pulls section content from top-level arrays for nav, value props, projects, process steps, pricing, and FAQ. A shared layout (`src/layouts/BaseLayout.astro`) wires global styles, while page-scoped rules and assets live beside the page for tight visual control. Client code is minimal: burger menu, scroll-aware topbar, IntersectionObserver reveals, and animated FAQ accordions. Assets live under `public/images/`, styling blends `src/styles/global.css` tokens with page-specific rules, and the CTA form posts to UseBasin with Cloudflare Turnstile. Builds run with `npm run build` to static `dist/`, and Cloudflare Pages auto-builds from GitHub.
+
+<figure>
+  <a href="/assets/MobilePreview.jpg" target="_blank" rel="noopener">
+    <img src="/assets/MobilePreview.jpg" alt="Brightpath Studio mobile hero screenshot" loading="lazy" style="max-width: 50%;" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700 mx-auto" />
+  </a>
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Mobile View</figcaption>
+</figure>
+
+## Problem
+Many small businesses rely on slow, bloated templates or skip a site because setup and upkeep feel painful. They need a focused page that tells their story, shows proof, and drives bookings without maintenance headaches. Generic builders bury CTAs, load too much JavaScript, or feel off-brand on mobile. Brightpath Studio delivers speed, clarity, and trust on day one with a layout tuned for inquiries and bookings.
+
+### Technical Explanation
+A single Astro page with data-driven sections and lean client scripts keeps the experience fast. CTA visibility is preserved with sticky mobile controls, predictable anchors, and minimal JS. Static hosting removes backend upkeep while keeping form handling secure through UseBasin and Turnstile.
+
+## Approach
+- Built a single-page Astro layout with reusable sections for hero, value props, work samples, process, pricing, proof, FAQ, and contact.
+- Drove content via simple arrays at the top of `index.astro` so sections can be edited or reordered without new components.
+- Applied responsive grids and media queries to keep layouts balanced across desktop, tablet, and phone, with a mobile CTA button pinned for quick action.
+- Added lightweight client behavior only where needed: burger navigation, scroll-aware topbar hide/show, reveal-on-scroll, and animated FAQs.
+- Kept assets lean in `public/images/` and used consistent card/pill/badge styling for a cohesive visual system.
+- Wired the CTA form to UseBasin with Cloudflare Turnstile for spam protection, avoiding any custom backend.
+- Configured as a static Astro build for Cloudflare Pages with GitHub-connected auto deploys, keeping hosting cheap, fast, and maintenance-free.
+
+### Technical Explanation
+Sections consume typed data arrays to drive markup and avoid per-section components. Scoped CSS keeps gradients, grids, and typography consistent without heavy frameworks. Client interactivity sticks to small scripts that defer to IntersectionObserver and basic event listeners, preserving Core Web Vitals.
+
+## Workflow Story: From Design to Live Site
+
+### 1) Map the story
+Define nav anchors, sections, and offers as data inside `index.astro` so content is centralized and easy to reorder.
+
+### 2) Build the layout
+Compose hero, work, process, pricing, proof, FAQ, and CTA blocks with shared cards, badges, and consistent spacing.
+
+### 3) Layer interactions
+Hook up the burger navigation, scroll-aware topbar, reveal animations, FAQ transitions, and a mobile CTA button that stays in reach.
+
+### 4) Style and polish
+Apply global tokens plus page-scoped CSS for gradients, cards, responsive grids, and tuned typography to keep the brand cohesive.
+
+### 5) Connect conversions
+Wire the UseBasin form with Turnstile protection, add the Fiverr booking link, and verify CTA flows across devices.
+
+### 6) Ship static
+Run `npm run build` to emit `dist/`, push to GitHub, and let Cloudflare Pages auto-build and deploy to the CDN-backed host.
+
+<figure>
+  <a href="/assets/CloudflareDeployment.png" target="_blank" rel="noopener">
+    <img src="/assets/CloudflareDeployment.png" alt="Cloudflare Pages deployment screenshot" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  </a>
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Cloudflare Pages Deployment</figcaption>
+</figure>
+
+<hr class="section-divider" />
 
 ## Results
-Reduced processing time by 80%.
+- Fast-loading static site with minimal client JavaScript, keeping interactions smooth on mobile and desktop.
+- CTA-first structure that moves visitors from hero to proof to pricing to contact without distractions.
+- Easy edits via simple data arrays: swap offers, add FAQs, or reorder sections without touching the layout skeleton.
+- Mobile-friendly experience with sticky CTA, responsive grids, and scroll-aware navigation that stays out of the way.
+- No backend upkeep: static Cloudflare Pages hosting plus UseBasin/Turnstile for secure form handling.
+- Reusable boilerplate that can be rethemed for other service businesses with minimal changes.
+
+## Tech Stack
+- Framework: Astro 4 (static site generation)
+- Languages: JavaScript/TypeScript support, Astro components, HTML, CSS
+- Hosting/Deployment: Astro static output (`dist/`) for Cloudflare Pages (auto-builds from GitHub)
+- Tooling: npm scripts (`astro dev`, `astro build`, `astro preview`)
