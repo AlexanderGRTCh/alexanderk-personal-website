@@ -1,78 +1,95 @@
 ---
 title: "Live AI Agent Infrastructure"
-description: "A self-hosted, production multi-agent AI system running 24/7 on personal hardware. Handles voice transcription, parallel task orchestration, persistent memory, proactive monitoring, and automated code workflows — all operating continuously through a Telegram interface."
-thumbnail: "/assets/project-ai.svg"
+description: "A self-hosted production multi-agent AI system running 24/7 on personal hardware. Handles voice transcription, parallel task orchestration, persistent memory, proactive monitoring and automated code workflows all operating continuously through a Telegram interface."
+thumbnail: "/assets/ai-infrastructure.jpg"
 tags: ["AI", "Multi-Agent", "Docker", "Linux", "Claude", "Whisper", "Python", "Automation", "Infrastructure"]
 demoUrl: "/no-demo"
 featured: true
 ---
 
-A production AI system I designed, built, and operate on my own hardware. Not a demo. Not a tutorial project. It runs every day, handles real tasks, and evolves as my workflow does.
+A production AI system I designed, built and operate on my own hardware. Not a demo. Not a tutorial project. It runs every day, handles real tasks and evolves as my workflow does.
 
 ### Technical Explanation
-The system runs as a persistent agent inside a Docker container on a self-hosted Debian 12 server, accessible via Telegram. It uses Claude as its reasoning layer, whisper.cpp for local voice transcription, and a file-based memory architecture for session continuity. A coordinator pattern allows it to spawn and manage parallel sub-agents for distinct task types.
+The system runs as a persistent agent inside a Docker container on a self-hosted Debian 12 server accessible via Telegram. It uses Claude as its reasoning layer, whisper.cpp for local voice transcription and a file-based memory architecture for session continuity. A coordinator pattern allows it to spawn and manage parallel sub-agents for distinct task types.
 
 ## Problem
 
-AI tools are everywhere — but they're stateless, cloud-dependent, and context-blind. Every session starts from zero. Every voice message costs API credits. Every task that needs a specialist requires manual handoff. There's no system that just knows your work, stays running, and gets things done in parallel.
+AI tools are everywhere but they are stateless, cloud-dependent and context-blind. Every session starts from zero. Every voice message costs API credits. Every task that needs a specialist requires manual handoff. There is no system that just knows your work, stays running and gets things done in parallel.
 
 ### Technical Explanation
-The core problems were: persistent identity across sessions (solved with file-based memory architecture), local voice processing without API cost (solved with whisper.cpp on-device), and parallel task execution without manual orchestration (solved with a coordinator-spawns-sub-agents pattern). Each design decision was driven by a real operational constraint.
+The core problems were persistent identity across sessions (solved with file-based memory architecture), local voice processing without API cost (solved with whisper.cpp on-device) and parallel task execution without manual orchestration (solved with a coordinator-spawns-sub-agents pattern). Each design decision was driven by a real operational constraint.
 
 ## Approach
 
-- Deployed the agent inside a Docker container on a Debian 12 server (AMD Ryzen 5 3600X, 23GB RAM) — isolated, persistent, hardware-controlled.
-- Built a local voice pipeline: incoming OGG audio → ffmpeg converts to 16kHz mono WAV → whisper.cpp transcribes to text. Zero external API calls, zero transcription cost.
-- Designed a file-based memory system: daily markdown logs capture raw session activity; a curated long-term `MEMORY.md` stores distilled context that persists across restarts and compactions.
-- Implemented a coordinator-sub-agent architecture: the main agent spawns parallel sub-agents scoped to specific tasks (marketing research, development, content, data analysis), each with defined tool access, then synthesizes results.
-- Built a proactive heartbeat system: scheduled checks surface relevant emails, calendar events, and project status without needing to be asked.
-- Integrated GitHub workflows with fine-grained PATs — the agent can read all repositories, commit code changes, and push to branches autonomously, with review gates before merges.
-- Configured tool access policies per context: read/write for the workspace, browser automation via Playwright for account and web tasks, exec access for builds and scripts.
+Deployed the agent inside a Docker container on a Debian 12 server (AMD Ryzen 5 3600X, 23GB RAM), isolated, persistent and hardware-controlled.
+
+Built a local voice pipeline: incoming OGG audio is converted by ffmpeg to 16kHz mono WAV then transcribed by whisper.cpp to text. Zero external API calls, zero transcription cost.
+
+Designed a file-based memory system: daily markdown logs capture raw session activity while a curated long-term MEMORY.md stores distilled context that persists across restarts and compactions.
+
+Implemented a coordinator and sub-agent architecture: the main agent spawns parallel sub-agents scoped to specific tasks (marketing research, development, content, data analysis), each with defined tool access, then synthesizes results.
+
+Built a proactive heartbeat system: scheduled checks surface relevant emails, calendar events and project status without needing to be asked.
+
+Integrated GitHub workflows with fine-grained PATs so the agent can read all repositories, commit code changes and push to branches autonomously, with review gates before merges.
+
+Configured tool access policies per context: read and write for the workspace, browser automation via Playwright for account and web tasks, exec access for builds and scripts.
 
 ### Technical Explanation
-Docker provides container isolation and reproducibility. whisper.cpp runs the `tiny` model for fast transcription with the `base` model available for higher accuracy. The memory system separates append-only daily logs from a curated long-term file, keeping context windows efficient. Sub-agents are spawned with `mode=run` for one-shot tasks or `mode=session` for persistent work, each receiving a scoped task brief and returning structured output. GitHub fine-grained PATs are scoped per repository to enforce least-privilege access.
+Docker provides container isolation and reproducibility. whisper.cpp runs the tiny model for fast transcription with the base model available for higher accuracy. The memory system separates append-only daily logs from a curated long-term file keeping context windows efficient. Sub-agents are spawned with mode=run for one-shot tasks or mode=session for persistent work, each receiving a scoped task brief and returning structured output. GitHub fine-grained PATs are scoped per repository to enforce least-privilege access.
 
 ## System in Action
 
 The agent operates across four layers simultaneously.
 
 ### 1) Voice input, locally processed
-Voice messages arrive via Telegram, get transcribed by whisper.cpp on the server, and become actionable input — in seconds, with no cloud dependency.
+Voice messages arrive via Telegram, get transcribed by whisper.cpp on the server and become actionable input in seconds with no cloud dependency.
 
 ### 2) Parallel sub-agent execution
 A single instruction can spawn multiple sub-agents working in parallel: one scanning Reddit threads for marketing opportunities, another analyzing code, another drafting content. Each completes independently and reports back to the coordinator.
 
 ### 3) Persistent memory across sessions
-The agent retains context across every restart. Daily logs capture what happened; long-term memory stores what matters. Starting a new session doesn't mean starting over.
+The agent retains context across every restart. Daily logs capture what happened while long-term memory stores what matters. Starting a new session does not mean starting over.
 
 ### 4) Proactive monitoring
-Without being prompted, the agent checks email, upcoming calendar events, project build status, and active tasks on a schedule — surfacing what needs attention before it becomes urgent.
+Without being prompted, the agent checks email, upcoming calendar events, project build status and active tasks on a schedule, surfacing what needs attention before it becomes urgent.
 
 ## Results
 
-- Voice messages transcribed locally in under 5 seconds, zero API cost
-- Sub-agents complete parallel research, development, and content tasks simultaneously
-- Full context retained across sessions and server restarts
-- GitHub commits and branch pushes executed autonomously within approved workflows
-- Proactive monitoring surfaces calendar events, emails, and project status without prompting
-- Flutter app (Habbit-Tracker) — 14 visual and behavioral improvements implemented and committed by the agent across a single session
-- 701 automated tests written and validated by the agent for the same project
-- System running continuously since deployment
+Voice messages transcribed locally in under 5 seconds with zero API cost.
+
+Sub-agents complete parallel research, development and content tasks simultaneously.
+
+Full context retained across sessions and server restarts.
+
+GitHub commits and branch pushes executed autonomously within approved workflows.
+
+Proactive monitoring surfaces calendar events, emails and project status without prompting.
+
+Flutter app (Habbit-Tracker): 14 visual and behavioral improvements implemented and committed by the agent across a single session, with 701 automated tests written and validated in the same run.
+
+System running continuously since deployment.
 
 ### Technical Explanation
 Uptime is maintained through Docker's restart policy. Memory files are version-controlled alongside the workspace. The heartbeat system batches periodic checks into single API calls to minimize token usage. GitHub integration uses the API directly for repository reads and git operations for writes, keeping actions auditable and reversible.
 
 ## Tech Stack
 
-- Hardware: Debian 12, AMD Ryzen 5 3600X, 23GB RAM, self-hosted
-- Container: Docker (isolated runtime, persistent volume mounts)
-- AI Reasoning: Claude Sonnet / Opus via Anthropic API
-- Voice: whisper.cpp (local STT), ffmpeg (audio pipeline)
-- Agent Platform: OpenClaw (self-hosted agent runtime)
-- Memory: Markdown-based daily logs + curated long-term memory file
-- Automation: Bash, Node.js, Python, GitHub API, fine-grained PATs
-- Browser Automation: Playwright with self-contained Chromium
-- Interface: Telegram bot integration
+Hardware: Debian 12, AMD Ryzen 5 3600X, 23GB RAM, self-hosted
+
+Container: Docker (isolated runtime, persistent volume mounts)
+
+AI Reasoning: Claude Sonnet and Opus via Anthropic API
+
+Voice: whisper.cpp (local STT) and ffmpeg (audio pipeline)
+
+Memory: Markdown-based daily logs and curated long-term memory file
+
+Automation: Bash, Node.js, Python, GitHub API, fine-grained PATs
+
+Browser Automation: Playwright with self-contained Chromium
+
+Interface: Telegram bot integration
 
 ### Technical Explanation
-Each component handles a distinct concern. Docker isolates the runtime and ensures reproducibility across restarts. whisper.cpp eliminates ongoing transcription API costs by running inference locally. The memory architecture separates raw logging from curated knowledge, keeping context efficient. Playwright provides headless browser automation from within the container using its bundled Chromium binary, requiring no host-level browser dependency. GitHub fine-grained tokens enforce least-privilege access — each token is scoped to specific repositories and permission levels.
+Each component handles a distinct concern. Docker isolates the runtime and ensures reproducibility across restarts. whisper.cpp eliminates ongoing transcription API costs by running inference locally. The memory architecture separates raw logging from curated knowledge keeping context efficient. Playwright provides headless browser automation from within the container using its bundled Chromium binary requiring no host-level browser dependency. GitHub fine-grained tokens enforce least-privilege access with each token scoped to specific repositories and permission levels.
