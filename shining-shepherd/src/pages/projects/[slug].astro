@@ -6,8 +6,11 @@ export const slugMap = {
   project1: 'project1',
   project2: 'project2',
   project3: 'project3',
+  project4: 'project4',
   'match-engine': 'project2',
   'cloud-security-pipeline': 'project1',
+  'brightpath-studio': 'project3',
+  'ai-agent-infrastructure': 'project4',
 };
 
 export async function getStaticPaths() {
@@ -56,13 +59,18 @@ const { Content } = await project.render();
       <Content />
     </div>
 
-    {(resolvedDemoUrl || project.data.githubUrl) && (
+    {(resolvedDemoUrl || project.data.githubUrl || project.data.clientLinks?.length) && (
       <div class="flex flex-wrap gap-4">
         {resolvedDemoUrl && (
           <a href={resolvedDemoUrl} class="btn-secondary" target="_blank" rel="noopener">
             View Demo
           </a>
         )}
+        {project.data.clientLinks?.map((link) => (
+          <a href={link.url} class="btn-secondary" target="_blank" rel="noopener">
+            {link.label} ↗
+          </a>
+        ))}
         {project.data.githubUrl && (
           <a href={project.data.githubUrl} class="btn-secondary" target="_blank" rel="noopener">
             View Code

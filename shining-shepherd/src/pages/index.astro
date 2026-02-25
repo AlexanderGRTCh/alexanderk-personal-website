@@ -214,9 +214,13 @@ const myExperience = [
                   <span class="pill">{tag}</span>
                 ))}
               </div>
-              <div class="mt-6 flex items-center justify-between text-sm font-semibold">
+              <div class="mt-6 flex flex-wrap items-center gap-3 text-sm font-semibold">
                 <span class="btn-tertiary">View project</span>
-                <span aria-hidden="true" class="text-gray-400 transition group-hover:translate-x-1 group-hover:text-gray-600 dark:group-hover:text-gray-200">&rarr;</span>
+                {project.data.clientLinks?.map((link) => (
+                  <a href={link.url} class="btn-tertiary" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                    {link.label} ↗
+                  </a>
+                ))}
               </div>
             </div>
           </a>
