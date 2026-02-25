@@ -196,34 +196,36 @@ const myExperience = [
     ) : (
       <div class="grid gap-6 md:grid-cols-2">
         {highlightedProjects.map((project) => (
-          <a href={`/projects/${project.slug}`} class="card group overflow-hidden">
-            <div class="relative h-56 w-full overflow-hidden">
-              <img
-                src={project.data.thumbnail}
-                alt={project.data.title}
-                loading="lazy"
-                class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent opacity-0 transition group-hover:opacity-100"></div>
-            </div>
-            <div class="p-6">
-              <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{project.data.title}</h3>
-              <p class="mt-3 text-gray-600 dark:text-gray-300">{project.data.description}</p>
-              <div class="mt-4 flex flex-wrap gap-2">
-                {project.data.tags.map((tag) => (
-                  <span class="pill">{tag}</span>
-                ))}
+          <div class="card group overflow-hidden">
+            <a href={`/projects/${project.slug}`} class="block">
+              <div class="relative h-56 w-full overflow-hidden">
+                <img
+                  src={project.data.thumbnail}
+                  alt={project.data.title}
+                  loading="lazy"
+                  class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent opacity-0 transition group-hover:opacity-100"></div>
               </div>
-              <div class="mt-6 flex flex-wrap items-center gap-3 text-sm font-semibold">
-                <span class="btn-tertiary">View project</span>
-                {project.data.clientLinks?.map((link) => (
-                  <a href={link.url} class="btn-tertiary" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                    {link.label} ↗
-                  </a>
-                ))}
+              <div class="p-6 pb-3">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{project.data.title}</h3>
+                <p class="mt-3 text-gray-600 dark:text-gray-300">{project.data.description}</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  {project.data.tags.map((tag) => (
+                    <span class="pill">{tag}</span>
+                  ))}
+                </div>
               </div>
+            </a>
+            <div class="px-6 pb-6 flex flex-wrap items-center gap-3 text-sm font-semibold">
+              <a href={`/projects/${project.slug}`} class="btn-tertiary">View project →</a>
+              {project.data.clientLinks?.map((link) => (
+                <a href={link.url} class="btn-tertiary" target="_blank" rel="noopener">
+                  {link.label} ↗
+                </a>
+              ))}
             </div>
-          </a>
+          </div>
         ))}
       </div>
     )}
