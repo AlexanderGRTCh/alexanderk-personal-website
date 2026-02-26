@@ -15,13 +15,13 @@ const skills = [
       'Java (8+)',
       'SQL',
       'Bash / Shell',
-      'Familiarity: TypeScript, JavaScript, Dart',
+      'Familiarity: TypeScript, JavaScript',
     ],
   },
   {
     title: 'Frameworks & Infrastructure',
     items: [
-      'Flutter · Riverpod · Hive',
+      'Flutter / Dart · Riverpod · Hive',
       'Node.js · Astro · Tailwind CSS',
       'Docker · GitHub Actions · Vercel',
       'AWS (EC2, Secrets Manager, GuardDuty, CloudTrail)',
@@ -83,7 +83,7 @@ const experience = [
 const myExperience = [
   {
     title: 'Software Developer',
-    company: 'Portfolio Projects',
+    company: 'Independent',
     period: '2019 - present',
     bullets: [
       'Designed and operate a 24/7 multi-agent LLM system on self-hosted Linux infrastructure using Python, Node.js, Docker, and the Anthropic API (Claude Sonnet and Opus)',
@@ -93,14 +93,13 @@ const myExperience = [
     ],
   },
   {
-    title: 'IT Support and Systems Lab',
-    company: 'Self directed',
+    title: 'Systems and Infrastructure',
+    company: 'Self-directed',
     period: '2020 - present',
     bullets: [
-      'Configured and maintained Windows and Linux systems including OS installs, imaging, driver management, and hardware troubleshooting',
-      'Set up and managed home and small office networking including routers, VPN clients, DNS, and file sharing',
-      'Wrote Bash and Python scripts for automated health checks, log collection, and system monitoring',
-      'Built custom PCs and performed hardware repairs including board-level diagnostics',
+      'Designed and maintained home and small office networks with VPN, DNS, and file sharing; zero downtime on self-hosted production services',
+      'Automated routine maintenance with Bash and Python scripts, reducing manual effort for health checks, log management, and system monitoring',
+      'Built and maintained systems from bare metal including OS configuration, driver management, and hardware diagnostics',
     ],
   },
   {
@@ -108,18 +107,17 @@ const myExperience = [
     company: "Riley's",
     period: 'July 2025 - Dec 2025',
     bullets: [
-      'Earned "Up and Coming Star 2025" award for outstanding performance and highest named written feedback among new hires',
-      'Managed high-volume fine-dining service in a fast-paced environment',
+      'Worked full-time in high-pressure fine-dining service while completing CS studies, building operational precision and composure under load',
     ],
   },
   {
-    title: 'FOH Manager',
+    title: 'Front of House Manager',
     company: 'Robba Da Matti',
     period: 'May 2023 - Feb 2025',
     bullets: [
-      'Managed floor operations and staffing and ensured POS and network uptime',
-      'Upsell program increased product sales 25 to 35 percent',
-      'Managed transparent tip outs, evaluated new hires, and resolved escalations',
+      'Led front-of-house operations for a high-volume restaurant, managing real-time staffing, service recovery, and team performance under pressure',
+      'Grew product sales 25 to 35 percent through a structured upsell program and team alignment',
+      'Maintained POS and network uptime; evaluated new hires and handled escalations from guests and staff',
     ],
   },
   {
@@ -127,8 +125,7 @@ const myExperience = [
     company: 'Robba Da Matti',
     period: 'Aug 2021 - Apr 2023',
     bullets: [
-      'Top sales driven by clear persuasive communication',
-      'Handled two to four thousand dollars in orders per shift with consistent five star feedback',
+      'Handled two to four thousand dollars in orders per shift with consistent five-star feedback while managing a full CS course load',
       'Built repeat guest relationships and maintained accuracy under pressure',
     ],
   },
@@ -159,9 +156,8 @@ const myExperience = [
       </p>
       <div class="flex flex-col items-center justify-center gap-3 text-base font-medium sm:flex-row">
         <a class="btn-secondary" href="/projects">Explore projects</a>
-        <a class="btn-secondary" href="#contact">Work with me</a>
-        <a class="btn-secondary" href={import.meta.env.BASE_URL + 'request-cv/'}>Request CV</a>
         <a class="btn-secondary" href="https://github.com/AlexanderGRTCh" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn-secondary" href="#contact">Work with me</a>
       </div>
     </div>
   </section>
@@ -171,9 +167,11 @@ const myExperience = [
       <span class="section-kicker">About</span>
       <h2 class="section-title">Building systems that run in production</h2>
       <p class="section-description">
-        I design and operate software end to end, from self-hosted AI agent infrastructure
-        to secure CI/CD pipelines and production web applications. My work runs live, not in sandbox environments.
-        I focus on clarity, reliability, and systems that keep working when you stop watching them.
+        Started building in 2019 while working full time and completing a Computer Science degree at Langara College.
+        The constraint forced focus: no time for things that don't ship, no patience for abstractions that don't connect to real problems.
+        Today I run a 24/7 AI agent system on my own server, have a Flutter app live on Google Play,
+        and deliver client sites with 5-star reviews. The years in operations and team management
+        taught me what production actually means: something works when you need it to, or it doesn't.
       </p>
     </div>
     <div class="grid gap-6 md:grid-cols-2">
@@ -303,6 +301,18 @@ const myExperience = [
           </div>
         </div>
       ))}
+    </div>
+  </section>
+
+  <section id="education" class="section">
+    <div class="section-heading">
+      <span class="section-kicker">Education</span>
+      <h2 class="section-title">Academic background</h2>
+    </div>
+    <div class="card p-6">
+      <span class="text-sm font-semibold uppercase tracking-wide text-indigo-500">Graduated April 2025</span>
+      <h3 class="mt-2 text-xl font-semibold text-gray-900 dark:text-white">Associate of Science, Computer Science</h3>
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Langara College, Vancouver, BC</p>
     </div>
   </section>
 
