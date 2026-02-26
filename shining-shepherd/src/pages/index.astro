@@ -79,14 +79,28 @@ const experience = [
 ];
 const myExperience = [
   {
-    title: 'Software Developer',
-    company: 'Independent',
+    title: '',
     period: '2021 to present',
-    bullets: [
-      'Designed and operate a 24/7 multi-agent LLM system on self-hosted Linux infrastructure using Python, Node.js, Docker, and the Anthropic API (Claude Sonnet and Opus)',
-      'Developed a cross-platform Flutter habit tracker published on Google Play, with 701 passing tests, RevenueCat monetization, AdMob integration, and a 12-member international beta team',
-      'Designed and deployed a production DevSecOps pipeline on AWS using GitHub Actions, Terraform, Bandit, Trivy, and automated security gates',
-      'Delivered production websites for paying clients using Astro and Tailwind CSS, maintaining 5-star reviews across all projects',
+    roles: [
+      {
+        title: 'DevSecOps & AI Automation Engineer',
+        company: 'Independent',
+        period: 'Early 2023 to present',
+        bullets: [
+          'Designed and operate a 24/7 multi-agent LLM system on self-hosted Linux infrastructure using Python, Node.js, Docker, and the Anthropic API (Claude Sonnet and Opus)',
+          'Developed a cross-platform Flutter habit tracker published on Google Play, with 701 passing tests, RevenueCat monetization, AdMob integration, and a 12-member international beta team',
+          'Designed and deployed a production DevSecOps pipeline on AWS using GitHub Actions, Terraform, Bandit, Trivy, and automated security gates',
+          'Delivered production websites for paying clients using Astro and Tailwind CSS, maintaining 5-star reviews across all projects',
+        ],
+      },
+      {
+        title: 'Study and Development',
+        company: 'Independent',
+        period: '2021 to early 2023',
+        bullets: [
+          'Built algorithms, data structures, and small programs in C++, Java, and Python to master OOP, debugging, and core problem-solving while balancing studies and work',
+        ],
+      },
     ],
   },
   {
@@ -100,7 +114,7 @@ const myExperience = [
     ],
   },
   {
-    title: 'Hospitality',
+    title: '',
     period: 'Aug 2021 to Dec 2025',
     roles: [
       {
@@ -116,9 +130,9 @@ const myExperience = [
         company: 'Robba Da Matti',
         period: 'May 2023 to Feb 2025',
         bullets: [
-          'Led front-of-house operations for a high-volume restaurant, managing real-time staffing, service recovery, and team performance under pressure',
-          'Grew product sales 25 to 35 percent through a structured upsell program and team alignment',
-          'Maintained POS and network uptime; evaluated new hires and handled escalations from guests and staff',
+          'Directed high-volume front-of-house operations, optimizing real-time staffing and service recovery to deliver seamless guest experiences while maintaining team performance under peak pressure',
+          'Drove 25 to 35 percent product sales growth by designing and leading structured upselling programs, staff incentives, and performance alignment across FOH and BOH',
+          'Owned critical operational and financial controls including POS and network systems troubleshooting, $200 daily VIP hospitality credit allocation, weekly tip-outs, bar inventory accuracy, and new-hire performance evaluations',
         ],
       },
       {
@@ -126,8 +140,8 @@ const myExperience = [
         company: 'Robba Da Matti',
         period: 'Aug 2021 to Apr 2023',
         bullets: [
-          'Handled two to four thousand dollars in orders per shift with consistent five-star feedback while managing a full CS course load',
-          'Built repeat guest relationships and maintained accuracy under pressure',
+          'Handled $2,000 to $4,000 in orders per shift with consistent five-star feedback, maintaining precision in order accuracy, payments, and guest expectations in an upscale Italian setting while managing a full Computer Science course load',
+          'Cultivated repeat guest loyalty through personalized service and relationship-building, driving consistent return business and positive word-of-mouth',
         ],
       },
     ],
@@ -284,16 +298,19 @@ const myExperience = [
           <div class="timeline-content card">
             <div class="p-6">
               <span class="text-sm font-semibold uppercase tracking-wide text-indigo-500">{item.period}</span>
-              <h3 class="mt-2 text-xl font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+              {item.title && <h3 class="mt-2 text-xl font-semibold text-gray-900 dark:text-white">{item.title}</h3>}
               {item.roles ? (
-                <div class="mt-4 space-y-5 divide-y divide-gray-100 dark:divide-gray-700">
+                <div class="mt-4 space-y-4">
                   {item.roles.map((role) => (
-                    <div class="pt-4 first:pt-0" key={role.title}>
+                    <div key={role.title}>
                       <div class="flex flex-wrap items-baseline justify-between gap-2">
                         <h4 class="text-base font-semibold text-gray-800 dark:text-gray-200">{role.title}</h4>
                         <span class="text-xs font-medium text-gray-400">{role.period}</span>
                       </div>
                       <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{role.company}</p>
+                      {role.note && (
+                        <p class="text-xs italic text-gray-400 dark:text-gray-500 mt-0.5">{role.note}</p>
+                      )}
                       <ul class="mt-2 list-disc pl-5 space-y-1 text-gray-600 dark:text-gray-300">
                         {role.bullets.map((point) => (
                           <li>{point}</li>
