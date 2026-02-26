@@ -100,30 +100,36 @@ const myExperience = [
     ],
   },
   {
-    title: 'Fine Dining Server',
-    company: "Riley's",
-    period: 'July 2025 to Dec 2025',
-    bullets: [
-      'Delivered high-pressure, high-volume fine-dining service; developed operational composure and precision under load',
-    ],
-  },
-  {
-    title: 'Front of House Manager',
-    company: 'Robba Da Matti',
-    period: 'May 2023 to Feb 2025',
-    bullets: [
-      'Led front-of-house operations for a high-volume restaurant, managing real-time staffing, service recovery, and team performance under pressure',
-      'Grew product sales 25 to 35 percent through a structured upsell program and team alignment',
-      'Maintained POS and network uptime; evaluated new hires and handled escalations from guests and staff',
-    ],
-  },
-  {
-    title: 'Server',
-    company: 'Robba Da Matti',
-    period: 'Aug 2021 to Apr 2023',
-    bullets: [
-      'Handled two to four thousand dollars in orders per shift with consistent five-star feedback while managing a full CS course load',
-      'Built repeat guest relationships and maintained accuracy under pressure',
+    title: 'Hospitality',
+    period: 'Aug 2021 to Dec 2025',
+    roles: [
+      {
+        title: 'Fine Dining Server',
+        company: "Riley's",
+        period: 'Jul 2025 to Dec 2025',
+        bullets: [
+          'Delivered fine-dining service in a high-pressure environment; received the "Up and Coming Star 2025" award for outstanding performance and written customer feedback among new hires.',
+        ],
+      },
+      {
+        title: 'Front of House Manager',
+        company: 'Robba Da Matti',
+        period: 'May 2023 to Feb 2025',
+        bullets: [
+          'Led front-of-house operations for a high-volume restaurant, managing real-time staffing, service recovery, and team performance under pressure',
+          'Grew product sales 25 to 35 percent through a structured upsell program and team alignment',
+          'Maintained POS and network uptime; evaluated new hires and handled escalations from guests and staff',
+        ],
+      },
+      {
+        title: 'Server',
+        company: 'Robba Da Matti',
+        period: 'Aug 2021 to Apr 2023',
+        bullets: [
+          'Handled two to four thousand dollars in orders per shift with consistent five-star feedback while managing a full CS course load',
+          'Built repeat guest relationships and maintained accuracy under pressure',
+        ],
+      },
     ],
   },
 ];
@@ -272,22 +278,43 @@ const myExperience = [
         Roles that shaped my craft, strengthening engineering instincts, communication, and product intuition.
     </div>
     <div class="relative border-l border-gray-200 pl-8 dark:border-gray-700">
-      {myExperience.map((item, index) => (
+      {myExperience.map((item) => (
         <div class="timeline-item" key={item.title}>
           <div class="timeline-dot"></div>
           <div class="timeline-content card">
             <div class="p-6">
               <span class="text-sm font-semibold uppercase tracking-wide text-indigo-500">{item.period}</span>
               <h3 class="mt-2 text-xl font-semibold text-gray-900 dark:text-white">{item.title}</h3>
-              <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{item.company}</p>
-              {item.bullets ? (
-                <ul class="mt-3 list-disc pl-5 space-y-1 text-gray-600 dark:text-gray-300">
-                  {item.bullets.map((point) => (
-                    <li>{point}</li>
+              {item.roles ? (
+                <div class="mt-4 space-y-5 divide-y divide-gray-100 dark:divide-gray-700">
+                  {item.roles.map((role) => (
+                    <div class="pt-4 first:pt-0" key={role.title}>
+                      <div class="flex flex-wrap items-baseline justify-between gap-2">
+                        <h4 class="text-base font-semibold text-gray-800 dark:text-gray-200">{role.title}</h4>
+                        <span class="text-xs font-medium text-gray-400">{role.period}</span>
+                      </div>
+                      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{role.company}</p>
+                      <ul class="mt-2 list-disc pl-5 space-y-1 text-gray-600 dark:text-gray-300">
+                        {role.bullets.map((point) => (
+                          <li>{point}</li>
+                        ))}
+                      </ul>
+                    </div>
                   ))}
-                </ul>
+                </div>
               ) : (
-                <p class="mt-3 text-gray-600 dark:text-gray-300">{item.description}</p>
+                <>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{item.company}</p>
+                  {item.bullets ? (
+                    <ul class="mt-3 list-disc pl-5 space-y-1 text-gray-600 dark:text-gray-300">
+                      {item.bullets.map((point) => (
+                        <li>{point}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p class="mt-3 text-gray-600 dark:text-gray-300">{item.description}</p>
+                  )}
+                </>
               )}
             </div>
           </div>
