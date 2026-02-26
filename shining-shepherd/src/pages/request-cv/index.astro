@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout>
+  <section id="request-cv" class="section">
+    <div class="section-heading">
+      <span class="section-kicker">Contact</span>
+      <h2 class="section-title">Request CV</h2>
+      <p class="section-description">
+        Fill out the form below to request my CV. This uses the same message platform and account as the "Let's collaborate" form.
+      </p>
+    </div>
+    <div class="card p-8">
+      <form action="https://usebasin.com/f/9cc815c9e668" method="POST" class="grid gap-4 md:grid-cols-2">
+        <input type="hidden" name="subject" value="CV Request" />
+        <input type="hidden" name="_subject" value="CV Request" />
+        <label class="form-label">
+          Name
+          <input type="text" name="name" required class="input mt-2" />
+        </label>
+        <label class="form-label">
+          Email
+          <input type="email" name="email" required class="input mt-2" />
+        </label>
+        <label class="form-label md:col-span-2">
+          Message
+          <textarea name="message" rows="6" required class="input mt-2">Hi Alexander,
+
+I'd like to request your CV. Please find the details below:
+
+Reason for request:
+Job title or role of interest:
+Company or organization:
+
+Thank you,
+</textarea>
+        </label>
+        <div class="md:col-span-2">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAACEaBeyP2pMmy3_x"></div>
+        </div>
+        <div class="md:col-span-2">
+          <button type="submit" class="btn-primary w-full md:w-auto">Send message</button>
+        </div>
+      </form>
+      <div class="mt-6 flex flex-wrap justify-center gap-3 text-sm font-medium">
+        <a class="btn-tertiary" href="https://github.com/AlexanderGRTCh" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn-tertiary" href="https://www.linkedin.com/in/alexanderkemos" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>

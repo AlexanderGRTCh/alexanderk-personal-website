@@ -1,0 +1,386 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+const projects = await getCollection('projects');
+const sortedProjects = [...projects].sort((a, b) => a.data.title.localeCompare(b.data.title));
+const featuredProjects = sortedProjects.filter((p) => p.data.featured);
+const highlightedProjects = (featuredProjects.length > 0 ? featuredProjects : sortedProjects).slice(0, 3);
+
+const skills = [
+  {
+    title: 'Languages',
+    items: [
+      'Python',
+      'Bash / Shell',
+      'Foundation: C++, Java, SQL',
+    ],
+  },
+  {
+    title: 'Frameworks & Infrastructure',
+    items: [
+      'Flutter / Dart · Riverpod · Hive',
+      'Node.js · Astro · Tailwind CSS',
+      'Docker · GitHub Actions · Vercel',
+      'AWS (EC2, Secrets Manager, GuardDuty, CloudTrail)',
+      'Terraform · Linux · Git / GitHub',
+      'Bandit · Trivy · pytest',
+    ],
+  },
+  {
+    title: 'AI Engineering',
+    items: [
+      'Anthropic API (Claude Opus, Sonnet)',
+      'Agent Orchestration and Tool Use',
+      'whisper.cpp (Local Speech-to-Text)',
+      'Playwright Browser Automation',
+      'Codex (OpenAI, VSCode and CLI)',
+      'Claude CLI (Agentic Development)',
+      'OpenClaw AI Agent (Self-hosted)',
+      '24/7 Production Deployment',
+    ],
+  },
+  {
+    title: 'Core Strengths',
+    items: [
+      'Mobile App Development (iOS + Android)',
+      'AI Agent Architecture and Orchestration',
+      'Production Systems and Reliability',
+      'DevSecOps and CI/CD Pipelines',
+      'Cloud Infrastructure and IaC',
+      'Full-Stack Web Delivery',
+      'System Automation and Scripting',
+      'Testing and Documentation',
+    ],
+  },
+];
+
+const experience = [
+  {
+    title: 'Software Engineer Intern (Demo)',
+    company: 'TechCo Labs',
+    period: 'Summer 2024',
+    description:
+      'Built internal dashboards, automated data quality checks, and collaborated across product and design pods.',
+  },
+  {
+    title: 'Teaching Assistant, Data Structures (Demo)',
+    company: 'University of Ottawa',
+    period: '2023 to Present',
+    description:
+      'Coached more than 150 students through weekly labs, live-coded algorithm walkthroughs, and curated practice sets.',
+  },
+  {
+    title: 'Freelance Developer (Demo)',
+    company: 'Self-Employed',
+    period: '2022 to 2023',
+    description:
+      'Delivered small-business websites and API integrations with a focus on accessibility, performance, and maintainability.',
+  },
+];
+const myExperience = [
+  {
+    title: 'DevSecOps & AI Automation Engineer',
+    company: 'Independent',
+    period: 'Early 2023 to present',
+    bullets: [
+      'Designed and operate a 24/7 multi-agent LLM system on self-hosted Linux infrastructure using Python, Node.js, Docker, and the Anthropic API (Claude Sonnet and Opus)',
+      'Developed a cross-platform Flutter habit tracker published on Google Play, with 701 passing tests, RevenueCat monetization, AdMob integration, and a 12-member international beta team',
+      'Designed and deployed a production DevSecOps pipeline on AWS using GitHub Actions, Terraform, Bandit, Trivy, and automated security gates',
+      'Delivered production websites for paying clients using Astro and Tailwind CSS, maintaining 5-star reviews across all projects',
+    ],
+  },
+  {
+    title: 'Study and Development',
+    company: 'Independent',
+    period: '2021 to early 2023',
+    bullets: [
+      'Built algorithms, data structures, and small programs in C++, Java, and Python to master OOP, debugging, and core problem-solving while balancing studies and work',
+    ],
+  },
+  {
+    title: 'Systems and Infrastructure',
+    company: 'Self-directed',
+    period: '2020 to present',
+    bullets: [
+      'Designed and maintained home and small office networks with VPN, DNS, and file sharing; zero downtime on self-hosted production services',
+      'Automated routine maintenance with Bash and Python scripts, reducing manual effort for health checks, log management, and system monitoring',
+      'Built and maintained systems from bare metal including OS configuration, driver management, and hardware diagnostics',
+    ],
+  },
+  {
+    title: '',
+    period: 'Aug 2021 to Dec 2025',
+    roles: [
+      {
+        title: 'Fine Dining Server',
+        company: "Riley's",
+        period: 'Jul 2025 to Dec 2025',
+        bullets: [
+          'Delivered fine-dining service in a high-pressure environment; received the "Up and Coming Star 2025" award for outstanding performance and written customer feedback among new hires.',
+        ],
+      },
+      {
+        title: 'Front of House Manager',
+        company: 'Robba Da Matti',
+        period: 'May 2023 to Feb 2025',
+        bullets: [
+          'Directed high-volume front-of-house operations, optimizing real-time staffing and service recovery to deliver seamless guest experiences while maintaining team performance under peak pressure',
+          'Drove 25 to 35 percent product sales growth by designing and leading structured upselling programs, staff incentives, and performance alignment across FOH and BOH',
+          'Owned critical operational and financial controls including POS and network systems troubleshooting, $200 daily VIP hospitality credit allocation, weekly tip-outs, bar inventory accuracy, and new-hire performance evaluations',
+        ],
+      },
+      {
+        title: 'Server',
+        company: 'Robba Da Matti',
+        period: 'Aug 2021 to Apr 2023',
+        bullets: [
+          'Handled $2,000 to $4,000 in orders per shift with consistent five-star feedback, maintaining precision in order accuracy, payments, and guest expectations in an upscale Italian setting while managing a full Computer Science course load',
+          'Cultivated repeat guest loyalty through personalized service and relationship-building, driving consistent return business and positive word-of-mouth',
+        ],
+      },
+    ],
+  },
+];
+---
+
+<Layout>
+  <section id="home" class="scroll-mt-32 text-center sm:mb-24">
+    <div class="mx-auto flex max-w-3xl flex-col items-center gap-8">
+      <div class="relative flex h-36 w-36 items-center justify-center">
+        <div class="avatar-ring"></div>
+        <div class="avatar-gradient"></div>
+        <img
+          src="/assets/FC2.jpg"
+          alt="Alexander Kemos"
+          class="relative z-10 h-28 w-28 rounded-full object-cover shadow-lg shadow-indigo-200/40"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </div>
+      <h1 class="text-balance text-4xl font-semibold leading-tight text-gray-900 sm:text-6xl dark:text-white">
+        Hi, I'm <span class="text-gradient">Alexander Kemos</span>
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300">
+        I build things that stay running. A production AI agent system on my own hardware, a Flutter app live on Google Play, client sites with 5-star reviews. Not demos. Production.
+      </p>
+      <div class="flex flex-col items-center justify-center gap-3 text-base font-medium sm:flex-row">
+        <a class="btn-secondary" href="/projects">Explore projects</a>
+        <a class="btn-secondary" href="https://github.com/AlexanderGRTCh" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn-secondary" href="#contact">Work with me</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="section-heading">
+      <span class="section-kicker">About</span>
+      <h2 class="section-title">How I got here</h2>
+      <p class="section-description">
+        I didn't take the straight path to software. Four years of engineering (mechanical to electrical) and a decade of hands-on experience came first. CS at Langara felt right; I graduated April 2025 and went all-in December 2025. Since then: a production AI agent system running on my own hardware, a Flutter app live on Google Play (701 tests, 12-member beta team), client websites with 5-star reviews, and a secure DevSecOps pipeline on AWS. I build things that stay running.
+      </p>
+    </div>
+    <div class="grid gap-6 md:grid-cols-2">
+      <div class="card p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">What drives me</h3>
+        <p class="mt-3 text-gray-600 dark:text-gray-300">
+          Curiosity, precision, and continuous improvement.
+          I thrive in teams that build things right, explain why they work,
+          and keep learning together.
+        </p>
+      </div>
+      <div class="card p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">What I'm exploring</h3>
+        <p class="mt-3 text-gray-600 dark:text-gray-300">
+          Multi-agent AI systems, mobile product development, and content automation pipelines.
+          Building things that reach real users and learning from what happens when they do.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section">
+    <div class="section-heading">
+      <span class="section-kicker">Projects</span>
+      <h2 class="section-title">Selected work</h2>
+      <p class="section-description">
+        Production systems, shipped apps, and client work.
+        Each project here is live, tested by real users, and built to keep running.
+      </p>
+    </div>
+
+    {highlightedProjects.length === 0 ? (
+      <p class="text-center text-gray-500">No projects yet&mdash;check back soon.</p>
+    ) : (
+      <div class="grid gap-6 md:grid-cols-2">
+        {highlightedProjects.map((project) => (
+          <div class="card group overflow-hidden">
+            <a href={`/projects/${project.slug}`} class="block">
+              <div class="relative h-56 w-full overflow-hidden">
+                <img
+                  src={project.data.thumbnail}
+                  alt={project.data.title}
+                  loading="lazy"
+                  class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent opacity-0 transition group-hover:opacity-100"></div>
+              </div>
+              <div class="p-6 pb-3">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{project.data.title}</h3>
+                <p class="mt-3 text-gray-600 dark:text-gray-300">{project.data.description}</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  {project.data.tags.map((tag) => (
+                    <span class="pill">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </a>
+            <div class="px-6 pb-6 flex flex-wrap items-center gap-3 text-sm font-semibold">
+              <a href={`/projects/${project.slug}`} class="btn-tertiary">View project</a>
+              {project.data.clientLinks?.map((link) => (
+                <a href={link.url} class="btn-tertiary" target="_blank" rel="noopener">
+                  {link.label} ↗
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <div class="mt-8 flex justify-center">
+      <a href="/projects" class="btn-secondary">View full project archive</a>
+    </div>
+  </section>
+
+  <section id="skills" class="section">
+    <div class="section-heading">
+      <span class="section-kicker">Skills</span>
+      <h2 class="section-title">Tools I reach for</h2>
+      <p class="section-description">
+        A blend of modern frameworks, solid fundamentals, and collaborative practices that drive growth and consistent delivery.
+      </p>
+    </div>
+    <div class="grid gap-6 md:grid-cols-3">
+      {skills.map((group) => (
+        <div class="card h-full p-6" key={group.title}>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{group.title}</h3>
+          <ul class="mt-4 space-y-2 text-gray-600 dark:text-gray-300">
+            {group.items.map((item) => (
+              <li key={item} class="flex items-center gap-2">
+                <span class="h-2 w-2 shrink-0 rounded-full bg-indigo-500"></span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="experience" class="section">
+    <div class="section-heading">
+      <span class="section-kicker">Experience</span>
+      <h2 class="section-title">Highlights from the journey</h2>
+      <p class="section-description">
+        Roles that shaped my craft, strengthening engineering instincts, communication, and product intuition.
+    </div>
+    <div class="relative border-l border-gray-200 pl-8 dark:border-gray-700">
+      {myExperience.map((item) => (
+        <div class="timeline-item" key={item.title}>
+          <div class="timeline-dot"></div>
+          <div class="timeline-content card">
+            <div class="p-6">
+              <span class="text-sm font-semibold uppercase tracking-wide text-indigo-500">{item.period}</span>
+              {item.title && <h3 class="mt-2 text-xl font-semibold text-gray-900 dark:text-white">{item.title}</h3>}
+              {item.roles ? (
+                <div class="mt-4 space-y-4">
+                  {item.roles.map((role) => (
+                    <div key={role.title}>
+                      <div class="flex flex-wrap items-baseline justify-between gap-2">
+                        <h4 class="text-base font-semibold text-gray-800 dark:text-gray-200">{role.title}</h4>
+                        <span class="text-xs font-medium text-gray-400">{role.period}</span>
+                      </div>
+                      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{role.company}</p>
+                      {role.note && (
+                        <p class="text-xs italic text-gray-400 dark:text-gray-500 mt-0.5">{role.note}</p>
+                      )}
+                      <ul class="mt-2 list-disc pl-5 space-y-1 text-gray-600 dark:text-gray-300">
+                        {role.bullets.map((point) => (
+                          <li>{point}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{item.company}</p>
+                  {item.bullets ? (
+                    <ul class="mt-3 list-disc pl-5 space-y-1 text-gray-600 dark:text-gray-300">
+                      {item.bullets.map((point) => (
+                        <li>{point}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p class="mt-3 text-gray-600 dark:text-gray-300">{item.description}</p>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="education" class="section">
+    <div class="section-heading">
+      <span class="section-kicker">Education</span>
+      <h2 class="section-title">Academic background</h2>
+    </div>
+    <div class="card p-6">
+      <span class="text-sm font-semibold uppercase tracking-wide text-indigo-500">Graduated April 2025</span>
+      <h3 class="mt-2 text-xl font-semibold text-gray-900 dark:text-white">Associate of Science, Computer Science</h3>
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Langara College, Vancouver, BC</p>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="section-heading">
+      <span class="section-kicker">Contact</span>
+      <h2 class="section-title">Let's collaborate</h2>
+      <p class="section-description">
+        I'm always excited to chat about new opportunities, open-source projects, or creative builds.
+        Drop a message and let's make something meaningful together.
+      </p>
+    </div>
+    <div class="card p-8">
+      <form action="https://usebasin.com/f/9cc815c9e668" method="POST" class="grid gap-4 md:grid-cols-2">
+        <label class="form-label">
+          Name
+          <input type="text" name="name" required class="input mt-2" />
+        </label>
+        <label class="form-label">
+          Email
+          <input type="email" name="email" required class="input mt-2" />
+        </label>
+        <label class="form-label md:col-span-2">
+          Message
+          <textarea name="message" rows="4" required class="input mt-2"></textarea>
+        </label>
+        <div class="md:col-span-2">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAACEaBeyP2pMmy3_x"></div>
+        </div>
+        <div class="md:col-span-2">
+          <button type="submit" class="btn-primary w-full md:w-auto">Send message</button>
+        </div>
+      </form>
+      <div class="mt-6 flex flex-wrap justify-center gap-3 text-sm font-medium">
+        <a class="btn-tertiary" href="https://github.com/AlexanderGRTCh" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn-tertiary" href="https://www.linkedin.com/in/alexanderkemos" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>

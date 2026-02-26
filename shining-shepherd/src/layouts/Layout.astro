@@ -1,0 +1,263 @@
+
+---
+import '../styles/global.css';
+
+const navItems = [
+  { id: 'home', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'contact', label: 'Contact' },
+];
+
+const isHome = Astro.url.pathname === '/';
+const pathname = Astro.url.pathname;
+
+const activeId = (() => {
+  if (isHome) return 'home';
+  if (pathname.startsWith('/projects')) return 'projects';
+  if (pathname.startsWith('/playbooks')) return 'projects';
+  if (pathname.startsWith('/about')) return 'about';
+  if (pathname.startsWith('/contact')) return 'contact';
+  return 'home';
+})();
+
+const getHref = (id: string) => {
+  if (isHome) {
+    return `#${id}`;
+  }
+  return id === 'home' ? '/#home' : `/#${id}`;
+};
+---
+
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Alexander Kemos Portfolio</title>
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-white">
+    {isHome && (
+      <>
+        <div class="bg-[#fbe2e3] absolute top-[-6rem] right-[6rem] h-[28rem] w-[28rem] -z-10 rounded-full blur-[8rem] sm:w-[42rem] dark:bg-[#946263]"></div>
+        <div class="bg-[#dbd7fb] absolute top-[-4rem] left-[-28rem] h-[28rem] w-[40rem] -z-10 rounded-full blur-[8rem] sm:w-[48rem] md:left-[-18rem] lg:left-[-8rem] dark:bg-[#676394]"></div>
+      </>
+    )}
+
+    <header class="relative z-50">
+      <nav class="fixed top-2 left-1/2 flex -translate-x-1/2 items-center px-3 h-auto sm:top-6 sm:h-[3.25rem]">
+        <div class="nav-container" data-nav-container data-is-home={isHome ? 'true' : 'false'}>
+          <span class="nav-pill" data-nav-pill></span>
+          <ul class="flex h-10 w-full flex-nowrap items-center justify-start gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap no-scrollbar snap-x snap-mandatory text-sm font-medium text-gray-600 sm:h-full sm:justify-center sm:gap-4 dark:text-gray-300">
+            {navItems.map((item) => (
+              <li class="nav-item snap-start" key={item.id}>
+                <a
+                  href={getHref(item.id)}
+                  data-section={item.id}
+                  class:list={[
+                    'nav-link',
+                    {
+                      'nav-link-active': item.id === activeId,
+                    },
+                  ]}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main class="relative mx-auto w-full max-w-5xl px-4 pb-24 pt-32 sm:px-6 sm:pt-40">
+      <slot />
+    </main>
+
+    <footer class="border-t border-gray-200 py-6 text-center text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400">
+      &copy; {new Date().getFullYear()} Alexander Kemos. All rights reserved.
+    </footer>
+    <script is:inline>
+        const initNavSync = () => {
+          const navLinks = Array.from(document.querySelectorAll('a[data-section]'));
+          const sections = Array.from(document.querySelectorAll('section[id]'));
+          const navContainer = document.querySelector('[data-nav-container]');
+          const navPill = document.querySelector('[data-nav-pill]');
+          const navList = navContainer ? navContainer.querySelector('ul') : null;
+          if (!navLinks.length || !navContainer || !navPill) {
+            return;
+          }
+
+          const navIds = navLinks
+            .map((link) => link.dataset.section || '')
+            .filter((id) => Boolean(id));
+          const sectionIds = sections.map((section) => section.id);
+          const isHomePage = navContainer.dataset.isHome === 'true';
+          let currentActive = null;
+          let scrollFrame = null;
+          let pillFrame = null;
+
+          const isMobile = () => {
+            // Tailwind sm breakpoint: 640px
+            return window.matchMedia('(max-width: 639px)').matches || (navList && navList.scrollWidth > navList.clientWidth);
+          };
+
+          const scrollLinkIntoView = (link, behavior = 'auto') => {
+            if (!navList || !link) return;
+            const listRect = navList.getBoundingClientRect();
+            const linkRect = link.getBoundingClientRect();
+            const fullyVisible = linkRect.left >= listRect.left && linkRect.right <= listRect.right;
+            const linkLeftInList = linkRect.left - listRect.left + navList.scrollLeft;
+            const targetLeft = Math.max(0, linkLeftInList - (navList.clientWidth - linkRect.width) / 2);
+            if (fullyVisible && Math.abs(navList.scrollLeft - targetLeft) < 2) return;
+            navList.scrollTo({ left: targetLeft, behavior });
+          };
+
+          const setPillForLink = (link) => {
+            const linkRect = link.getBoundingClientRect();
+            const containerRect = navContainer.getBoundingClientRect();
+            const offsetLeft = linkRect.left - containerRect.left;
+            const offsetTop = linkRect.top - containerRect.top;
+            navPill.style.setProperty('width', `${linkRect.width}px`);
+            navPill.style.setProperty('height', `${linkRect.height}px`);
+            navPill.style.setProperty('transform', `translate(${offsetLeft}px, ${offsetTop}px)`);
+            navPill.classList.add('nav-pill-active');
+          };
+
+          const activate = (id, behavior = 'auto') => {
+            if (!id || currentActive === id || !navIds.includes(id)) {
+              return;
+            }
+
+            currentActive = id;
+
+            navLinks.forEach((link) => {
+              const isActive = link.dataset.section === id;
+              link.classList.toggle('nav-link-active', isActive);
+              link.setAttribute('aria-current', isActive ? 'true' : 'false');
+              if (isActive) {
+                setPillForLink(link);
+                if (isMobile()) scrollLinkIntoView(link, behavior);
+              }
+            });
+          };
+
+          const getInitialId = () => {
+            const hashId = window.location.hash.replace('#', '');
+            if (hashId && navIds.includes(hashId)) {
+              return hashId;
+            }
+
+            const preActive = navLinks.find((link) => link.classList.contains('nav-link-active'));
+            if (preActive && preActive.dataset.section) {
+              return preActive.dataset.section;
+            }
+
+            return navIds[0];
+          };
+
+          activate(getInitialId());
+
+          navLinks.forEach((link) => {
+            link.addEventListener('click', () => {
+              const { section } = link.dataset;
+              if (section) {
+                activate(section, 'smooth');
+              }
+            });
+          });
+
+          const schedulePillUpdate = () => {
+            if (pillFrame !== null) return;
+            pillFrame = window.requestAnimationFrame(() => {
+              pillFrame = null;
+              if (!currentActive) return;
+              const activeLink = navLinks.find((l) => l.dataset.section === currentActive);
+              if (activeLink) setPillForLink(activeLink);
+            });
+          };
+
+          const scheduleScrollUpdate = () => {
+            if (!isHomePage || !sectionIds.length) {
+              return;
+            }
+            if (scrollFrame !== null) {
+              return;
+            }
+            scrollFrame = window.requestAnimationFrame(() => {
+              scrollFrame = null;
+              const viewportMid = window.scrollY + window.innerHeight / 2;
+              let targetId = navIds[0];
+
+              sections.forEach((section) => {
+                const rect = section.getBoundingClientRect();
+                const sectionTop = window.scrollY + rect.top;
+                const sectionBottom = sectionTop + rect.height;
+                if (viewportMid >= sectionTop && viewportMid < sectionBottom) {
+                  targetId = section.id;
+                }
+              });
+
+              activate(targetId, isMobile() ? 'smooth' : 'auto');
+            });
+          };
+
+          if (isHomePage && sectionIds.length) {
+            const observer = new IntersectionObserver(
+              (entries) => {
+                const visibleEntries = entries
+                  .filter((entry) => entry.isIntersecting)
+                  .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+                if (!visibleEntries.length) {
+                  return;
+                }
+
+                const targetId = visibleEntries[0].target.id;
+                activate(targetId, isMobile() ? 'smooth' : 'auto');
+              },
+              {
+                rootMargin: '-45% 0px -45% 0px',
+                threshold: [0.25, 0.5, 0.75],
+              }
+            );
+
+            sections.forEach((section) => observer.observe(section));
+            window.addEventListener('scroll', scheduleScrollUpdate, { passive: true });
+            scheduleScrollUpdate();
+          }
+
+          window.addEventListener('hashchange', () => {
+            const newHash = window.location.hash.replace('#', '');
+            if (newHash && navIds.includes(newHash)) {
+              activate(newHash, 'smooth');
+            }
+          });
+
+          window.addEventListener('resize', () => {
+            if (!currentActive) {
+              return;
+            }
+            const activeLink = navLinks.find((link) => link.dataset.section === currentActive);
+            if (activeLink) {
+              setPillForLink(activeLink);
+              if (isMobile()) scrollLinkIntoView(activeLink, 'auto');
+            }
+          });
+
+          if (navList) {
+            navList.addEventListener('scroll', schedulePillUpdate, { passive: true });
+          }
+        };
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initNavSync);
+        } else {
+          initNavSync();
+        }
+      </script>
+  </body>
+</html>
