@@ -11,34 +11,45 @@ const skills = [
     title: 'Languages',
     items: [
       'Python',
-      'C++',
-      'Java',
-      'SQL',
-      'HTML & CSS (basic)',
-      'Bash/Shell',
+      'Bash / Shell',
+      'Foundation: C++, Java, SQL',
     ],
   },
   {
-    title: 'Frameworks & Tools',
+    title: 'Frameworks & Infrastructure',
     items: [
-      'Git/GitHub · VSCode · Eclipse',
-      'Docker · Terraform · GitHub Actions',
-      'AWS (EC2, S3, IAM, CloudTrail, GuardDuty)',
-      'Linux · Windows',
-      'Security Scanning (Trivy, Bandit) · Active Directory (basic) · Zoom/Teams',
+      'Flutter / Dart · Riverpod · Hive',
+      'Node.js · Astro · Tailwind CSS',
+      'Docker · GitHub Actions · Vercel',
+      'AWS (EC2, Secrets Manager, GuardDuty, CloudTrail)',
+      'Terraform · Linux · Git / GitHub',
+      'Bandit · Trivy · pytest',
+    ],
+  },
+  {
+    title: 'AI Engineering',
+    items: [
+      'Anthropic API (Claude Opus, Sonnet)',
+      'Agent Orchestration and Tool Use',
+      'whisper.cpp (Local Speech-to-Text)',
+      'Playwright Browser Automation',
+      'Codex (OpenAI, VSCode and CLI)',
+      'Claude CLI (Agentic Development)',
+      'OpenClaw AI Agent (Self-hosted)',
+      '24/7 Production Deployment',
     ],
   },
   {
     title: 'Core Strengths',
     items: [
-      'Object-Oriented Programming (OOP)',
-      'Algorithms, Recursion & Debugging',
-      'Data Structures & Optimization',
-      'Testing & Documentation',
-      'CI/CD & DevOps Fundamentals',
-      'Operating System Management (Linux/Windows)',
-      'Networking (VPN, DNS, LAN/Wi-Fi setup)',
-      'Automation & Scripting',
+      'Mobile App Development (iOS + Android)',
+      'AI Agent Architecture and Orchestration',
+      'Production Systems and Reliability',
+      'DevSecOps and CI/CD Pipelines',
+      'Cloud Infrastructure and IaC',
+      'Full-Stack Web Delivery',
+      'System Automation and Scripting',
+      'Testing and Documentation',
     ],
   },
 ];
@@ -52,16 +63,16 @@ const experience = [
       'Built internal dashboards, automated data quality checks, and collaborated across product and design pods.',
   },
   {
-    title: 'Teaching Assistant - Data Structures (Demo)',
+    title: 'Teaching Assistant, Data Structures (Demo)',
     company: 'University of Ottawa',
-    period: '2023 - Present',
+    period: '2023 to Present',
     description:
       'Coached more than 150 students through weekly labs, live-coded algorithm walkthroughs, and curated practice sets.',
   },
   {
     title: 'Freelance Developer (Demo)',
     company: 'Self-Employed',
-    period: '2022 - 2023',
+    period: '2022 to 2023',
     description:
       'Delivered small-business websites and API integrations with a focus on accessibility, performance, and maintainability.',
   },
@@ -69,52 +80,49 @@ const experience = [
 const myExperience = [
   {
     title: 'Software Developer',
-    company: 'Portfolio Projects',
-    period: '2019 - present',
+    company: 'Independent',
+    period: '2021 to present',
     bullets: [
-      'Recent CS grad. Built CI/CD with Python, Terraform, Docker, and AWS, secured with Bandit and Trivy, tested with pytest',
-      'Delivered a PHP and MySQL app with normalized schema and triggers',
-      'Built a classic Snake game in Python and a Java tennis match simulator with momentum based scoring',
-      'Completed 40 plus OOP and algorithm assignments in C++, Java, and Python',
+      'Designed and operate a 24/7 multi-agent LLM system on self-hosted Linux infrastructure using Python, Node.js, Docker, and the Anthropic API (Claude Sonnet and Opus)',
+      'Developed a cross-platform Flutter habit tracker published on Google Play, with 701 passing tests, RevenueCat monetization, AdMob integration, and a 12-member international beta team',
+      'Designed and deployed a production DevSecOps pipeline on AWS using GitHub Actions, Terraform, Bandit, Trivy, and automated security gates',
+      'Delivered production websites for paying clients using Astro and Tailwind CSS, maintaining 5-star reviews across all projects',
     ],
   },
   {
-    title: 'IT Support and Systems Lab',
-    company: 'Self directed',
-    period: '2020 - present',
+    title: 'Systems and Infrastructure',
+    company: 'Self-directed',
+    period: '2020 to present',
     bullets: [
-      'Configured Windows and Linux installs, imaging, drivers, and troubleshooting',
-      'Basic networking with home routers and VPN clients, plus printer and file sharing',
-      'Wrote small Bash and Python scripts for health checks and log collection',
-      'Built and tuned custom PCs and repaired a Samsung monitor power board',
+      'Designed and maintained home and small office networks with VPN, DNS, and file sharing; zero downtime on self-hosted production services',
+      'Automated routine maintenance with Bash and Python scripts, reducing manual effort for health checks, log management, and system monitoring',
+      'Built and maintained systems from bare metal including OS configuration, driver management, and hardware diagnostics',
     ],
   },
   {
     title: 'Fine Dining Server',
     company: "Riley's",
-    period: '2025 - present',
+    period: 'July 2025 to Dec 2025',
     bullets: [
-      'Awarded Up and Coming Star 2025 for most named five star reviews among more than fifteen new hires',
-      'Excelled in high pressure service and built real meaningful guest connections',
+      'Delivered high-pressure, high-volume fine-dining service; developed operational composure and precision under load',
     ],
   },
   {
-    title: 'FOH Manager',
+    title: 'Front of House Manager',
     company: 'Robba Da Matti',
-    period: 'May 2023 - Feb 2025',
+    period: 'May 2023 to Feb 2025',
     bullets: [
-      'Managed floor operations and staffing and ensured POS and network uptime',
-      'Upsell program increased product sales 25 to 35 percent',
-      'Managed transparent tip outs, evaluated new hires, and resolved escalations',
+      'Led front-of-house operations for a high-volume restaurant, managing real-time staffing, service recovery, and team performance under pressure',
+      'Grew product sales 25 to 35 percent through a structured upsell program and team alignment',
+      'Maintained POS and network uptime; evaluated new hires and handled escalations from guests and staff',
     ],
   },
   {
     title: 'Server',
     company: 'Robba Da Matti',
-    period: 'Aug 2021 - Apr 2023',
+    period: 'Aug 2021 to Apr 2023',
     bullets: [
-      'Top sales driven by clear persuasive communication',
-      'Handled two to four thousand dollars in orders per shift with consistent five star feedback',
+      'Handled two to four thousand dollars in orders per shift with consistent five-star feedback while managing a full CS course load',
       'Built repeat guest relationships and maintained accuracy under pressure',
     ],
   },
@@ -140,14 +148,12 @@ const myExperience = [
         Hi, I'm <span class="text-gradient">Alexander Kemos</span>
       </h1>
       <p class="text-lg text-gray-600 dark:text-gray-300">
-        I build and operate production software, from self-hosted AI infrastructure
-        to automated deployment pipelines and full-stack web applications.
+        I build things that stay running. Self-hosted AI on my own hardware, a Flutter app live on Google Play, client sites with 5-star reviews. Not demos. Production.
       </p>
       <div class="flex flex-col items-center justify-center gap-3 text-base font-medium sm:flex-row">
         <a class="btn-secondary" href="/projects">Explore projects</a>
-        <a class="btn-secondary" href="#contact">Work with me</a>
-        <a class="btn-secondary" href={import.meta.env.BASE_URL + 'request-cv/'}>Request CV</a>
         <a class="btn-secondary" href="https://github.com/AlexanderGRTCh" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn-secondary" href="#contact">Work with me</a>
       </div>
     </div>
   </section>
@@ -155,11 +161,9 @@ const myExperience = [
   <section id="about" class="section">
     <div class="section-heading">
       <span class="section-kicker">About</span>
-      <h2 class="section-title">Building systems that run in production</h2>
+      <h2 class="section-title">How I got here</h2>
       <p class="section-description">
-        I design and operate software end to end, from self-hosted AI agent infrastructure
-        to secure CI/CD pipelines and production web applications. My work runs live, not in sandbox environments.
-        I focus on clarity, reliability, and systems that keep working when you stop watching them.
+        CS grad, Langara College, April 2025. Since going all-in on software in December 2025: a Flutter app live on Google Play with 701 tests and a 12-member beta team, a self-hosted AI agent system running 24/7 on my own hardware, client websites with 5-star reviews, and a production DevSecOps pipeline on AWS. I build things that stay running.
       </p>
     </div>
     <div class="grid gap-6 md:grid-cols-2">
@@ -289,6 +293,18 @@ const myExperience = [
           </div>
         </div>
       ))}
+    </div>
+  </section>
+
+  <section id="education" class="section">
+    <div class="section-heading">
+      <span class="section-kicker">Education</span>
+      <h2 class="section-title">Academic background</h2>
+    </div>
+    <div class="card p-6">
+      <span class="text-sm font-semibold uppercase tracking-wide text-indigo-500">Graduated April 2025</span>
+      <h3 class="mt-2 text-xl font-semibold text-gray-900 dark:text-white">Associate of Science, Computer Science</h3>
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Langara College, Vancouver, BC</p>
     </div>
   </section>
 
