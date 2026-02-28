@@ -1,6 +1,6 @@
 ---
 title: "Live AI Agent Infrastructure"
-description: "A self-hosted production multi-agent AI system running 24/7 on personal hardware. Outcome-first prompting, hub-and-spoke coordination with a shared blackboard, and a universal agent class with specialist sub-agents for build, design, marketing, security and career. Voice transcription, persistent memory, parallel task execution and proactive monitoring — all through Telegram."
+description: "A self-hosted production multi-agent AI system running 24/7 on personal hardware. Outcome-first prompting, hub-and-spoke coordination with a shared blackboard, and a universal agent class with specialist sub-agents for build, design, marketing, security and career. Voice transcription, persistent memory, parallel task execution and proactive monitoring, all through Telegram."
 thumbnail: "/assets/ai-infrastructure.jpg"
 tags: ["AI", "Multi-Agent", "Docker", "Linux", "Claude", "Whisper", "Python", "Automation", "Infrastructure"]
 demoUrl: "/no-demo"
@@ -21,7 +21,7 @@ Built a local voice pipeline: incoming OGG audio is converted by ffmpeg to 16kHz
 
 Designed a file-based memory system: daily markdown logs capture raw session activity while a curated long-term MEMORY.md stores distilled context that persists across restarts and compactions. Raw logging and curated knowledge stay separate to keep context windows efficient.
 
-Implemented outcome-first agent prompting: every spawn brief follows a fixed structure — goal (what we're trying to achieve and why), constraints (hard limits, file paths, what must not change), suggested approach (guidance the agent can deviate from with reason), deliverable (exactly what to produce and where). This eliminates ambiguous hand-offs and produces self-verifying agents.
+Implemented outcome-first agent prompting: every spawn brief follows a fixed structure: goal (what we're trying to achieve and why), constraints (hard limits, file paths, what must not change), suggested approach (guidance the agent can deviate from with reason), deliverable (exactly what to produce and where). This eliminates ambiguous hand-offs and produces self-verifying agents.
 
 Built a hub-and-spoke coordination model: the main agent controls all information flow and never executes implementation tasks. Sub-agents append to a shared BLACKBOARD.md on completion; the main agent synthesizes and writes decisions to DECISIONS.md after confirmation. Cross-agent state is always visible and auditable.
 
@@ -29,7 +29,7 @@ Runs a universal agent class: one template, role defined at spawn time. Speciali
 
 Built a proactive heartbeat system: scheduled checks surface relevant emails, calendar events and project status without needing to be asked. Heartbeat batches periodic checks into single API calls to minimize token usage.
 
-Integrated GitHub workflows with fine-grained PATs scoped per repository: the agent can read all repositories, commit code changes and push to branches autonomously, using the GitHub API for reads and git operations for writes — keeping actions auditable and reversible. Review gates stay in place before merges.
+Integrated GitHub workflows with fine-grained PATs scoped per repository: the agent can read all repositories, commit code changes and push to branches autonomously, using the GitHub API for reads and git operations for writes, keeping actions auditable and reversible. Review gates stay in place before merges.
 
 Configured tool access policies per context: read and write for the workspace, browser automation via Playwright (bundled Chromium, no host-level browser dependency) for account and web tasks, exec access for builds and scripts.
 
@@ -57,7 +57,7 @@ Specialist sub-agents complete parallel implementation, research, design and con
 
 Full context retained across sessions and server restarts.
 
-GitHub commits and branch pushes executed autonomously within approved workflows — reads via API, writes via git, fully auditable.
+GitHub commits and branch pushes executed autonomously within approved workflows: reads via API, writes via git, fully auditable.
 
 Proactive monitoring surfaces calendar events, emails and project status without prompting.
 
