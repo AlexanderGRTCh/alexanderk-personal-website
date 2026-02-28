@@ -38,6 +38,7 @@ Configured tool access policies per context: read and write for the workspace, b
 The agent operates across four layers simultaneously.
 
 ### 1) Voice input, locally processed
+
 Voice messages arrive via Telegram, get transcribed by whisper.cpp on the server and become actionable input in seconds with no cloud dependency.
 
 ### 2) Parallel specialist sub-agents
@@ -47,6 +48,7 @@ A single instruction can spawn multiple specialists working in parallel: build/F
 The agent retains context across every restart. Daily logs capture what happened; long-term memory stores what matters. Starting a new session does not mean starting over.
 
 ### 4) Proactive monitoring
+
 Without being prompted, the agent checks email, upcoming calendar events, project build status and active tasks on a schedule, surfacing what needs attention before it becomes urgent.
 
 ## Results
