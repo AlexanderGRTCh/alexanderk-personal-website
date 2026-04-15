@@ -1,0 +1,109 @@
+---
+title: "StreakUp Cross-Platform Habit Tracker"
+description: "A production Flutter app with 655 automated tests, behavioral psychology-driven engagement, and a complete monetization stack. Shipped on Google Play and the App Store."
+thumbnail: "/assets/streakup-thumbnail.png"
+tags: ["Flutter", "Dart", "Riverpod", "Hive", "RevenueCat", "AdMob", "iOS", "Android"]
+demoUrl: "https://alexandergrtch.github.io/StreakUp/"
+featured: true
+clientLinks:
+  - label: "Google Play"
+    url: "https://play.google.com/store/apps/details?id=com.resolutiontracker.app"
+  - label: "App Store"
+    url: "https://apps.apple.com/app/streakup-habit-tracker/id6742748961"
+---
+
+StreakUp is a cross-platform habit tracker built with Flutter and shipped to real users on Google Play and the App Store. It supports daily and weekly recurring habits, one-off tasks, streak tracking with shield protection, milestone badges, and a 5-tone emotion-aware celebration system. The app uses Riverpod for state management, Hive for offline-first local storage, RevenueCat for subscriptions, and AdMob for ad monetization. With 655 automated tests across 34 test files, it demonstrates production-grade mobile development with comprehensive test coverage.
+
+### Technical Explanation
+The architecture follows Clean Architecture with domain, data, and presentation layers. Riverpod providers handle reactive state across the app. Hive boxes store goals and settings locally with custom adapters for complex types. RevenueCat SDK manages subscription entitlements with real-time status streaming. AdMob serves banner and interstitial ads with frequency capping. Notifications use `flutter_local_notifications` with Yes/No action buttons that trigger background handlers storing pending actions in SharedPreferences for processing on next app launch.
+
+## Problem
+Most habit trackers feel transactional: check a box, see a number, repeat. They fail to build emotional investment or respond to the user's actual journey. Users abandon them because streak breaks feel like failure, empty states feel intimidating, and the apps do not adapt to real life (vacations, missed days, varying motivation). Monetization is often an afterthought, slapped on as intrusive ads without a cohesive freemium strategy.
+
+### Technical Explanation
+Building a habit tracker that users actually stick with requires more than CRUD operations. It needs: (1) behavioral psychology hooks that make progress feel rewarding, (2) graceful handling of real-world disruptions like missed days and vacations, (3) a monetization system that respects free users while incentivizing upgrades, (4) offline-first data persistence with sync-ready architecture, and (5) comprehensive test coverage to prevent regressions in a codebase that spans UI, state management, notifications, and in-app purchases.
+
+## Approach
+- **Built a 5-tone emotion system** that maps every check-in to one of five celebrations: Relief (default animated overlay), Momentum (streak-at-risk orange banner), Resilience (comeback teal banner), Gratitude (full-screen milestone overlay with confetti), and Shield (streak protection indigo overlay). Each tone uses distinct colors, haptic patterns, and durations. Priority ensures only one celebration fires per check-in.
+- **Implemented Streak Shields**: Users earn shields at milestones (1 free, 2 premium) that protect streaks during 1-2 day gaps. Shielded days display as indigo circles on the calendar. This transforms streak breaks from failure points into resource-management decisions.
+- **Designed 7 UI motion animations**: progress bar overshoot, check-in button pop, streak badge entrance bounce, post-check-in card glow, staggered card entrance, badge unlock animation, and calendar today pulse. All animations respect a `hapticEnabled` user setting.
+- **Created 145 streak-tiered micro-messages** that evolve with streak length: "It begins." (day 1) → "Not a fluke." (days 2-3) → "Legendary." (day 60+). Messages fade in with 6px slide-up animation.
+- **Built a surprise reward system**: 12% chance of "Lucky!" golden relief variant with triple particles, shimmer glow ring, and 1.3x entrance bounce. Variable ratio reinforcement increases engagement without predictability.
+- **Implemented weekly consistency dots**: 7 Mon-Sun dots on the home screen showing which days had all habits completed. Creates "complete the row" motivation via the Zeigarnik Effect.
+- **Added streak-at-risk glow**: Amber 3.5px left accent on goal cards when streak > 0 and not checked in today. Makes loss aversion visible.
+- **Built personal best proximity**: "2 days from your best!" amber text when current streak is within 2 days of personal best and best >= 3. Uses near-miss effect to drive completion.
+- **Designed empty state with identity framing**: "One habit changes everything / What's yours?" with suggestion chips (Exercise, Read daily, Meditate) that pre-fill the add-goal screen. Eliminates blank-page paralysis via endowed progress effect.
+- **Implemented time-aware greeting**: "Good morning. 3 habits waiting." vs "All caught up!" on Today's Mission card. First text feels personal and changes each visit.
+- **Built "You Built This" rotating stat**: Trophy line below shields showing total check-ins, personal best, or days active. Rotates daily using `dayOfYear % count`.
+- **Created personalized splash screen**: Fire gradient (deepOrange to amber) when user has active streak, with contextual messages ("14 days strong", "Fresh start. Let's go."). Streak data cached in SharedPreferences from previous session.
+- **Architected complete monetization stack**: Free tier (3 habits + 3 one-offs, banner + interstitial ads) vs Premium (unlimited, no ads, exclusive themes). RevenueCat handles monthly ($1.99) and yearly ($14.99) subscriptions with 7-day free trial. Dynamic pricing from offerings, never hardcoded.
+- **Wrote 655 automated tests** across 34 test files covering: goal sorting, notification expiration, one-off integration, purchase/restore flow, weekly metrics, emotion mapping, celebration dispatching, streak calculation, milestone logic, shield activation, and all Phase 1.5 home screen features.
+
+### Technical Explanation
+The emotion system uses an `EmotionTone` enum and `mapCheckInEmotion()` function that evaluates streak state, milestone proximity, and history to return the appropriate tone. Each tone has a dedicated widget (`ReliefCheckOverlay`, `MomentumOverlay`, etc.) with precise animation controllers, durations, and haptic triggers. The shield system adds `DayStatus.shielded` and `ShieldOpportunity` classes with logic limiting activation to 1-2 day gaps on daily goals. Weekly goals use `completedWeeksCount()` instead of total check-ins for milestone eligibility. All animations use `TweenAnimationBuilder` with `ValueKey` triggers for fresh animations on state change.
+
+## Workflow Story: From Check-In to Celebration
+
+### 1) Morning check-in
+User opens app. Splash screen shows fire gradient with "14 days strong." Today's Mission card greets "Good morning. 3 habits waiting." Weekly dots show Mon-Wed filled green, Thu (today) pulsing amber, Fri-Sun dim. Goal cards display streak counts; one shows amber left accent (streak at risk).
+
+### 2) Completing a habit
+User taps check-in on a goal. Relief overlay animates: green circle scales with elastic bounce, checkmark draws with overshoot, three gradient ripples emanate, warm particles drift outward. Micro-message fades in: "Two weeks of showing up." If 1 check-in from next milestone, "Almost There" ghost badge teaser appears with 92% progress ring.
+
+### 3) Breaking a streak (with shields)
+User returns after 2 days. Shield prompt bottom sheet appears: "Protect your 14-day streak?" User taps "Use Shield." Shield celebration overlay: indigo backdrop, shield icon bounces with metallic shimmer, sparkles drift, "Streak Protected" message. Calendar shows indigo circle with shield icon for missed day. Streak continues.
+
+### 4) Hitting a milestone
+30-day check-in triggers Gratitude overlay: dark backdrop, milestone badge bounces in with golden glow ring, confetti + stars rain down, pride message appears. "+1 Shield" indigo chip shown below title. User taps Continue to dismiss.
+
+### 5) Subscription upgrade
+Free user hits 3-habit limit. Upgrade dialog shows monthly and yearly options with dynamic localized prices from RevenueCat. User purchases yearly plan. `isPremiumProvider` streams true → ads disappear instantly, premium themes unlock, unlimited goals enabled.
+
+<figure>
+  <img src="/assets/streakup-mission-card.png" alt="Today's Mission card with weekly consistency dots and time-aware greeting" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Today's Mission card with weekly dots and personalized greeting</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/streakup-relief-overlay.png" alt="Relief celebration overlay with animated checkmark and micro-message" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Relief overlay with elastic checkmark animation and tiered micro-message</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/streakup-shield-overlay.png" alt="Shield celebration overlay protecting a streak" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Shield overlay with indigo theme and metallic shimmer</figcaption>
+</figure>
+
+<figure>
+  <img src="/assets/streakup-calendar.png" alt="Calendar view with shielded days and milestone progress" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400">Calendar showing shielded days, check-ins, and milestone tracking</figcaption>
+</figure>
+
+<hr class="section-divider" />
+
+## Results
+- Shipped to Google Play and App Store with active user base and 12-member international beta team providing real-world feedback.
+- 655 automated tests covering unit, widget, and integration scenarios with comprehensive edge case handling.
+- 5-tone emotion system increases check-in satisfaction through contextual celebrations that match user emotional state.
+- Streak Shields reduce churn from missed days by reframing them as resource-management decisions rather than failures.
+- Weekly consistency dots and streak-at-risk glow leverage behavioral psychology (Zeigarnik Effect, Loss Aversion) to drive daily engagement.
+- Surprise reward system (12% variable ratio) creates anticipation without predictability.
+- RevenueCat subscription model with 7-day free trial converts free users to premium with transparent pricing.
+- Offline-first architecture with Hive ensures full functionality without network connectivity.
+- Comprehensive notification system with Yes/No actions enables check-in without opening app.
+
+## Tech Stack
+- **Framework**: Flutter 3.38.5 with Dart 3.10.4
+- **State Management**: Riverpod 3.0.3 (AsyncNotifier, StreamProvider, FutureProvider)
+- **Local Storage**: Hive (goals, settings, adapters) + SharedPreferences (simple values, pending actions)
+- **Monetization**: RevenueCat (`purchases_flutter`) for subscriptions, Google Mobile Ads (AdMob) for banner/interstitial
+- **Notifications**: `flutter_local_notifications` with action buttons, timezone-aware scheduling
+- **Architecture**: Clean Architecture (domain/data/presentation layers)
+- **Testing**: 655 tests across 34 files (no mockito — manual mocks with Fake base class)
+- **CI/CD**: GitHub Actions for test automation, manual Play Console/App Store Connect upload
+- **Version**: 1.0.3+20 (current), package `com.AlexanderCH.habitracker2026`
+
+## Links
+- **Universal Link**: https://alexandergrtch.github.io/StreakUp/
+- **Google Play**: https://play.google.com/store/apps/details?id=com.resolutiontracker.app
+- **App Store**: https://apps.apple.com/app/streakup-habit-tracker/id6742748961
