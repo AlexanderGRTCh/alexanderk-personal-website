@@ -1,0 +1,91 @@
+---
+title: "Agentic Orchestration Infrastructure"
+description: "A production multi-agent AI system with semantic long-term memory, autonomous task orchestration, voice input, and continuous operation on personal hardware. Built, operated, and actively shipping real products."
+thumbnail: "/assets/ai-infrastructure.jpg"
+tags: ["AI", "Multi-Agent", "Python", "Claude", "Whisper", "sqlite-vec", "MCP", "Automation", "Infrastructure"]
+demoUrl: "/no-demo"
+featured: true
+---
+
+A production AI system I designed, built, and operate on personal hardware. Not a demo project. It runs every day, handles real work across code, marketing, research, and scheduling, and accepts voice commands through Telegram as the primary interface. Saying something is enough to start work.
+
+## Problem
+
+Most AI tools are stateless. Every new session starts from zero, specialist agents require constant manual handoffs, and any task running longer than a few minutes needs supervision. OAuth tokens expire silently, parallel workstreams are impossible in a single agent loop, and there is no mechanism to detect a failed process without manually checking.
+
+### Technical Explanation
+Stateless sessions force full context reconstruction on every call, wasting tokens and breaking continuity on multiday tasks. Single-agent architectures serialize work that could run in parallel, blocking throughput. Without persistent semantic memory, each spawned agent must receive the full project brief at start time, pushing prompts past practical token limits. Without an autonomous monitoring layer, stalled or failed processes accumulate undetected until a human notices.
+
+## Approach
+
+- Built a local voice pipeline: Telegram delivers incoming audio as OGG files; ffmpeg converts each file to a 16kHz mono WAV; whisper.cpp runs inference on device using either the tiny or base model depending on accuracy requirements. The entire pipeline runs locally with zero external API calls and zero per-message transcription cost, completing in under 5 seconds per message.
+- Designed a 4-layer memory hierarchy: a curated MEMORY.md (hot context, always injected, 150 line cap) feeds every agent session; a dynamically refreshed CONTEXT.md pulls domain-specific rules on demand from the Brain DB; daily markdown log files store full session detail and are never auto-injected; a sqlite-vec database called Brain DB holds semantic long-term memory using OpenAI text-embedding-3-large embeddings at 3072 dimensions.
+- Implemented weighted semantic retrieval: every memory query scores results by semantic similarity (60%), importance (30%), and recency (10%). Importance is assigned heuristically at insert time using a fixed scale (blocker=9 through task=4), with keyword boosts for anything marked critical or credential-related. A consolidation pipeline merges near-duplicate entries at a 0.92 cosine threshold to keep the database clean over time.
+- Built per-query memory injection: context_refresh.py rewrites a dedicated section of MEMORY.md on every heartbeat cycle with the top Brain DB hits for currently active task keywords. The Memory Preamble Protocol is baked into the agent template so every sub-agent issues a Brain DB query before starting work, pulling focused long-term context without loading the full database into the spawn prompt.
+- Designed a hub-and-spoke agent coordination model using Claude Code as the orchestration primitive: sub-agents append results to a shared BLACKBOARD.md (append-only shared state); confirmed outcomes are written to DECISIONS.md by the main agent after explicit confirmation. Spawn prompts follow an outcome-first structure covering goal, constraints, suggested approach, and deliverable. A specialist persona library covering build, design, marketing, security, career, and copywriting roles is referenced at spawn time.
+- Built an agent watcher system: agent_watcher_daemon.py runs a 3-minute polling loop, compares agent timestamps against BLACKBOARD.md update times, and writes a file-based stuck-alert marker if no progress is detected within 6 minutes. The heartbeat system monitors the daemon process itself and keeps it alive.
+- Implemented task routing and working memory separation: task_router.py performs a semantic search against persona descriptions to match an incoming task to the correct specialist identity and spawn configuration. agent_memory_slice.py generates lean task-specific context snippets by combining top Brain DB hits with keyword-filtered MEMORY.md sections, keeping spawn prompts under 300 tokens.
+- Built a structured inter-agent protocol: every agent completion message follows a JSON schema with six fields: summary, files_changed, what_works, what_doesnt, needs_alexander, and next. agent_message.py logs all inter-agent messages to a persistent audit log.
+- Integrated GitHub with two accounts using fine-grained PATs scoped per repository. One account holds read access across all repositories; a second agent account holds collaborator write access for approved repositories where autonomous commits are permitted.
+- Built a social automation layer: Twitter/X engagement runs through Tweepy API v2 for all write operations; YouTube engagement uses YouTube Data API v3 with OAuth2 for comments and subscriptions, scheduled on a 30-minute cycle; Reddit sessions run through Playwright with cookie-based authentication. Each platform maintains velocity caps and a deduplication log that persists across session boundaries.
+- Built an auto-reauth system: when a token failure occurs, a file-based marker is written at a known path. The heartbeat system detects the marker, sends a Telegram alert containing the exact authorization URL and the one-tap exchange command, then deletes the marker so the alert fires exactly once per incident.
+- Configured a proactive heartbeat via Windows Task Scheduler: on a fixed schedule the system checks OAuth token expiry, verifies stuck-agent markers, confirms daemon health, surfaces relevant emails, and reviews project status. Silence from the heartbeat means every check passed.
+- Published <a href="https://alexandergrtch.github.io/StreakUp/" target="_blank" rel="noopener" style="color: #4f46e5; font-weight: 600;">StreakUp</a>, a cross-platform Flutter habit tracker, on <a href="https://play.google.com/store/apps/details?id=com.AlexanderCH.habitracker2026" target="_blank" rel="noopener">Google Play</a> and the <a href="https://apps.apple.com/us/app/streakup-habit-tracker-goals/id6760596379" target="_blank" rel="noopener">App Store</a> as the primary product the system actively supports. The app integrates RevenueCat for subscription monetization and AdMob for ad delivery, includes 701 automated tests, and is supported by a 12-member international beta team.
+
+### Technical Explanation
+context_refresh.py extracts the top 3 active task keywords from the last 10 BLACKBOARD entries, issues a sqlite-vec similarity query, deduplicates results by memory ID, and overwrites the current context section of MEMORY.md in place. agent_memory_slice.py produces a combined context slice at spawn time by issuing a Brain DB search for the task description, applying keyword filtering over MEMORY.md sections, and formatting the output under a Relevant Context heading. The social layer splits concerns by transport: Tweepy handles all Twitter writes while Playwright handles search and read operations, avoiding synthetic event detection on React-rendered UIs. The OAuth reauth marker protocol is stateless and idempotent: the scheduler writes a marker on token failure; the heartbeat reads it, dispatches the Telegram alert, and deletes it immediately, preventing duplicate notifications.
+
+## System in Action
+
+### 1) Voice message becomes an active task
+A voice message arrives in Telegram as an OGG file. ffmpeg converts the audio to a 16kHz mono WAV file in a single command. whisper.cpp runs local inference and returns a text transcript in under 5 seconds. That transcript is passed to the agent as a text instruction with no cloud dependency and no per-message cost.
+
+### 2) Memory context assembled before work begins
+Before any task starts, the system assembles a layered context bundle. The MEMORY.md hot context is always present. CONTEXT.md pulls the relevant domain rules on demand. agent_memory_slice.py issues a semantic query to the Brain DB and combines the top weighted hits with filtered MEMORY.md sections into a focused preamble under 300 tokens. The agent receives a precise, task-scoped context window instead of a raw file dump.
+
+### 3) Task routed to the right specialist
+task_router.py receives the task description and performs a semantic search against the persona library. The closest match returns a specialist identity and a prebuilt spawn configuration including persona file path, relevant memory slice, and structured reporting format. The main agent reviews the routing decision before spawning, maintaining oversight at the dispatch point.
+
+### 4) Parallel specialists execute simultaneously
+A single instruction can trigger multiple specialists at once: a build agent implements features, a marketing agent drafts copy and schedules social posts, and a career agent updates portfolio content, all running in parallel. Each agent appends a structured JSON completion message to BLACKBOARD.md when done. The main agent reads every BLACKBOARD diff before writing anything to DECISIONS.md, ensuring no outcome is committed without review.
+
+### 5) Watcher detects a stall and alerts
+The agent_watcher_daemon.py polling loop runs every 3 minutes. If a registered agent has not updated BLACKBOARD.md within 6 minutes of its start time, the daemon writes a stuck alert to a fixed file path. The next heartbeat cycle reads the alert file, sends a Telegram notification with the agent label and last known state, then deletes the file. The alert fires exactly once per incident.
+
+### 6) OAuth failure surfaces and resolves in one step
+When a scheduled YouTube or Gmail operation encounters an expired token, reauth.py writes a marker to a fixed path. On the next heartbeat, the system reads the marker, formats a recovery message containing the full authorization URL and the exact exchange command, sends it via Telegram, and removes the marker. One command and the system resumes without a debugging session.
+
+## Results
+
+- Continuous operation across session boundaries and day transitions with full context preserved at every restart.
+- Voice transcription completed on device in under 5 seconds per message with zero transcription API cost across all usage.
+- Semantic memory retrieval returns focused, weighted results from the Brain DB rather than injecting complete context files into every prompt.
+- Parallel specialist agents reduce total task time by executing implementation, research, content, and review work concurrently rather than serially.
+- Stalled agents detected and surfaced via Telegram within 6 minutes through the autonomous watcher daemon with no manual checking required.
+- OAuth token failures resolved through a single Telegram message and one-tap recovery command with no manual debugging session required.
+- Social automation operating across Twitter, YouTube, and Reddit with persona-consistent copy, velocity controls, and cross-session deduplication.
+- All GitHub commits and pushes executed within auditable fine-grained PAT scope, traceable per repository and per account.
+- <a href="https://alexandergrtch.github.io/StreakUp/" target="_blank" rel="noopener" style="color: #4f46e5; font-weight: 600;">StreakUp</a> published on <a href="https://play.google.com/store/apps/details?id=com.AlexanderCH.habitracker2026" target="_blank" rel="noopener">Google Play</a> and the <a href="https://apps.apple.com/us/app/streakup-habit-tracker-goals/id6760596379" target="_blank" rel="noopener">App Store</a> with active RevenueCat monetization, AdMob integration, 701 automated tests passing, and a 12-member international beta team.
+
+## Tech Stack
+
+- **Runtime:** Windows 10 Pro, Python venv
+- **Orchestration:** Claude Code (Anthropic) as the agent primitive
+- **Tool Access:** MCP bridge (mcp_bridge.py)
+- **AI Reasoning:** Claude Sonnet via Anthropic API
+- **Voice Processing:** whisper.cpp (local inference, tiny and base models) and ffmpeg (OGG to 16kHz WAV)
+- **Memory Architecture:** 4-layer hierarchy including MEMORY.md (hot context), CONTEXT.md (dynamic domain rules), daily markdown logs, and Brain DB
+- **Brain DB:** SQLite + sqlite-vec, 3072-dimension embeddings
+- **Embeddings:** OpenAI text-embedding-3-large at 3072 dimensions
+- **Semantic Retrieval:** Weighted scoring at 60% cosine similarity, 30% importance, 10% recency decay; consolidation pipeline at 0.92 cosine threshold
+- **Agent Coordination:** BLACKBOARD.md (shared append-only state), DECISIONS.md (confirmed outcomes, main agent only), JSON structured reporting protocol
+- **Scheduling:** Windows Task Scheduler (episodic memory extraction, nightly)
+- **Monitoring:** agent_watcher_daemon.py (3-minute polling, file-based stuck alerts) and heartbeat scheduler
+- **Task Routing:** task_router.py (semantic persona match) and agent_memory_slice.py (lean context slices under 300 tokens)
+- **Social Automation:** Tweepy API v2 (Twitter writes), YouTube Data API v3 with OAuth2, Playwright with cookie sessions (Reddit and Twitter search)
+- **GitHub Integration:** Two accounts with fine-grained PATs scoped per repository
+- **Interface:** Telegram bot
+- **Languages:** Python, Bash, Dart (Flutter)
+
+### Technical Explanation
+The hub-and-spoke coordination model enforces a single decision authority: sub-agents can only append to BLACKBOARD.md; the main agent is the sole writer to DECISIONS.md and only writes after reviewing the full BLACKBOARD diff. The 4-layer memory design separates retrieval cost from freshness: MEMORY.md holds the minimum viable context at nearly zero token cost; CONTEXT.md refreshes domain rules on demand without invalidating the hot context cache; daily logs provide full session detail on demand; the Brain DB handles semantic retrieval across any time window. The social transport split between Tweepy for writes and Playwright for reads avoids platform detection issues on React-rendered UIs. task_router.py and agent_memory_slice.py work as a pair at spawn time: the router selects the persona; the memory slice tool generates focused context for that persona's task, combining Brain DB hits with filtered MEMORY.md sections to stay under the 300-token spawn prompt budget.
