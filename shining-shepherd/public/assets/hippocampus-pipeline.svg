@@ -1,0 +1,99 @@
+<svg width="1100" height="440" viewBox="0 0 1100 440" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <marker id="arrP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4F46E5"/>
+    </marker>
+    <marker id="arrGrey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <!-- Card -->
+  <rect x="1" y="1" width="1098" height="438" rx="20" fill="#F8FAFC" stroke="#E5E7EB" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="32" y="44" font-size="22" font-weight="700" fill="#1F2937">How a memory is found</text>
+  <text x="32" y="67" font-size="14" fill="#6B7280">Search two ways at once, merge them fairly, drop duplicates, score, return the best five.</text>
+
+  <!-- helper: all stage boxes height 56, vertical center for single-row stages = 200 -->
+
+  <!-- 1. Query -->
+  <rect x="32" y="172" width="96" height="56" rx="12" fill="#4F46E5"/>
+  <text x="80" y="198" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">Query</text>
+  <text x="80" y="216" font-size="11" fill="#E0E0FF" text-anchor="middle">a question</text>
+
+  <!-- 2. Embed -->
+  <rect x="160" y="172" width="104" height="56" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+  <text x="212" y="196" font-size="14" font-weight="700" fill="#1F2937" text-anchor="middle">Embed</text>
+  <text x="212" y="214" font-size="10.5" fill="#6B7280" text-anchor="middle">cached</text>
+
+  <!-- arrow query->embed -->
+  <path d="M128 200 L156 200" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrP)"/>
+  <!-- arrow embed -> split point -->
+  <path d="M264 200 L296 200" fill="none" stroke="#4F46E5" stroke-width="2"/>
+
+  <!-- ===== Two parallel channels ===== -->
+  <!-- channel A: dense vector (top) -->
+  <rect x="300" y="120" width="150" height="60" rx="12" fill="#FFFFFF" stroke="#4F46E5" stroke-width="2"/>
+  <text x="375" y="146" font-size="13.5" font-weight="700" fill="#1F2937" text-anchor="middle">Vector search</text>
+  <text x="375" y="165" font-size="10.5" fill="#6B7280" text-anchor="middle">by meaning · sqlite-vec</text>
+
+  <!-- channel B: BM25 keyword (bottom) -->
+  <rect x="300" y="220" width="150" height="60" rx="12" fill="#FFFFFF" stroke="#4F46E5" stroke-width="2"/>
+  <text x="375" y="246" font-size="13.5" font-weight="700" fill="#1F2937" text-anchor="middle">Keyword search</text>
+  <text x="375" y="265" font-size="10.5" fill="#6B7280" text-anchor="middle">exact words · BM25 / FTS5</text>
+
+  <!-- split arrows from x=296,200 to each channel -->
+  <path d="M296 200 C 290 200 290 150 298 150" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrP)"/>
+  <path d="M296 200 C 290 200 290 250 298 250" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrP)"/>
+  <text x="252" y="100" font-size="11" fill="#6B7280">in parallel</text>
+
+  <!-- 3. RRF merge: channels converge -->
+  <rect x="490" y="166" width="118" height="68" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+  <text x="549" y="192" font-size="13.5" font-weight="700" fill="#1F2937" text-anchor="middle">Merge</text>
+  <text x="549" y="209" font-size="10.5" fill="#6B7280" text-anchor="middle">Reciprocal</text>
+  <text x="549" y="223" font-size="10.5" fill="#6B7280" text-anchor="middle">Rank Fusion</text>
+
+  <!-- converging arrows into RRF -->
+  <path d="M450 150 C 470 150 472 188 488 192" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrP)"/>
+  <path d="M450 250 C 470 250 472 212 488 208" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrP)"/>
+
+  <!-- 4. Normalize + tier-bias -->
+  <rect x="640" y="172" width="116" height="56" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+  <text x="698" y="195" font-size="12.5" font-weight="700" fill="#1F2937" text-anchor="middle">Normalize</text>
+  <text x="698" y="213" font-size="10.5" fill="#6B7280" text-anchor="middle">+ tier bias</text>
+  <path d="M608 200 L636 200" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrP)"/>
+
+  <!-- 5. MMR -->
+  <rect x="788" y="172" width="104" height="56" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+  <text x="840" y="195" font-size="13.5" font-weight="700" fill="#1F2937" text-anchor="middle">Diversify</text>
+  <text x="840" y="213" font-size="10.5" fill="#6B7280" text-anchor="middle">MMR</text>
+  <path d="M756 200 L784 200" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrP)"/>
+
+  <!-- 6. Score -->
+  <rect x="924" y="160" width="148" height="80" rx="12" fill="#FFFFFF" stroke="#4F46E5" stroke-width="2"/>
+  <text x="998" y="183" font-size="13.5" font-weight="700" fill="#1F2937" text-anchor="middle">Score</text>
+  <text x="998" y="202" font-size="10.5" fill="#6B7280" text-anchor="middle">0.75 relevance</text>
+  <text x="998" y="216" font-size="10.5" fill="#6B7280" text-anchor="middle">0.15 freshness</text>
+  <text x="998" y="230" font-size="10.5" fill="#6B7280" text-anchor="middle">0.10 importance</text>
+  <path d="M892 200 L920 200" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrP)"/>
+
+  <!-- 7. Rerank (dormant) + Top 5, second row -->
+  <!-- score down to rerank -->
+  <path d="M998 240 C 998 280 800 290 762 312" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-dasharray="5 5" marker-end="url(#arrGrey)"/>
+
+  <!-- Rerank dormant -->
+  <rect x="612" y="312" width="150" height="60" rx="12" fill="#FFFFFF" stroke="#6B7280" stroke-width="1.8" stroke-dasharray="6 5"/>
+  <text x="687" y="336" font-size="13" font-weight="700" fill="#6B7280" text-anchor="middle">Rerank</text>
+  <text x="687" y="354" font-size="10.5" fill="#6B7280" text-anchor="middle">Voyage · built, dormant</text>
+
+  <!-- Top 5 -->
+  <rect x="424" y="312" width="130" height="60" rx="12" fill="#4F46E5"/>
+  <text x="489" y="338" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">Top 5</text>
+  <text x="489" y="357" font-size="10.5" fill="#E0E0FF" text-anchor="middle">back to the agent</text>
+
+  <!-- rerank -> top5 (dashed, dormant) -->
+  <path d="M612 342 L560 342" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-dasharray="5 5" marker-end="url(#arrGrey)"/>
+
+  <text x="687" y="392" font-size="11" fill="#6B7280" text-anchor="middle">optional stage, currently off</text>
+</svg>

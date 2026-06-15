@@ -1,0 +1,248 @@
+---
+title: "Hippocampus"
+description: "Long-term memory for AI agents: four layers, type-aware decay, and total recall in one SQLite file. A sanitized reference architecture from a production system."
+thumbnail: "/assets/hippocampus-cover.svg"
+tags: ["AI", "Agent Memory", "RAG", "sqlite-vec", "FTS5", "SQLite", "Retrieval", "Python"]
+featured: true
+---
+
+export const callout = {
+  borderLeft: "4px solid #4F46E5",
+  background: "rgba(79, 70, 229, 0.06)",
+  padding: "0.75rem 1.25rem",
+  borderRadius: "0.375rem",
+  margin: "1.5rem 0",
+};
+
+export const formula = {
+  textAlign: "center",
+  fontWeight: 700,
+  color: "#4F46E5",
+  fontSize: "1.15rem",
+  margin: "1.75rem 0",
+};
+
+export const diagram = {
+  display: "block",
+  width: "100%",
+  maxWidth: "640px",
+  margin: "1.75rem auto",
+  borderRadius: "0.5rem",
+};
+
+_Why an agent forgets, and the design decisions that fix it. Memory types, decay, and retrieval, in one SQLite file._
+
+<div style={callout}>
+**What this is.** Hippocampus is a sanitized reference architecture from a memory system that runs my daily work, every day, on real workloads. (The name is the brain structure that decides what gets kept as long-term memory and what fades, which is exactly the job here.) Nothing in this write-up is a demo or a proposal; it is a system in production, explained so you can see each design decision and the reason behind it.
+</div>
+
+## Start with the problem, because the problem is the design
+
+An AI agent with no memory starts every conversation from zero. You can hand it a giant block of context each time, but that is expensive, it overflows, and most of it is irrelevant to the task at hand. So the real question is not "how do I store everything." It is: **out of everything that was ever said, which few things should this agent recall right now, and how do I keep that selection fast, cheap, and correct as the store grows?**
+
+Naive memory, the kind you get from "embed every message and do a similarity search," fails in three specific ways. Each failure is not a bug to patch. It is a design decision waiting to be made.
+
+**It can't find an exact word.** Ask a pure semantic search for a filename, a flag, or an error code, and it often misses. The embedding blurs literal strings into "meaning," and the one thing you needed was the literal string. *Decision forced: search by meaning and by exact words at the same time.*
+
+**It crowds the top with near-duplicates.** The same fact gets said five slightly different ways over months. A plain top-5 returns five paraphrases of one thing and pushes out four other things you needed. *Decision forced: actively reward variety in the results, and merge duplicates before they pile up.*
+
+**Stale facts outrank fresh ones.** Yesterday's correction should beat a two-year-old belief. But if you just boost recent things, you bury the permanent rules that are supposed to stay. *Decision forced: let different kinds of memory age at different speeds.*
+
+That third decision is the heart of this system, so the rest of the page builds from it.
+
+## The shape: four layers of memory
+
+Before the details, the map. Memory reaches the agent in four distinct layers, and what separates them is *when* each one loads. The whole design is shaped by a single constraint: you cannot paste everything the system knows into every prompt. It is too expensive, and it drowns the model in noise. So each layer earns its place by loading only when it should.
+
+<img src="/assets/hippocampus-architecture.svg" alt="The four memory layers and the two stores in one SQLite file: always-on rules, on-demand domain rules, the raw archive for explicit recall, and weighted semantic retrieval from the curated store." style={diagram} loading="lazy" />
+
+**Layer 1, always-on.** A small, dense set of non-negotiable rules and communication invariants, injected at the start of every session by a hook, plus a tiny per-turn nudge (around seventy tokens) that keeps the agent's style from drifting. No search, always present. It is kept deliberately small, around two thousand tokens, because every token here is paid on every single session.
+
+**Layer 2, on-demand.** Domain-specific rules, fetched only when a task actually needs them, pulled live from the store by a single command. The rules for one kind of work load when you do that work and never weigh down anything else. Layer 1 stays small precisely because this layer exists.
+
+**Layer 3, explicit recall.** The raw archive of everything that was actually said, every message of every past session, indexed but never auto-injected. It stays silent until something explicitly asks it. This is the total-recall safety net, deliberately kept out of the hot path so it costs nothing until the moment it is needed.
+
+**Layer 4, weighted semantic retrieval.** The curated memory store, reached through a single memory tool the agent calls directly (exposed over a small local tool server, no network round-trip to anything but the embedding API), at the start of a session and again every time a sub-agent is spawned, returning a focused handful of the most relevant facts. This is the layer most of this page is about, because it is the hard one: choosing *which* few memories out of thousands belong in front of the agent right now.
+
+<div style={callout}>
+**Why four and not one:** a single always-loaded blob would be both too big (cost) and too generic (it cannot know today's task). Splitting memory by *when it should load* is what keeps the per-turn memory cost roughly two orders of magnitude below "inject everything," while still putting the right context in front of the agent at the right moment. That economics is the whole reason for the split: Layer 1 is paid on every session and Layer 4's per-turn nudge on every turn, so both are kept tiny, while the heavy material in Layers 2 and 3 stays out of the baseline until something asks for it. Cheap memory is memory you can afford to use on every single turn. Everything that follows zooms into Layer 4, where the interesting decisions live.
+</div>
+
+## The core idea: not all memories are the same kind of thing
+
+Here is the move the whole architecture rests on. A rule like "never commit a secret to git" is not the same kind of thing as "I spoke with a client on Tuesday." One is a deliberate, near-permanent decision. The other is a passing event that will be irrelevant in a few months. Treating them identically, one storage bin, one aging curve, one trust level, is what makes naive memory feel dumb.
+
+So the system gives every memory a **type**, and the type carries beliefs about that memory: how long it tends to stay true, whether a human wrote it or a machine extracted it, and whether it is allowed to merge with its neighbors. Everything downstream, how it ages, how it ranks, whether it can be rewritten, falls out of the type.
+
+<div style={callout}>
+**Why this matters:** once "kind of memory" is a first-class property, you stop arguing about a single global policy. A rule and a task can live in the same store and behave like the different things they are.
+</div>
+
+## The memory types, and why each ages the way it does
+
+Every stored memory gets one type. Each type has a **half-life**, the time after which its freshness is worth half as much. Think of it as each memory carrying its own egg timer, set to how long that kind of truth usually lasts. Here is the full ladder, grouped by how long they hold.
+
+<img src="/assets/hippocampus-halflife.svg" alt="The memory-type half-life ladder: near-permanent rules at ten years, slow-changing tools and people at two years, normal facts at one year, reflective notes at six months, ephemeral tasks at ninety days, and disposable pings at seven days." style={diagram} loading="lazy" />
+
+**Near-permanent (half-life ~10 years) — rules, architecture, decisions.** These are deliberate choices. "We push as this identity." "The embedding model is locked." A decision you made on purpose rarely expires on its own; if it changes, you change it explicitly. So time barely discounts it.
+
+**Slow-changing (~2 years) — tools, configs, people.** A tool's usage, a config value, a fact about a person. These drift, but slowly. Two years is a reasonable "probably still true" window.
+
+**Normal facts (~1 year) — facts, references, projects, and machine-learned procedures.** The bulk of what the system knows. True for a good while, but the world moves; a year of un-reinforcement and the system stops trusting it as strongly.
+
+**Reflective (~6 months) — insights, reflections, meeting notes.** Interpretations and summaries. Useful, but they date faster than hard facts because they are a snapshot of thinking at a moment.
+
+**Ephemeral (~90 days) — tasks and todos.** "Build the report." "Fix the parser." Three months later it is done or abandoned, and it should fade out of the way. These are also the ones the system actively retires (more below).
+
+**Disposable (~7 days) — operational pings.** Health checks and liveness signals. After a week they are pure noise, so they decay almost immediately.
+
+<div style={callout}>
+**How the half-life becomes math, plainly:** when the system scores a memory for retrieval, it multiplies in a freshness factor that is `exp(−age / half-life)`. A one-week-old health ping is already near zero. A one-week-old rule is essentially undimmed. Same age, completely different treatment, because the timer length is set by the type. **The point is that permanence never becomes dominance:** old rules stay findable without flooding the top over fresh, specific facts.
+</div>
+
+<div style={callout}>
+**The rejected alternative:** one decay curve for everything. Simpler to build, but it forces a bad choice, either recent noise drowns durable rules, or durable rules drown today's correction. Type-aware decay refuses the choice.
+</div>
+
+## Curated vs extracted: two authors that never contaminate each other
+
+There is a second split, just as important, hiding inside the types: **who wrote the memory.**
+
+Some memories are **human-curated rules**. A person decided them on purpose. These are frozen: the system never merges them, never rewrites them, never lets an automated process quietly change them.
+
+Other memories are **machine-extracted procedures** (internally, a separate type). The system distilled them from watching sessions. These are allowed to merge with near-duplicates, to decay, and, by design, to *grow more confident* when the same procedure is observed again.
+
+<div style={callout}>
+**Why this matters:** you do not want the firehose of auto-extracted observations editing your laws. Keeping curated and extracted as different types, with different permissions, means curation and extraction can both run at full speed without poisoning each other. The human-written layer stays trustworthy; the machine-written layer stays adaptive.
+</div>
+
+This split earned itself the hard way. Early on the system conflated the two, and 547 machine-extracted procedures had quietly piled up as frozen, un-mergeable rules, unable to consolidate or age. Separating the types let all 547 start merging and decaying correctly, in well under a second.
+
+## Two memories in one file: precision and total recall
+
+A distilled memory is lossy on purpose. From an hour-long session the system keeps only five to eight durable sentences. That is great for precision and terrible if you later need the exact thing that was said.
+
+So there are two stores in **the same SQLite file**, with no shared tables:
+
+- **The curated store** keeps those five-to-eight distilled sentences per session. Small, sharp, the thing you search for decisions.
+- **The raw archive** keeps every meaningful message of every session, indexed for search. Big, complete, the thing you fall back to when distillation dropped a detail.
+
+<div style={callout}>
+**Why this matters:** precision memory and total recall have opposite needs, and most systems pick one. Putting both in one file, as two independent table sets, lets them coexist with zero extra infrastructure. One file holds the sharp summary and the full transcript, and a single search interface reaches either.
+</div>
+
+**The indexes live inside the file, too.** Searching by meaning means comparing the query against thousands of stored vectors. Done naively that is a brute-force scan of every embedding on every query, which gets slow as the store grows. So the system uses a dedicated **vector index** (the `sqlite-vec` extension) that finds nearest neighbours quickly without scanning everything, and a **full-text keyword index** (SQLite's FTS5) for the exact-word channel. Both are virtual tables in the *same* file as the data, and database triggers keep the keyword index in lock-step automatically whenever a memory is inserted, changed, or retired. The headline claim, no separate vector-database service, is only true because the vector and keyword indexes are built directly into SQLite.
+
+And the keyword index is deliberately tuned for this job. It is left **un-stemmed** and told to treat `_ - . /` as part of a word, so a filename like `brain.py`, a flag like `--force`, or a path survives as one literal token instead of being chopped apart or normalized into something unsearchable. That single configuration choice is what actually makes the exact-word channel catch the things semantic search blurs away. The raw archive makes the opposite choice on purpose, stemming its keywords so a search for "running" also finds "ran," because in the firehose, finding more matters more than finding exactly.
+
+## How a memory is born
+
+Walk a single fact from conversation to stored memory.
+
+1. **A conversation happens.** Every message is written to a transcript file as it occurs.
+2. **It goes quiet.** A watcher running once an hour waits until a session has been idle for thirty minutes, so it only processes finished work, not a live conversation. It fingerprints each transcript by content hash, so a file it has already fully handled and that hasn't changed is skipped without a second look.
+3. **It gets distilled.** A small, cheap language model reads the finished session (capped at a generous slice of the most recent activity, so one marathon session can't blow up the prompt) and returns five to eight one-sentence items, each written to stand on its own six months later. They are sorted into three buckets on purpose: **durable facts** (what is true), **results** (what happened), and **procedures** (how something is done). An empty or trivial session returns nothing and costs one cheap call.
+4. **Each item is typed, scored, embedded, and stored.** The bucket sets the type, and the type sets three things at once: the aging timer, the importance baseline (a decision outranks a task by default, then nudged up when the sentence contains words like "never," "must," or "credential"), and which internal tier it lands in. The sentence is then turned into a 1,536-number **semantic vector** by an embedding model and written to the store alongside a keyword-index entry, so it can later be found by meaning and by exact words.
+5. **The raw transcript is archived** into the total-recall store, message by message, so nothing is truly lost even though the curated store kept only a handful of sentences.
+6. **At night, the store improves and prunes itself.** Near-duplicates are merged into a single sharper sentence; tasks and todos past ninety days are retired. (Both detailed below.)
+
+<div style={callout}>
+**Why three buckets, and why it matters:** the split is not cosmetic. It maps directly onto the three tiers the memory is organized into, **semantic** (what is true), **episodic** (what happened and when), and **procedural** (how to act). One search interface reaches all three, but they age and behave differently: procedures are slow, trusted know-how; episodic results are the fast-fading log of events; semantic facts sit between. Forcing every extracted sentence to declare which of the three it is keeps know-how, history, and fact from blurring into one undifferentiated pile.
+</div>
+
+<div style={callout}>
+**The crash-safe part, in plain terms:** the watcher remembers exactly how far it got in each file, down to the last message it processed, and only advances that marker when a step fully succeeds. So it never re-reads what it already handled, and it never silently skips what it hasn't. If the machine dies mid-extraction, the next run picks up precisely where it left off. This rule, advance only on success, exists because an earlier version advanced the marker even when a step failed, and quietly walked past five days of unprocessed sessions before anyone noticed. The fix was to make the marker move only on a clean, completed extraction. A single file that keeps failing is given a few attempts and then set aside so one poisoned transcript can't stall the whole queue. **Why this matters:** an ingestion pipeline that double-counts or skips is worse than none, because you stop trusting the memory. The watermark makes ingestion boring and correct.
+</div>
+
+**And there is a second, slower pass as a backstop.** Once a day a daily sweep walks every transcript with the idle gate removed, so anything the hourly watcher somehow missed still gets caught within twenty-four hours. Because the hourly pass normally covers everything first, this daily pass usually finds nothing left to do and costs nothing. It is a belt-and-suspenders guarantee: the fast loop does the work, the slow loop makes sure nothing falls through.
+
+## How a memory is found
+
+Now the other direction: a new session asks for what's relevant. The query runs a short pipeline. In plain terms first, then the mechanism.
+
+<div style={callout}>
+**Plain version.** Search two ways at once, by meaning and by exact words. Merge the two result lists fairly, without trusting either one's raw numbers. Throw out near-duplicates so you get variety, not five copies of one idea. Then score what's left by three things, how relevant it is, how important it was marked, and how fresh it is on its own type's clock, and hand back the best five.
+</div>
+
+<img src="/assets/hippocampus-pipeline.svg" alt="The retrieval pipeline: a query is embedded, then run through a dense vector search and a BM25 keyword search in parallel, fused with Reciprocal Rank Fusion, diversified with Maximal Marginal Relevance, scored with type-aware decay, optionally reranked, and returned as the top five memories." style={diagram} loading="lazy" />
+
+<div style={callout}>
+**The mechanism, for the curious.** The query is embedded into the same vector space as the memories (and recent query embeddings are cached, so a repeated lookup skips the embedding call entirely). It then runs two channels in parallel: a **semantic vector search** over the vector index (cosine nearest-neighbours, top thirty) and a **lexical BM25 keyword search** over the full-text index (top thirty). The two ranked lists are merged with **Reciprocal Rank Fusion**, which combines by *rank position* rather than raw score, so one channel's overconfident number can't dominate the other. The fused scores are normalized to a common scale, with a small deliberate nudge toward task-type memories when the query itself looks like a to-do. The candidates are then diversified with **Maximal Marginal Relevance**, which trades a little pure relevance for variety so the top isn't five paraphrases of one fact.
+</div>
+
+Each survivor gets a final score:
+
+<div style={formula}>0.75 × relevance  +  0.10 × importance  +  0.15 × freshness</div>
+
+where freshness is that memory's type-aware decay term. The weights are the policy, in plain sight. Relevance dominates because the right topic matters most. Importance gets a small, deliberate vote, so a memory flagged critical edges out a trivial one of equal relevance. Recency gets a slightly larger vote than importance, because between two equally relevant facts the newer one is usually what you want, yet small enough that it never overrides relevance itself. The best five flow back into the conversation.
+
+<div style={callout}>
+**Why search both ways:** it is the direct fix for the first failure mode. The keyword side catches the literal filename; the meaning side catches the intent behind the words. A good librarian knows both the exact title you asked for and the book you actually meant.
+</div>
+
+There is also a final optional re-ranking stage: a **hosted cross-encoder reranker** (Voyage's `rerank-2.5-lite`) that scores the query and each top candidate *together*, rather than comparing them as separate pre-computed vectors, and reorders them. It is the most accurate step and the most expensive. It is built and wired but currently turned off, on purpose; see the limits section.
+
+<div style={callout}>
+**One more design choice worth naming: the pipeline fails open.** Every optional stage degrades gracefully instead of breaking. No keyword index, and it falls back to meaning-only search. No rerank key, and it skips reranking silently. Exactly one step is load-bearing, turning the query into an embedding, and that single point of failure is deliberate and known, not an accident.
+</div>
+
+## How memories improve over time
+
+Most memory systems only ever add and delete. This one also *improves what it already has*, every night.
+
+**Merging by meaning, not by string.** The system scans for memories that are near-identical in meaning, found by vector similarity above a strict threshold, not by matching text. It then asks a language model to merge each near-duplicate cluster into one cleaner, more complete sentence, keeps that improved version, and retires the rest. Ten scattered phrasings of one fact, captured across months, collapse into a single sharp statement that is better than any original.
+
+<div style={callout}>
+**Why this is hard, and worth it:** naive deduplication either keeps an arbitrary copy (losing detail the others had) or concatenates them (creating bloat). An LLM merge under a strict similarity gate is the difference between a store that decays into noise and one that gets *sharper* the more it sees the same thing. After a night of merges the keyword index is told to rebuild itself from scratch as a cheap backstop, so even if a write somewhere left it slightly out of step with the data, the next morning it is back in exact sync.
+</div>
+
+**Confidence that grows with evidence.** Machine-extracted procedures are allowed to gain confidence when the same procedure is observed again; seeing a pattern a second and third time should make the system trust it more, exactly as a person would. Human-curated rules are exempt, because they are already deliberate: they neither merge nor drift.
+
+## Keeping itself honest
+
+Improving memories is half the job. The other half is removing what's dead and noticing the moment something breaks.
+
+**Retiring the ephemeral.** Tasks and todos past ninety days are retired, and disposable operational pings decay almost immediately, so short-lived memories never linger as clutter long after they stop mattering. Items explicitly marked permanent are exempt.
+
+<div style={callout}>
+**A self-watching operations layer.** Every moving part, the hourly watcher, the nightly tidy, the snapshots, writes a small heartbeat file when it runs. Each heartbeat records two different timestamps on purpose: the last time the job *ran at all* and the last time it actually *did work*. That distinction matters, because a job can be perfectly healthy and still have nothing to do (the daily backstop usually finds no new sessions); without separating "ran clean but idle" from "stopped running," a quiet-but-fine job looks identical to a dead one. A monitor checks those heartbeats every half hour and, if something has gone silent past roughly twice its expected interval, sends one alert to my phone, escalating only if the silence persists, respecting quiet hours by holding low-priority alerts until morning, queuing alerts to disk if the network is down and draining them when it returns, and even watching itself (a monitor for the monitor, so two things would have to die at once for the system to go quiet). A kill switch can mute it deliberately during planned downtime. **Why this matters:** unattended automation that fails silently is a time bomb. The cheapest insurance is a system that tells you the moment it stops, in one message, without crying wolf.
+</div>
+
+**A nightly safety net under all of it.** Once a night the whole workspace, every rule, doc, and piece of code that defines how the system behaves, is committed to a local version-control snapshot. The live database itself is deliberately left out (it is large, private, and rebuildable), but everything that *shapes* the memory is captured, so a bad edit is always one revert away. It is the unglamorous backstop that means no change to the system is ever truly unrecoverable.
+
+## What it actually runs on
+
+The whole thing is deliberately small: **one Python environment, one SQLite file, and five scheduled tasks.** No separate vector-database service, no message queue, no Docker, no cloud dependency for retrieval. The vector index and the keyword index live inside the same SQLite file as the data. That smallness is a feature: it is portable, inspectable, and there is no server to keep alive.
+
+Set against the hosted agent-memory services in this space (mem0, Zep, and the like), the contrast is deliberate: no server, no account, and no per-call cloud dependency to retrieve a memory. The honest tradeoff is the flip side of that simplicity. It is single-user and Windows-first today, where the hosted services are multi-tenant and cross-platform out of the box.
+
+## Engineering notes, in brief
+
+For the reader who wants the whole toolbox in one place, here is what's under the hood, named:
+
+- **Hybrid retrieval:** dense semantic vectors (`sqlite-vec`) and lexical BM25 (FTS5), run in parallel and fused with Reciprocal Rank Fusion by rank position.
+- **Ranking:** Maximal Marginal Relevance for diversity, then a weighted score of relevance, importance, and a type-aware exponential-decay freshness term.
+- **Optional rerank:** a hosted cross-encoder reranker (Voyage `rerank-2.5-lite`) that scores query and candidate together (built, currently dormant).
+- **Storage:** one SQLite file in WAL mode; the vector index (`sqlite-vec`) and the full-text index (FTS5) are virtual tables in that same file, the keyword index deliberately un-stemmed and identifier-preserving, with triggers keeping it in sync on every write.
+- **Embeddings:** computed once per memory and reused; query embeddings served from a 256-entry in-process LRU cache keyed on the normalized query.
+- **Crash-safe ingestion:** per-file content hash plus a last-message watermark that advances only on success, a thirty-minute idle gate, a recent-activity prompt cap, per-file error caps, and a daily backstop pass (idle gate removed) that normally finds nothing and costs nothing.
+- **Self-maintenance:** nightly LLM merge of near-duplicates above a strict similarity gate, confidence growth for re-observed procedures, and type-aware retirement of stale items.
+- **Self-watching ops:** flat-file heartbeats that separate "last ran" from "last did work," escalating deduplicated alerts with quiet hours, an offline spill queue, and a kill switch, plus a monitor that watches the monitor.
+- **Safety net:** a nightly local version-control snapshot of every rule, doc, and source file (the database itself excluded), so any change is one revert away.
+- **Injection economics:** always-on rules loaded once per session, domain rules fetched on demand from the procedural tier, and a roughly seventy-token per-turn nudge against style drift.
+
+None of this is exotic on its own. The system is the *combination*, run as one small, self-maintaining whole.
+
+## Honest limits
+
+A clean sheet would be a lie, and disclosed limits build more trust than hidden ones.
+
+- **The re-ranking step is off.** It is built and tested but runs without a key, kept dormant for now on privacy, latency, and the simple fact that its benefit is unproven without a proper evaluation. Built, not enabled.
+- **Single-user and Windows-first, by design.** It runs as five Windows scheduled tasks for one operator, which is exactly the workload it was built for; there is currently no need for a multi-user deployment or a Linux/Docker host. The architecture is portable in principle, and broadening it later (a containerized Linux service, or a multi-user setup that other agents or people could share) is a deliberate option held open for the future, not a present requirement.
+- **Retrieval is about 1.6 seconds per query.** Almost all of that is process startup and the embedding API call; the actual ranking is under thirty milliseconds at this scale. Worth knowing before you put it in a tight loop.
+
+## And it's real
+
+This is not a benchmark toy. It is the memory layer underneath the system I use for daily work, holding thousands of curated facts and over fifty thousand archived message-chunks in a single file that has tidied itself every night for months. That's the whole claim. The interesting part isn't that I use it; it's why it's built the way it is.
+
+_The code and design rationale will ship with the open-source release. Built by Alexander Kemos, Vancouver._

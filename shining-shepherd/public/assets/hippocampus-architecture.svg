@@ -1,0 +1,115 @@
+<svg width="960" height="720" viewBox="0 0 960 720" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <marker id="arrowA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4F46E5"/>
+    </marker>
+  </defs>
+
+  <!-- Card -->
+  <rect x="1" y="1" width="958" height="718" rx="20" fill="#F8FAFC" stroke="#E5E7EB" stroke-width="2"/>
+
+  <!-- Title -->
+  <text x="40" y="52" font-size="26" font-weight="700" fill="#1F2937">How memory reaches the agent</text>
+  <text x="40" y="78" font-size="15" fill="#6B7280">Four layers load at different moments. Two stores live in one file. It maintains itself.</text>
+
+  <!-- ================= THE AGENT (center target) ================= -->
+  <g>
+    <rect x="380" y="296" width="200" height="92" rx="16" fill="#4F46E5"/>
+    <text x="480" y="338" font-size="22" font-weight="700" fill="#FFFFFF" text-anchor="middle">The Agent</text>
+    <text x="480" y="364" font-size="13" fill="#E0E0FF" text-anchor="middle">gets the right context</text>
+  </g>
+
+  <!-- ================= FOUR LAYERS (left column) ================= -->
+  <!-- Layer 1 -->
+  <g>
+    <rect x="40" y="120" width="300" height="74" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+    <circle cx="68" cy="146" r="13" fill="#4F46E5"/>
+    <text x="68" y="151" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+    <text x="92" y="148" font-size="16" font-weight="700" fill="#1F2937">Always-on rules</text>
+    <text x="92" y="170" font-size="12.5" fill="#6B7280">Core rules + a tiny per-turn nudge.</text>
+    <text x="92" y="186" font-size="12.5" fill="#6B7280">No search. Always present.</text>
+  </g>
+  <!-- Layer 2 -->
+  <g>
+    <rect x="40" y="208" width="300" height="74" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+    <circle cx="68" cy="234" r="13" fill="#4F46E5"/>
+    <text x="68" y="239" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text>
+    <text x="92" y="236" font-size="16" font-weight="700" fill="#1F2937">On-demand rules</text>
+    <text x="92" y="258" font-size="12.5" fill="#6B7280">Domain know-how, fetched only</text>
+    <text x="92" y="274" font-size="12.5" fill="#6B7280">when a task needs it.</text>
+  </g>
+  <!-- Layer 3 -->
+  <g>
+    <rect x="40" y="402" width="300" height="74" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+    <circle cx="68" cy="428" r="13" fill="#4F46E5"/>
+    <text x="68" y="433" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+    <text x="92" y="430" font-size="16" font-weight="700" fill="#1F2937">Explicit recall</text>
+    <text x="92" y="452" font-size="12.5" fill="#6B7280">Total-recall archive. Silent until</text>
+    <text x="92" y="468" font-size="12.5" fill="#6B7280">something asks for it.</text>
+  </g>
+  <!-- Layer 4 -->
+  <g>
+    <rect x="40" y="490" width="300" height="74" rx="12" fill="#FFFFFF" stroke="#4F46E5" stroke-width="2"/>
+    <circle cx="68" cy="516" r="13" fill="#4F46E5"/>
+    <text x="68" y="521" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text>
+    <text x="92" y="518" font-size="16" font-weight="700" fill="#1F2937">Weighted retrieval</text>
+    <text x="92" y="540" font-size="12.5" fill="#6B7280">The curated store. Returns a few</text>
+    <text x="92" y="556" font-size="12.5" fill="#6B7280">best-matched facts on call.</text>
+  </g>
+
+  <!-- arrows from layers into agent -->
+  <path d="M340 157 C 380 157 370 320 378 326" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrowA)"/>
+  <path d="M340 245 C 372 245 366 322 378 333" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrowA)"/>
+  <path d="M340 439 C 372 439 366 356 378 350" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrowA)"/>
+  <path d="M340 527 C 380 527 370 366 378 358" fill="none" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrowA)"/>
+
+  <!-- ================= ONE SQLITE FILE (right column) ================= -->
+  <g>
+    <rect x="620" y="120" width="300" height="300" rx="16" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+    <text x="770" y="150" font-size="15" font-weight="700" fill="#1F2937" text-anchor="middle">One SQLite file</text>
+    <text x="770" y="170" font-size="12" fill="#6B7280" text-anchor="middle">two stores, no shared tables</text>
+
+    <!-- Curated store -->
+    <rect x="644" y="190" width="252" height="92" rx="12" fill="#F8FAFC" stroke="#E5E7EB" stroke-width="1.5"/>
+    <text x="660" y="216" font-size="15" font-weight="700" fill="#4F46E5">Curated store</text>
+    <text x="660" y="238" font-size="12.5" fill="#6B7280">A few sharp distilled sentences</text>
+    <text x="660" y="254" font-size="12.5" fill="#6B7280">per session. For decisions.</text>
+    <text x="660" y="273" font-size="11.5" fill="#6B7280">~ thousands of curated facts</text>
+
+    <!-- Raw archive -->
+    <rect x="644" y="296" width="252" height="92" rx="12" fill="#F8FAFC" stroke="#E5E7EB" stroke-width="1.5"/>
+    <text x="660" y="322" font-size="15" font-weight="700" fill="#4F46E5">Raw archive</text>
+    <text x="660" y="344" font-size="12.5" fill="#6B7280">Every meaningful message ever</text>
+    <text x="660" y="360" font-size="12.5" fill="#6B7280">said. The total-recall net.</text>
+    <text x="660" y="379" font-size="11.5" fill="#6B7280">~ tens of thousands of chunks</text>
+  </g>
+  <text x="770" y="408" font-size="11.5" fill="#6B7280" text-anchor="middle">Vector + keyword indexes built into the same file. No separate database.</text>
+
+  <!-- links: layers 3 & 4 reach into the stores -->
+  <path d="M580 514 C 700 460 640 440 660 392" fill="none" stroke="#6B7280" stroke-width="1.6" stroke-dasharray="5 5" marker-end="url(#arrowA)"/>
+  <path d="M580 426 C 700 440 700 300 642 270" fill="none" stroke="#6B7280" stroke-width="1.6" stroke-dasharray="5 5" marker-end="url(#arrowA)"/>
+
+  <!-- ================= FIVE SCHEDULED JOBS (bottom band) ================= -->
+  <g>
+    <rect x="40" y="600" width="880" height="92" rx="14" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+    <text x="60" y="628" font-size="15" font-weight="700" fill="#1F2937">It maintains itself</text>
+    <text x="220" y="628" font-size="13" fill="#6B7280">five scheduled jobs keep the store fresh, deduplicated, and watched</text>
+
+    <g font-size="12" fill="#1F2937">
+      <rect x="60" y="644" width="158" height="34" rx="8" fill="#F8FAFC" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="139" y="665" text-anchor="middle">Hourly: read sessions</text>
+
+      <rect x="228" y="644" width="158" height="34" rx="8" fill="#F8FAFC" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="307" y="665" text-anchor="middle">Daily: backstop sweep</text>
+
+      <rect x="396" y="644" width="158" height="34" rx="8" fill="#F8FAFC" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="475" y="665" text-anchor="middle">Nightly: merge + prune</text>
+
+      <rect x="564" y="644" width="158" height="34" rx="8" fill="#F8FAFC" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="643" y="665" text-anchor="middle">Nightly: code snapshot</text>
+
+      <rect x="732" y="644" width="168" height="34" rx="8" fill="#F8FAFC" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="816" y="665" text-anchor="middle">Every 30 min: watchdog</text>
+    </g>
+  </g>
+</svg>
