@@ -198,7 +198,7 @@ Most memory systems only ever add and delete. This one also *improves what it al
 
 **Confidence that grows with evidence.** Machine-extracted procedures are allowed to gain confidence when the same procedure is observed again; seeing a pattern a second and third time should make the system trust it more, exactly as a person would. Human-curated rules are exempt, because they are already deliberate: they neither merge nor drift.
 
-## Keeping itself honest
+## Pruning and self-watching
 
 Improving memories is half the job. The other half is removing what's dead and noticing the moment something breaks.
 
@@ -214,7 +214,7 @@ Improving memories is half the job. The other half is removing what's dead and n
 
 The whole thing is deliberately small: **one Python environment, one SQLite file, and five scheduled tasks.** No separate vector-database service, no message queue, no Docker, no cloud dependency for retrieval. The vector index and the keyword index live inside the same SQLite file as the data. That smallness is a feature: it is portable, inspectable, and there is no server to keep alive.
 
-Set against the hosted agent-memory services in this space (mem0, Zep, and the like), the contrast is deliberate: no server, no account, and no per-call cloud dependency to retrieve a memory. The honest tradeoff is the flip side of that simplicity. It is single-user and Windows-first today, where the hosted services are multi-tenant and cross-platform out of the box.
+Set against the hosted agent-memory services in this space (mem0, Zep, and the like), the contrast is deliberate: no server, no account, and no per-call cloud dependency to retrieve a memory. The tradeoff is the flip side of that simplicity. It is single-user and Windows-first today, where the hosted services are multi-tenant and cross-platform out of the box.
 
 ## Engineering notes, in brief
 
@@ -233,9 +233,9 @@ For the reader who wants the whole toolbox in one place, here is what's under th
 
 None of this is exotic on its own. The system is the *combination*, run as one small, self-maintaining whole.
 
-## Honest limits
+## The limits
 
-A clean sheet would be a lie, and disclosed limits build more trust than hidden ones.
+Every system has limits, and disclosed ones build more trust than hidden ones.
 
 - **The re-ranking step is off.** It is built and tested but runs without a key, kept dormant for now on privacy, latency, and the simple fact that its benefit is unproven without a proper evaluation. Built, not enabled.
 - **Single-user and Windows-first, by design.** It runs as five Windows scheduled tasks for one operator, which is exactly the workload it was built for; there is currently no need for a multi-user deployment or a Linux/Docker host. The architecture is portable in principle, and broadening it later (a containerized Linux service, or a multi-user setup that other agents or people could share) is a deliberate option held open for the future, not a present requirement.
