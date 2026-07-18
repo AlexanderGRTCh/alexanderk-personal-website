@@ -1,101 +1,102 @@
 ---
 title: "Agentic Orchestration Infrastructure"
-description: "A production multi-agent AI system with semantic long-term memory, autonomous task orchestration, voice input, and continuous operation on personal hardware. Built, operated, and actively shipping real products."
+description: "A production multi-agent system that runs under either Claude or Codex, with compounding memory, provider-diverse self-review, and human review before shipping. Windows-native, and the system I use to build and ship real products."
 thumbnail: "/assets/ai-infrastructure.jpg"
-tags: ["AI", "Multi-Agent", "Python", "Claude", "Whisper", "sqlite-vec", "MCP", "Automation", "Infrastructure"]
+tags: ["AI", "Multi-Agent", "Multi-Provider", "Claude", "Codex", "Python", "sqlite-vec", "MCP", "Infrastructure"]
 demoUrl: "/no-demo"
 featured: true
 order: 1
 ---
 
-A production multi-agent AI system designed, built, and operated alone. Voice in, work out. No manual handoffs, no supervision required, no cloud dependency. The same system that builds and ships StreakUp.
+I designed and operate a Windows native multi agent system that turns requests into structured, reviewable work. It runs under Claude or Codex, and I use it to build and ship <a href="https://alexandergrtch.github.io/StreakUp/" target="_blank" rel="noopener" style="color: #4f46e5; font-weight: 600;">StreakUp</a>. Its core is local, with cloud models and selected cloud services where useful.
 
-## What It Does
+## In numbers
 
-A voice message arrives in Telegram. Within 5 seconds it becomes a running task, transcribed on-device by whisper.cpp with no external API call and no cost per message. That task is matched to the right specialist agent, given a focused memory slice assembled from semantic search results, and spawned with a precise context window rather than a full file dump.
+The system holds 17,133 active memory records, including curated facts and automatically extracted session memory, up from 6,715 five weeks earlier. Its transcript index contains 120,237 searchable chunks.
 
-The system runs work in parallel. One instruction can launch a build agent, a marketing agent, and a career agent simultaneously. Each appends results to a shared state file when done. Nothing is committed to the decision log until the main agent has reviewed the full diff. Work accumulates; oversight stays at the center.
+The operating surface includes 12 connected tools, more than 60 direct scripts, and 51 reusable skill templates. Cross provider review runs recorded costs of $0.62 and $0.17.
 
-It also monitors itself. A polling daemon checks agent progress every 3 minutes and surfaces stalled work via Telegram before it becomes a problem. A separate reaper process terminates agents that do not recover. OAuth failures write a file-based marker that the heartbeat detects, formats into a one-tap recovery message, and sends once. The system tells you what it needs; you resolve it in one step.
+One product built through this system is live on <a href="https://play.google.com/store/apps/details?id=com.AlexanderCH.habitracker2026" target="_blank" rel="noopener">Google Play</a> and the <a href="https://apps.apple.com/us/app/streakup-habit-tracker-goals/id6760596379" target="_blank" rel="noopener">App Store</a>.
 
-## Problem
+## The journey
 
-Most AI tools are stateless. Every new session starts from zero, specialist agents require constant manual handoffs, and any task running longer than a few minutes needs supervision. OAuth tokens expire silently, parallel workstreams are impossible in a single agent loop, and there is no mechanism to detect a failed process without manually checking.
+### Stage 1: A Linux gateway in Docker
 
-### Technical Explanation
-Stateless sessions force full context reconstruction on every call, wasting tokens and breaking continuity on multiday tasks. Single-agent architectures serialize work that could run in parallel, blocking throughput. Without persistent semantic memory, each spawned agent must receive the full project brief at start time, pushing prompts past practical token limits. Without an autonomous monitoring layer, stalled or failed processes accumulate undetected until a human notices.
+The system began as a persistent agent gateway running in Docker inside WSL Ubuntu. It established the basic pattern: messaging, tools, persistent state, and work spanning multiple chat sessions.
+
+That gateway is now retired, but its lessons shaped the current system.
+
+### Stage 2: A Windows native core
+
+I rebuilt the core around the environment I operate. The live system uses native Windows services, scheduled tasks, local storage, GPU access, Telegram, and command line agents, with no Docker or WSL in its active path.
+
+### Stage 3: Memory that compounds
+
+I added structured procedural, semantic, and episodic memory, followed by a searchable transcript store. An hourly session watcher extracts useful memories with a daily backstop, while raw conversations remain available for explicit search.
+
+The system can now recover relevant decisions, rules, and history across sessions.
+
+### Stage 4: One system, two model providers
+
+I separated the operating rules from the model running them. The same rules, memory, skills, and tools now work under Claude Code or Codex, including model calls launched from within a session.
+
+### Stage 5: Adversarial review before shipping
+
+I added structured review cycles in which Claude and Codex can critique the same artifact, challenge findings, merge overlapping issues, and stop when another round finds nothing material. A run ledger preserves state through interruptions.
+
+## What it does
+
+A voice message arrives through Telegram as an audio file. The live path converts it to the required format and transcribes it locally with faster-whisper large-v3 on the GPU, avoiding a per message transcription API charge.
+
+The transcript enters the active agent as an instruction. The system loads baseline rules, retrieves relevant memory when needed, and selects tools or specialist context for the task. Before parallel work starts, lifecycle checks look for duplicate work and apply the configured cost limit.
+
+Agents write findings to shared state rather than making final decisions independently. I can follow progress through Telegram, while liveness monitoring alerts me when work appears stalled. The result is an inspectable task with human review where findings become decisions.
+
+## The differentiator
+
+### Provider agnostic core
+
+The orchestration layer drives the vendors' first party command line tools, Claude Code and Codex, authenticated through their subscription plans. Those sessions use plan based access rather than metered third party API keys, making their cost more predictable and reducing dependence on third party API availability and pricing.
+
+The wider system remains hybrid, combining local compute and storage with selected cloud models and services. Its core rules, memory, tools, and skills are not locked to one model provider.
+
+### Provider diverse review
+
+Because the same operating rules work under both providers, Claude and Codex can review each other's work before it ships. Each reviewer produces structured findings; the system validates them, combines related issues, tracks agreement, and can run another bounded round when concerns remain unresolved.
+
+Recorded review cycles cost $0.62 for a three round red team and $0.17 for a two round blackboard review. These runs prove the mechanism works. They do not prove that two providers always outperform one model given the same budget.
 
 ## Architecture
 
-Every design decision in this system serves one constraint: maximize context precision while minimizing token cost. That principle determines what loads at session start, what gets queried on demand, what never auto-injects, and how much context each spawned agent receives.
+### Memory
 
-### Memory Injection Hierarchy
+Session context loads in tiers so simple work does not incur the full coordination stack. Persistent memory separates procedural knowledge, semantic facts, and episodic history. Raw transcript search sits alongside it and enters context only when retrieved.
 
-Session context loads in tiers matched to task complexity. Lite (~2k tokens) loads operational rules only. Standard (~6-8k) adds identity, user profile, domain context, and the skills registry. Full (~11-14k) adds agent coordination files, the spawn template, and shared state. Most sessions never reach full. Complex multi-agent tasks do.
+Retrieval combines keyword search with vector similarity. Results are fused, diversified to reduce repetition, and adjusted with type aware time decay. An optional reranking stage exists but is currently dormant by choice.
 
-Within those tiers, four memory layers operate with distinct injection strategies:
+### Agent lifecycle
 
-- Layer 1 is always-on: a dense set of non-negotiable operational rules injected at every session start via a hook, zero query cost
-- Layer 2 is on-demand: context_refresh.py rewrites a dedicated file with the top Brain DB hits for a given domain when requested; domain rules never pollute the always-on layer
-- Layer 3 is never auto-injected: daily session logs stored as markdown, accessed only when explicitly requested
-- Layer 4 is queried explicitly: Brain DB weighted retrieval at 60% cosine similarity, 30% importance, 10% recency; queried at session start and at every sub-agent spawn via the Memory Preamble Protocol
+A duplicate spawn guard checks whether equivalent work is already running. A cost circuit breaker applies a configured financial limit before execution expands. Heartbeats and liveness monitors watch active processes and send escalating Telegram alerts when attention is needed.
 
-The Brain DB has three internal tiers: procedural (HOW to do things), semantic (WHAT is true), and episodic (WHAT happened and when). A nightly pipeline extracts 5 to 8 facts from session logs and writes them to the episodic tier automatically. Memory compounds over time without manual input.
+These controls improve visibility and containment, but they do not make the system unattended. I remain responsible for reviewing alerts, resolving failures, and approving consequential decisions.
 
-### Agent Lifecycle Controls
+### Tools and coordination
 
-Before any sub-agent starts, spawn_guard.py checks for duplicate spawns and known-bad tool combinations. A cost circuit breaker sets a hard financial limit on token spend; runaway agents cannot exceed it regardless of task state. The watcher daemon polls every 3 minutes and writes a stuck-alert marker after 6 minutes of inactivity. The reaper terminates agents that exceed that threshold without resolving. The system does not accumulate stuck processes.
+The connected surface includes 12 named tools, more than 60 direct Python scripts, and 51 skill templates. They cover memory search, context retrieval, transcription, browser capture, file delivery, monitoring, and maintenance.
 
-### Tool Access
+Coordination follows a hub and spoke model. Specialists append structured results to shared state; the main agent reviews their output and relevant diffs before writing to the decision log. Oversight remains centralized when execution runs in parallel.
 
-Three distinct paths handle different workloads. The MCP bridge exposes 12 tools via a stdio server callable by name or natural language: semantic search, context refresh, audio transcription, browser screenshots, Telegram file delivery, and others. A skills library provides prompt templates for specialized task types, loaded at spawn time with a registry tracking ready versus needs-setup status. A direct Python layer covers 60-plus operational scripts for platform automation, memory operations, monitoring, and maintenance.
+## Deployment
 
-### Automation and Integration
+| Environment | Status | What it means |
+|---|---|---|
+| Windows native core | Running | The live agent system and its active operating path. |
+| Original Linux gateway in Docker | Retired | The system's working origin and the basis for parts of the current architecture. |
+| Linux desktop in Docker | Running | An operator environment, not the agent core. |
+| Portable core | Blueprinted and reviewed, not yet running | The container design exists, but the core has not completed a live container build and smoke test. |
 
-The hub-and-spoke coordination model uses Claude Code as the orchestration primitive. Sub-agents append to BLACKBOARD.md only; the main agent is the sole writer to DECISIONS.md and writes only after reviewing the full diff. Every agent completion follows a six-field JSON schema: summary, files_changed, what_works, what_doesnt, needs_alexander, and next. All inter-agent messages log to a persistent audit file.
+The core runs Windows native today. Its Linux lineage is real, while portable deployment remains designed rather than deployed.
 
-Task routing and social automation run as separate concerns. task_router.py semantically matches an incoming task to the closest specialist persona and returns a prebuilt spawn configuration. Social automation splits by transport: Tweepy API v2 handles all Twitter writes; Playwright handles reads and Reddit sessions; YouTube engagement runs through the Data API v3 with OAuth2 on a 30-minute cycle. Each platform maintains velocity caps and a cross-session deduplication log.
+## What this demonstrates
 
-GitHub integrates through two accounts with fine-grained PATs scoped per repository. One holds read access across all repositories; the second holds collaborator write access where autonomous commits are permitted.
-
-### Technical Explanation
-The tiered loading design keeps baseline token cost flat. Most sessions load lite or standard; full context loads only when agent coordination files are actively needed. The three-tier Brain DB allows the same query interface to serve different retrieval goals without mixing rule retrieval with fact retrieval or task history. spawn_guard and cost_breaker form a pre-execution safety layer: the first prevents logical errors, the second enforces financial limits. The episodic pipeline runs nightly and writes autonomously so memory grows without any manual curation step. The social transport split between Tweepy writes and Playwright reads avoids platform detection on React-rendered UIs.
-
-## System in Action
-
-### 1) Voice message becomes an active task
-A voice message arrives in Telegram as an OGG file. ffmpeg converts it to a 16kHz mono WAV in a single command. whisper.cpp runs local inference and returns a transcript in under 5 seconds. That text is passed to the agent as an instruction with no cloud dependency and no per-message cost.
-
-### 2) Context assembled at the right tier
-The system determines which loading tier applies before any work starts. Simple tasks load lite context. Multi-agent tasks load full context. agent_memory_slice.py then issues a Brain DB query and combines weighted results with filtered session context into a focused preamble under 300 tokens for each spawned sub-agent.
-
-### 3) Task routed to the right specialist
-task_router.py performs a semantic search against the persona library. The closest match returns a specialist identity and a prebuilt spawn configuration including persona file path, relevant memory slice, and structured reporting format. The main agent reviews the routing decision before spawning.
-
-### 4) Parallel specialists execute simultaneously
-A single instruction triggers multiple specialists at once: a build agent implements features, a marketing agent drafts copy and schedules posts, a career agent updates portfolio content. Each appends a structured JSON completion message to BLACKBOARD.md when done. The main agent reads every diff before writing anything to DECISIONS.md.
-
-### 5) Watcher detects a stall and alerts
-The polling loop runs every 3 minutes. No BLACKBOARD.md update within 6 minutes of an agent's start time writes a stuck alert and triggers a Telegram notification. If the agent still does not resolve, the reaper terminates it. The alert fires exactly once per incident.
-
-### 6) OAuth failure surfaces and resolves in one step
-When a scheduled operation hits an expired token, reauth.py writes a marker to a fixed path. The next heartbeat reads it, formats a recovery message with the full authorization URL and exact exchange command, sends it via Telegram, and removes the marker. One command and the system resumes.
-
-## Results
-
-- Continuous operation across session boundaries with full context preserved at every restart
-- Tiered loading matches token cost to task complexity; simple sessions never pay for full context depth
-- Voice transcription on-device in under 5 seconds per message, zero transcription API cost
-- Memory grows autonomously via nightly episodic extraction; no manual curation required
-- Parallel specialists reduce total task time by running implementation, research, content, and review concurrently
-- Stalled agents detected, alerted, and terminated through the watcher and reaper layer with no manual checking
-- OAuth failures resolved through a single Telegram message and one-tap recovery command
-- Social automation across Twitter, YouTube, and Reddit with velocity controls and cross-session deduplication
-- All GitHub commits within auditable fine-grained PAT scope, traceable per repository and per account
-- <a href="https://alexandergrtch.github.io/StreakUp/" target="_blank" rel="noopener" style="color: #4f46e5; font-weight: 600;">StreakUp</a> published on <a href="https://play.google.com/store/apps/details?id=com.AlexanderCH.habitracker2026" target="_blank" rel="noopener">Google Play</a> and the <a href="https://apps.apple.com/us/app/streakup-habit-tracker-goals/id6760596379" target="_blank" rel="noopener">App Store</a> with active RevenueCat monetization, AdMob integration, 701 automated tests, and a 12-member international beta team
-
-Built on Python, Claude Code, sqlite-vec, whisper.cpp, and the MCP protocol running on Windows 10 Pro.
-
----
-
-Building and operating this system alone is the clearest signal I can give of what I bring to complex software work: architecture instinct, shipping discipline, and the ability to keep something running without being asked to.
+I can design the architecture, build its operating parts, apply it to real product work, and keep it legible enough to audit and change. I can also distinguish what is running from what is planned, and what a successful mechanism proves from what it does not.
