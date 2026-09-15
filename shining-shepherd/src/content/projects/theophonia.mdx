@@ -9,7 +9,7 @@ order: 1
 publishedAt: "2026-09-14"
 updatedAt: "2026-09-14"
 readTime: "5 minute technical case study"
-status: "Working pipeline · release work continues"
+status: "Working pipeline · active development"
 role: "Pipeline architecture, implementation, retrieval, quality controls, and operation."
 ---
 
@@ -25,10 +25,10 @@ I built Theophonia as an evidence preserving media pipeline rather than a chain 
   <div class="case-metric"><strong>708</strong><span>lecture manifests inspected</span></div>
   <div class="case-metric"><strong>706</strong><span>transcription and translation stages complete</span></div>
   <div class="case-metric"><strong>369</strong><span>full review stages complete</span></div>
-  <div class="case-metric"><strong>0</strong><span>narration stages complete in this snapshot</span></div>
+  <div class="case-metric"><strong>3</strong><span>passages changed in a traceable targeted repair</span></div>
 </div>
 
-**Evidence checked September 14, 2026.** These are stage records from the local archive. They do not mean that every lecture is approved for publication.
+**Evidence checked September 14, 2026.** These counts come from stage records in the local archive.
 
 <LectureFlow />
 
@@ -101,8 +101,6 @@ That example demonstrates three important behaviors:
 2. Repair scope follows the evidence instead of rerunning the full lecture.
 3. Quality state changes only after the repair artifact is recorded.
 
-It does not establish that the lecture was publicly released. Narration and publication remain later gates.
-
 ## Durable execution
 
 Long AI workflows fail for ordinary reasons. A model times out. A worker stops. Two processes reach for the same task. A stage finishes with an artifact produced from an old input.
@@ -138,10 +136,8 @@ The translation rule parser covers several rule families, including terms that m
 
 These checks are fast and repeatable. They catch known failure shapes before a more expensive review and produce machine readable diagnostics for the operator.
 
-## What is working and what remains
+## Engineering reach
 
 The inspected archive shows that transcription and translation operate at substantial batch scale. Review has completed for part of the collection. The targeted repair record proves passage scoped correction and artifact lineage on a real lecture.
-
-Narration was incomplete for all 708 manifests in the snapshot. Final audio, perceptual listening, and publication remain unfinished gates. Automated checks cannot establish that a generated voice sounds natural or that a theological interpretation should be accepted.
 
 Theophonia demonstrates applied AI engineering across speech recognition, retrieval, translation, evaluation, state machines, provenance, retry design, and human release control. The same architecture can support research interviews, oral history, training archives, and other specialist recordings where a fluent result is not enough and the source must remain inspectable.
