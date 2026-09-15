@@ -2,28 +2,44 @@
 
 Updated September 14, 2026.
 
-The portfolio presents Alexander as an AI engineer and founder of Ktisis Arc. Ordinary readers should understand the useful result first. Engineers can inspect the implementation choices in a short expandable section.
+The portfolio presents Alexander as an AI engineer and founder of Ktisis Arc. Flagship project pages are layered technical case studies. A regular reader should understand the problem and value in the opening minute. A technical reader should then be able to inspect the actual architecture, implementation choices, operating behavior, evidence, and limits without opening hidden sections.
 
-Homepage selection: Theophonia, Agentic System, StreakUp, Hippocampus. Cloud Security and Tennis remain in the project archive. The earlier infrastructure URLs redirect to the current Agentic System story. Growth Engine is deferred until a verified live workflow supplies stronger evidence.
+## Flagship case study protocol
 
-Keep each case study close to 300 to 450 words including technical detail. Show purpose, personal contribution, evidence and current status. Use a real screenshot or a clearly identified explanatory diagram. No dash punctuation in visible prose. Preserve technical identifiers and actual screenshot content.
+Do not impose a short universal word limit. Let the complexity of the system determine the length. A five minute read, usually about 1,200 to 1,700 words, is appropriate for the flagship projects.
 
-New articles receive their real publication date. Existing articles show the date of substantive revision. Do not infer an original publication date from an unverified file timestamp. Put a verification date and scope beside measurements; updating copy does not establish new performance results.
+Open with the real problem, Alexander's role, and a compact evidence snapshot. Follow with a system diagram. Then explain the engineering in layers:
 
-All article routes use ProjectLayout.astro. Theophonia and Hippocampus use responsive HTML diagrams for readable mobile labels. Their SVG covers are illustrations of the workflow, not product screenshots. External actions, account grants, private content and credentials are excluded from examples.
+1. The operating journey or end to end workflow.
+2. The main subsystems and their boundaries.
+3. The difficult design decisions and rejected shortcuts.
+4. State, recovery, observability, and failure behavior.
+5. Concrete evidence with a verification date.
+6. Current limits and claims the evidence does not establish.
+7. The implementation stack and what Alexander personally built.
 
-## Evidence for this revision
+Keep technical content visible in the main reading path. Do not move the core architecture into expandable details. Remove repetition and unsupported claims rather than removing whole subsystems.
 
-Theophonia: portfolio-evidence-2026-09-14.json records the inspected local manifest totals. The repair example has three planned findings, three changed passages, a ready disposition and no full lecture retranscription. A completed review stage does not certify publication. No public Theophonia audio demo was established, so none is presented. Wisdom of the Saints biographies are a separate workflow.
+Use plain language first, followed immediately by precise implementation detail. Explain why each technology or algorithm exists. A tool list without the design reason is incomplete.
 
-Agentic System: the September 7 boot and map release record and retained comparison artifacts establish 8,316 to 773 text tokens for the root map. The 90.7 percent reduction is scoped to that text. Lookup validation included corrections and targeted checks; billing, general recall and speed were not benchmarked.
+Homepage selection remains Theophonia, Agentic System, StreakUp, and Hippocampus. Cloud Security and Tennis remain in the project archive. The earlier infrastructure URLs redirect to the current Agentic System story.
 
-Hippocampus: checked against the current memory implementation and architecture. Brain and Echo have separate tables and retrieval paths in one SQLite database. Keyword and vector rankings are fused and diversified. Exponential decay constants are not mathematical half lives. Query embeddings can use a cloud service. Exact vector distance search is not an approximate index. Optional reranking is documented as dormant.
+## Evidence and accuracy
 
-StreakUp retains its verified public store destinations and existing app screenshots. Stale test counts, revenue implications and unverified growth claims were removed. Cloud Security is presented as an engineering demonstration. Tennis is a simulator demonstration.
+New articles receive their real publication date. Existing articles show the date of substantive revision. Measurements include their verification date and scope. Updating the article does not create a new performance result.
+
+Theophonia uses the inspected manifest totals and traceable repair record in **portfolio evidence 2026 09 14.json**. A completed pipeline stage does not certify publication. No public audio demo is presented.
+
+Agentic System uses current database and tool counts only when directly inspected. Historical review costs and boot measurements keep their original snapshot dates. The site does not claim unattended autonomy, zero cloud dependency, universal recall, or a measured advantage over one provider at equal cost.
+
+Hippocampus follows the current retrieval implementation. Brain and Echo use separate tables and retrieval paths in one SQLite database. FTS5 and exact vector results are fused and diversified. Decay constants are not described as mathematical half lives. Query embeddings can use a cloud service. Optional model reranking is dormant.
+
+StreakUp uses the live source repository and public store destinations. Test declaration counts are source counts unless a full test run is explicitly recorded. Revenue, retention, conversion, and user growth are not inferred.
+
+Visible public copy uses no dash punctuation. Technical identifiers are rewritten in readable form where possible.
 
 ## Release workflow
 
-Build with npm run build. Inspect actual desktop and mobile pixels, expanded engineering sections, dark appearance and reduced motion. Verify dates, image loads, internal links and visible prose. Preserve the existing contact form integration without submitting a test message.
+Build with **npm run build**. Inspect desktop and mobile pixels in the real browser. Verify dates, diagrams, image loads, internal links, and rendered copy. Preserve the contact form without submitting a test message.
 
-Production uses the existing GitHub main branch and Cloudflare Pages Git integration. Verify the deployed commit and public pages after push. Have an independent reviewer assess what a business reader and an engineering hiring manager would understand. Record accepted findings and any followup release in the project work log.
+Production uses the GitHub main branch and Cloudflare Pages integration. Verify the deployed commit and the custom domain after pushing. An independent reviewer assesses what a business reader and an engineering hiring manager can learn from the finished pages.

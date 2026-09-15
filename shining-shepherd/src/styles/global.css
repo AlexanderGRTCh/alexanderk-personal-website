@@ -6,9 +6,9 @@
 .hero-role { margin-top: -1rem; font-size: 1.05rem; font-weight: 600; }
 .hero-role a, .timeline-content a { color: #4f46e5; text-decoration: underline; text-underline-offset: 4px; }
 .project-status { color: #64748b; font-size: .72rem; font-weight: 600; line-height: 1.6; margin-bottom: .5rem; }
-.case-study { max-width: 760px; margin: 0 auto; }
+.case-study { max-width: 840px; margin: 0 auto; min-width: 0; width: 100%; }
 .case-back { display: inline-block; color: #4f46e5; font-size: .9rem; font-weight: 600; }
-.case-header { margin: 2rem 0 1.8rem; }
+.case-header { margin: 2rem 0 1.8rem; min-width: 0; overflow-wrap: anywhere; }
 .case-status { color: #526075; font-size: .78rem; font-weight: 600; letter-spacing: .04em; }
 .case-header h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 650; line-height: 1.08; letter-spacing: -.045em; margin: .65rem 0 1rem; }
 .case-deck { max-width: 650px; font-size: clamp(1.08rem, 2.5vw, 1.3rem); color: #526075; line-height: 1.55; }
@@ -17,10 +17,37 @@
 .case-role strong { margin-right: .5rem; color: #1e293b; }
 .case-cover { margin: 1.75rem 0 2rem; }
 .case-cover img { width: 100%; height: auto; max-height: 360px; object-fit: contain; border-radius: 12px; background: #101d32; }
-.case-body { font-size: 1.02rem; line-height: 1.75; }
+.case-body { font-size: 1.02rem; line-height: 1.75; min-width: 0; overflow-wrap: anywhere; }
 .case-body h2 { font-size: 1.45rem; letter-spacing: -.02em; margin-top: 2.3rem; }
 .case-body h3 { font-size: 1.1rem; }
+.case-body h3 { margin-top: 1.65rem; }
 .case-body img { display: block; max-width: 100%; height: auto; border-radius: 8px; margin: 1.5rem auto; }
+.case-body blockquote {
+  background: rgba(79, 70, 229, .06);
+  border-left: 3px solid #6366f1;
+  border-radius: 0 9px 9px 0;
+  color: #334155;
+  margin: 1.6rem 0;
+  padding: .9rem 1.1rem;
+}
+.case-body blockquote p { margin: 0; }
+.case-body table { border-collapse: collapse; display: table; font-size: .86rem; margin: 1.5rem 0 2rem; width: 100%; }
+.case-body th { background: #e9edf5; color: #25324a; font-size: .72rem; letter-spacing: .06em; text-align: left; text-transform: uppercase; }
+.case-body th, .case-body td { border: 1px solid #d2d9e5; padding: .7rem .8rem; vertical-align: top; }
+.case-body td { color: #475569; }
+.case-metrics { display: grid; gap: .7rem; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 1.6rem 0 2rem; }
+.case-metric { background: #eef1f7; border: 1px solid #d5dce8; border-radius: 10px; padding: .9rem; }
+.case-metric strong { color: #111827; display: block; font-size: 1.35rem; letter-spacing: -.03em; line-height: 1.15; }
+.case-metric span { color: #64748b; display: block; font-size: .7rem; line-height: 1.4; margin-top: .4rem; }
+.engineering-grid { display: grid; gap: .8rem; grid-template-columns: 1fr 1fr; margin: 1.5rem 0; }
+.engineering-grid section { border: 1px solid #d5dce8; border-radius: 10px; padding: 1rem; }
+.engineering-grid section h3 { font-size: .98rem; margin: 0 0 .45rem; }
+.engineering-grid section p { color: #526075; font-size: .86rem; line-height: 1.6; margin: 0; }
+.journey-list { border-left: 1px solid #9aa8bd; margin: 1.5rem 0 2rem .45rem; padding-left: 1.35rem; }
+.journey-list section { margin: 0 0 1.35rem; position: relative; }
+.journey-list section::before { background: #6366f1; border: 3px solid #eef1f7; border-radius: 50%; content: ""; height: .7rem; left: -1.75rem; position: absolute; top: .42rem; width: .7rem; }
+.journey-list h3 { font-size: .98rem; margin: 0 0 .35rem; }
+.journey-list p { margin: 0; }
 .case-body details { border: 1px solid #dce2ea; border-radius: 10px; padding: 1rem 1.2rem; margin: 1.8rem 0; }
 .case-body summary { cursor: pointer; font-weight: 650; color: #334155; }
 .case-body details p { margin-top: 1rem; }
@@ -38,6 +65,8 @@
   border-radius: 14px;
   color: var(--map-bright);
   margin: 2.2rem 0;
+  max-width: 100%;
+  min-width: 0;
   overflow: hidden;
   padding: clamp(1.1rem, 4vw, 2rem);
   line-height: 1.45;
@@ -101,11 +130,28 @@
 .memory-stores div { text-align: center; }
 .memory-stores span { color: #8fa0ba; display: block; font-size: .66rem; text-transform: uppercase; letter-spacing: .1em; }
 .memory-stores strong { color: var(--map-accent); display: block; font-size: .78rem; margin-top: .25rem; }
+.product-flow { display: grid; gap: .7rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.product-flow .map-node:not(:last-child)::after {
+  color: #aeb8ff;
+  content: "→";
+  font-size: .95rem;
+  position: absolute;
+  right: -.58rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+.product-services { border-top: 1px solid var(--map-line); display: grid; gap: .5rem 1rem; grid-template-columns: 1fr 1fr; margin-top: 1rem; padding-top: 1rem; }
+.product-services span { color: #aab8cc; font-size: .7rem; }
+.product-services strong { color: #fff; }
 @media(max-width: 520px) {
   .case-header { margin-top: 1.5rem; }
-  .map-track-five, .agent-planes, .memory-retrievers { grid-template-columns: 1fr; }
+  .map-track-five, .agent-planes, .memory-retrievers, .product-flow { grid-template-columns: 1fr; }
   .map-track .map-node:not(:last-child)::after { bottom: -.8rem; left: 50%; right: auto; top: auto; transform: translateX(-50%) rotate(90deg); }
+  .product-flow .map-node:not(:last-child)::after { bottom: -.8rem; left: 50%; right: auto; top: auto; transform: translateX(-50%) rotate(90deg); }
   .map-spine, .memory-ranking { grid-template-columns: 1fr 1fr; }
+  .case-metrics, .engineering-grid, .product-services { grid-template-columns: 1fr 1fr; }
+  .case-body table { display: block; overflow-x: auto; }
   .case-body { font-size: 1rem; }
   .case-body h2 { font-size: 1.35rem; }
 }
@@ -114,6 +160,15 @@
   .case-role strong, .case-body summary { color: #e2e8f0; }
   .case-back, .hero-role a, .timeline-content a { color: #a5b4fc; }
   .case-body details, .case-footer { border-color: #40506b; }
+  .case-body blockquote { background: rgba(99, 102, 241, .12); color: #dbe4f2; }
+  .case-body th { background: #1b2940; color: #e8edf6; }
+  .case-body th, .case-body td { border-color: #40506b; }
+  .case-body td { color: #c5d0df; }
+  .case-metric { background: #162238; border-color: #3f4f69; }
+  .case-metric strong { color: #fff; }
+  .case-metric span { color: #aebcd0; }
+  .engineering-grid section { border-color: #40506b; }
+  .engineering-grid section p { color: #bdc9da; }
 }
 @media(prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }

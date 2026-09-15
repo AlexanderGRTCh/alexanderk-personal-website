@@ -8,46 +8,130 @@ featured: true
 order: 2
 publishedAt: "2026-09-14"
 updatedAt: "2026-09-14"
+readTime: "5 minute technical case study"
 status: "In daily use"
-role: "System design, implementation, integration, and operation."
+role: "System architecture, implementation, integration, and daily operation."
 ---
 
 import AgentArchitecture from '../../components/AgentArchitecture.astro';
 
-## An AI system built to keep working
+## The system behind the AI work
 
-A model can answer a prompt. A working engineering system must also recover the right project context, use tools safely, coordinate specialists, survive interruptions, and show what happened.
+A model can answer a prompt. A dependable engineering environment must also recover project context, select tools, coordinate specialists, survive interruptions, control cost, and preserve a record that a person can inspect.
 
-I built this Windows native environment for product development and the daily work of Ktisis Arc. Claude and Codex run on top of the same provider neutral protocol. The model can change without rebuilding the memory, tools, project rules, or review process around it.
+I built this Windows native system to support product development and the daily operation of Ktisis Arc. Claude and Codex run on top of the same provider neutral protocol. The active model can change while the rules, memory, tools, project maps, and review process remain shared.
+
+<div class="case-metrics">
+  <div class="case-metric"><strong>25,863</strong><span>memory rows in the September 14 snapshot</span></div>
+  <div class="case-metric"><strong>200,796</strong><span>searchable transcript chunks</span></div>
+  <div class="case-metric"><strong>12</strong><span>named tools exposed through MCP</span></div>
+  <div class="case-metric"><strong>78</strong><span>top level Python utilities in the tool layer</span></div>
+</div>
 
 <AgentArchitecture />
 
-## From request to reviewable work
+## How the system evolved
 
-Boot starts with a lean protocol and a root map. The map points to project indexes, operating rules, skills, and memory routes. The agent opens only the context required for the current task.
+The architecture did not appear in one pass. Each stage solved a problem exposed by actual use.
 
-When earlier decisions matter, the [Hippocampus memory layer](/projects/hippocampus) combines keyword and semantic retrieval. MCP servers and local scripts connect the agent to files, services, commands, and structured tools. Specialist agents can work on bounded parts of a larger task while a primary agent owns the final integration.
+<div class="journey-list">
+  <section>
+    <h3>1. Persistent gateway</h3>
+    <p>The first version was a long lived agent gateway running in Docker inside WSL Ubuntu. It established messaging, tools, persistent state, and work that could continue across conversations.</p>
+  </section>
+  <section>
+    <h3>2. Windows native core</h3>
+    <p>I rebuilt the active path around the machine I operate every day. Windows services, Task Scheduler, local storage, GPU access, Telegram, and first party command line agents replaced the old gateway.</p>
+  </section>
+  <section>
+    <h3>3. Compounding memory</h3>
+    <p>Procedural, semantic, and episodic memory gained a separate raw transcript archive. Scheduled extraction, consolidation, and retrieval let the system recover decisions without loading every conversation.</p>
+  </section>
+  <section>
+    <h3>4. One protocol, two providers</h3>
+    <p>I separated the operating brain from the model vendor. Claude and Codex now source the same rule floor and can be selected for a session or a bounded specialist task.</p>
+  </section>
+  <section>
+    <h3>5. Provider diverse review</h3>
+    <p>Structured review lets the providers critique the same artifact, challenge findings, combine related issues, and stop after a bounded round adds nothing material.</p>
+  </section>
+</div>
 
-For sensitive or complex artifacts, Claude and Codex can review the same work from different provider perspectives. Findings use a shared schema, similar issues are clustered, and bounded rounds stop when another pass adds nothing material. Accepted decisions enter a durable log.
+The original Docker gateway is retired. A separate Linux desktop still runs in Docker as an operator environment. A portable core has a reviewed blueprint, but it is not presented as a running deployment.
 
-## The engineering underneath
+## Follow a real task through the system
 
-Python coordinates the platform. SQLite stores memory, transcript indexes, task state, and run history. FTS5 and sqlite vec support hybrid retrieval. MCP gives models a consistent tool boundary. Windows services and scheduled tasks run background capture, health checks, and recovery jobs.
+A request can begin in a terminal or arrive through Telegram. Voice input is converted and transcribed locally with faster Whisper large v3 on the GPU. The transcript becomes the instruction, so speech does not require a separate manual handoff.
 
-A persistent run ledger allows interrupted workflows to resume. Duplicate work checks prevent accidental parallel copies. A cost circuit breaker limits bounded operations. Heartbeats and liveness checks surface work that has stalled instead of leaving it invisible.
+Boot loads the smallest rule floor that can operate safely. A root map routes the agent to the project index, relevant procedures, skills, and memory only when the task needs them. The agent can then call MCP tools or direct scripts for search, files, browser capture, transcription, monitoring, and maintenance.
 
-Raw conversations enter a separate searchable archive. An hourly watcher extracts useful facts, decisions, and procedures after sessions become idle, with a daily backstop. The curated memory remains focused while the original record stays available.
+Before parallel work expands, a duplicate guard checks whether equivalent work is already running. A cost circuit breaker applies the configured limit. Specialist agents receive bounded scopes and append structured findings to shared state. The primary agent reviews their output and relevant diffs before an accepted decision enters the durable log.
 
-## Measured context reduction
+Heartbeats make liveness observable. Scheduled monitoring detects stale state and sends escalating Telegram alerts when work appears stuck. The run ledger supports recovery after an interrupted process. These controls contain and expose failure; they do not remove operator responsibility.
 
-The earlier workspace map loaded **8,316 text tokens**. The replacement root map loaded **773**, a **90.7 percent reduction** at the September 7, 2026 implementation snapshot.
+> **Why this architecture matters.** The model is one replaceable execution component. Context, evidence, tools, and decisions remain part of the system instead of disappearing inside a chat window.
 
-The complete default boot path fell from **13,821 tokens to 2,614**. A cold comparison that included the required lookup routes fell from **16,633 to 5,470**. Sixteen bounded lookup cases exposed one missed route, which I corrected before all sixteen resolved.
+## Context routing and measured boot reduction
 
-This measures context loaded by the protocol. It does not claim a matching reduction in the provider bill, faster responses in every task, or perfect recall.
+The earlier workspace loaded a large general map before the task was known. That spent context on unrelated projects and made every session pay for information it might never use.
 
-## Proof through shipped work
+The replacement uses a small root map with selective topic routes. At the September 7, 2026 implementation snapshot:
 
-The platform is not a dashboard concept. I use it to develop [StreakUp](/projects/streakup-habit-tracker), operate Theophonia, maintain this portfolio, prepare documents, and run recurring checks.
+| Measurement | Earlier path | Selective path | Result |
+|---|---:|---:|---|
+| Root map text | 8,316 tokens | 773 tokens | 90.7 percent less |
+| Default boot floor | 13,821 tokens | 2,614 tokens | 81.1 percent less |
+| Cold lookup comparison | 16,633 tokens | 5,470 tokens | Smaller start with routed lookup |
 
-For an employer, it demonstrates AI systems engineering across orchestration, retrieval, tooling, evaluation, observability, and recovery. For a client, it shows the same practical judgment Ktisis Arc brings to business software: automate the repeatable work, preserve the evidence, and keep consequential decisions reviewable.
+Sixteen bounded lookup cases tested whether the smaller map could still find required material. The first candidate resolved fifteen. The missed route was corrected, then all sixteen targeted cases resolved.
+
+This is evidence for the tested routes and context size. It is not a universal recall benchmark, a latency benchmark, or proof that the provider bill falls by the same percentage.
+
+## Memory that stays useful
+
+The [Hippocampus memory layer](/projects/hippocampus) keeps curated rules, facts, decisions, and procedures separate from the Echo transcript archive. A normal memory query combines FTS5 keyword retrieval with exact vector similarity, then fuses and diversifies the rankings.
+
+An hourly watcher processes sessions after an idle window. A daily backstop catches work the normal schedule missed. Watermarks, tail resume behavior, and SQLite write ahead logging let extraction continue after interruption without starting the corpus again.
+
+The September 14 database inspection found 25,863 memory rows and 200,796 transcript chunks. Those counts show operating scale, not retrieval accuracy. Source inspection remains available when the focused result is incomplete.
+
+## Tools, skills, and provider adapters
+
+MCP exposes twelve named capabilities through a stable interface. The local tool directory contains 78 top level Python utilities, and the skill registry contains 60 directories in the same snapshot. The surface covers memory, context, transcription, browser work, monitoring, document delivery, and maintenance.
+
+Provider adapters keep Claude specific and Codex specific behavior outside the shared protocol. Both use their first party command line tools and plan based authentication. This makes provider switching practical and keeps the rule system independent from one API contract.
+
+The wider environment is still hybrid. Models, embeddings, search, and selected services can use the cloud. Local storage, orchestration, GPU transcription, state, and many tools run on the workstation.
+
+## Adversarial review as an engineering subsystem
+
+The review layer is more than asking a second model for an opinion. Each reviewer produces findings in a common schema. The system validates the records, clusters overlapping concerns, records agreement, and allows another bounded round when material disagreement remains.
+
+Two historical operating runs recorded costs of **$0.62 for three rounds** and **$0.17 for two rounds**. They demonstrate that the mechanism ran with a dry stop, minimal seats, and a round cap. They do not prove that two providers always beat one strong model at the same budget.
+
+This system has reviewed its own memory changes and agent team designs. That is useful because the architecture can apply its assurance process to the machinery that defines the process.
+
+## Reliability and operating boundaries
+
+<div class="engineering-grid">
+  <section>
+    <h3>Persistent state</h3>
+    <p>SQLite and appendable run artifacts keep memory, task progress, findings, and decisions available after the model session ends.</p>
+  </section>
+  <section>
+    <h3>Bounded execution</h3>
+    <p>Duplicate checks, cost limits, scoped workers, and round caps constrain expansion before it becomes invisible or expensive.</p>
+  </section>
+  <section>
+    <h3>Observable failure</h3>
+    <p>Heartbeats, scheduled checks, and Telegram alerts expose stalled work and preserve a route for recovery.</p>
+  </section>
+  <section>
+    <h3>Human authority</h3>
+    <p>Agents contribute evidence and proposed changes. I remain responsible for consequential decisions, release approval, and failure resolution.</p>
+  </section>
+</div>
+
+The system is in daily use for StreakUp, Theophonia, this portfolio, research, document production, and operational checks. It demonstrates engineering across orchestration, retrieval, provider abstraction, evaluation, observability, and recovery.
+
+For Ktisis Arc, the same design discipline applies to client work: automate the repeatable parts, preserve the source of a decision, expose failure, and keep control with the business owner.

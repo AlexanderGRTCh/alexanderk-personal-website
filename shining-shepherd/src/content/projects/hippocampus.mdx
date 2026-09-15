@@ -1,6 +1,6 @@
 ---
 title: "Hippocampus"
-description: "A hybrid AI memory engine combining FTS5, exact vector search, rank fusion, diversity selection, and type aware decay inside SQLite."
+description: "A hybrid AI memory engine combining FTS5, exact vector search, rank fusion, diversity selection, typed freshness, and source recovery inside SQLite."
 thumbnail: "/assets/hippocampus-cover.svg"
 thumbnailAlt: "Hippocampus retrieval architecture showing lexical and semantic search merged into a focused memory result."
 tags: ["AI Memory", "Retrieval", "SQLite"]
@@ -8,48 +8,164 @@ featured: true
 order: 4
 publishedAt: "2026-09-14"
 updatedAt: "2026-09-14"
+readTime: "5 minute technical case study"
 status: "In daily use · architecture case study"
-role: "Memory architecture, retrieval implementation, and operating workflow."
+role: "Memory architecture, retrieval implementation, consolidation, and operating workflow."
 ---
 
 import MemoryFlow from '../../components/MemoryFlow.astro';
 
-## Memory without loading every conversation
+## The design question
 
-An AI assistant needs past decisions, rules, and project context. Sending every old conversation into every new task wastes context and makes the useful details harder to find.
+An AI assistant with no memory starts every conversation from zero. Loading every old conversation solves that problem badly: context becomes expensive, relevant details compete with noise, and the model still has to discover which statements are current.
 
-Hippocampus is the retrieval layer inside my [Agentic System](/projects/agentic-system). It keeps curated memory and the raw transcript archive in one SQLite database while treating them as separate sources with separate search paths.
+The real question is narrower and harder: **out of everything the system has seen, which few memories belong in front of the agent for this task, and how can the original source remain available when the summary is not enough?**
+
+Hippocampus is my answer. It is the memory subsystem inside the [Agentic System](/projects/agentic-system), built in Python on one SQLite database with two distinct stores and several retrieval stages.
+
+<div class="case-metrics">
+  <div class="case-metric"><strong>25,863</strong><span>curated and extracted memory rows</span></div>
+  <div class="case-metric"><strong>200,796</strong><span>raw transcript chunks in Echo</span></div>
+  <div class="case-metric"><strong>60</strong><span>rank fusion denominator constant</span></div>
+  <div class="case-metric"><strong>5</strong><span>focused memories returned by default</span></div>
+</div>
+
+**Database counts inspected September 14, 2026.** They describe corpus size, not recall accuracy.
 
 <MemoryFlow />
 
+## Why naive memory fails
+
+Embedding every message and returning the nearest results looks attractive because it is easy to explain. It fails in three predictable ways.
+
+### Exact identifiers disappear
+
+A filename, command flag, error code, or product name may need a literal match. An embedding converts text into meaning, which can blur the exact string the task depends on. Hippocampus therefore searches both meaning and words.
+
+### Repetition crowds out variety
+
+The same decision can be restated across many sessions. A plain nearest neighbor query may return five versions of one fact and exclude four other facts the task needs. Hippocampus explicitly penalizes redundant results before selection.
+
+### Old truth competes with new truth
+
+Yesterday's correction should usually outrank an old project note. A durable safety rule should not vanish simply because it is old. Hippocampus assigns different freshness behavior to different memory types instead of using one global aging policy.
+
+> **Core principle.** Rules, decisions, project facts, temporary tasks, and monitoring pings are different kinds of information. Their storage, ranking, consolidation, and retirement behavior should reflect that difference.
+
+## Four layers, loaded at different times
+
+The system does not treat memory as one database query. It separates information according to when the agent should receive it.
+
+| Layer | What it contains | When it loads |
+|---|---|---|
+| Rule floor | Small nonnegotiable operating and communication rules | At session start |
+| Domain guidance | Project procedures, skills, and specialist instructions | When the task route requires them |
+| Echo archive | Original conversation chunks | Only during explicit transcript search |
+| Curated retrieval | Facts, rules, decisions, tasks, and learned procedures | At task start or when the agent requests memory |
+
+This split controls cost and noise. The small rule floor is paid often, so it stays small. Project guidance loads selectively. The large transcript archive stays silent until exact history matters. Curated retrieval contributes only a focused result.
+
+## Two stores in one SQLite file
+
+The curated Brain and the Echo archive share one physical database for operational simplicity, but they use separate tables and retrieval paths.
+
+Brain stores concise memory records with type, project, tags, importance, creation time, and consolidation state. It is designed for decisions and reusable context.
+
+Echo stores chunks from original sessions. It is deliberately larger and more literal. A distilled memory may say that a deployment decision changed. Echo can recover the conversation that explains who changed it, what alternatives were considered, and what wording was used.
+
+Keeping the stores separate avoids two opposite failures. Raw transcripts do not flood normal retrieval, and concise memory does not pretend to preserve every detail.
+
 ## The retrieval pipeline
 
-Every query runs through two retrievers. FTS5 with BM25 finds exact names, commands, phrases, and file references. sqlite vec performs exact cosine distance search to find related meaning when the query uses different language.
+Every Brain query follows an explicit sequence.
 
-Each retriever contributes up to 30 candidates. Reciprocal rank fusion merges the two rankings with a constant of 60. Maximal marginal relevance then reduces near duplicates and keeps up to 10 diverse candidates. The final scoring step weighs relevance, importance, memory type, and freshness before returning five memories.
+### 1. Embed the question
 
-That sequence solves different failure modes. Lexical search protects precise identifiers. Semantic search recovers concepts. Rank fusion avoids trusting one score scale. Diversity selection prevents five versions of the same memory from occupying the result.
+The query is converted into a 1,536 dimension embedding with OpenAI text embedding 3 small. Query embeddings are cached inside the running process.
 
-## Memory types behave differently
+### 2. Run two retrievers
 
-The curated store separates procedural, semantic, and episodic memory. A durable operating rule should remain useful longer than a temporary task update, so freshness uses exponential decay constants chosen by type.
+sqlite vec performs exact cosine nearest neighbor search. FTS5 with BM25 performs lexical search. Each returns up to 30 unconsolidated candidates, optionally filtered by memory tier.
 
-Those constants are decay windows, not mathematical half lives. The distinction matters because the ranking formula should be described as it is implemented.
+The vector search is exact rather than approximate. That keeps the implementation simple and predictable at the current scale, while creating a clear future boundary if the corpus outgrows brute force lookup.
 
-The raw Echo archive serves a different purpose. It keeps searchable transcript chunks for cases where the exact conversation matters. Archive search is explicit, so a large historical record does not flood normal memory retrieval.
+### 3. Fuse the rankings
 
-## Technical boundaries
+Reciprocal rank fusion combines the two ordered lists with a denominator constant of 60. The fused scores are normalized before later stages.
 
-The database and ranking logic run locally in Python with SQLite, FTS5, and sqlite vec. Query embeddings can use a cloud service, so the search path is not fully offline.
+Rank fusion is useful because BM25 and cosine distance do not share a meaningful score scale. The system combines their positions rather than pretending that the raw numbers are directly comparable.
 
-Vector retrieval is exact distance search. This design does not claim an approximate index or unlimited scale. A further model based reranking stage exists as an optional dormant path and is not part of the normal result.
+### 4. Apply a small query hint
 
-Retrieval can still miss an important memory or surface an outdated one. Stored source metadata makes inspection possible, and the agent can search the transcript archive when the curated result is insufficient.
+Queries containing words such as task, reminder, deadline, or next give task and todo memories a small relevance nudge. This is a bounded heuristic, not a general intent classifier.
 
-## Why I built it
+### 5. Diversify with MMR
 
-Hippocampus turns memory into an engineering subsystem with explicit stores, ranking stages, and limitations. I use it in daily work to recover project decisions without repeatedly explaining the whole environment.
+Maximal marginal relevance selects up to 10 memories. Its default relevance weight is 0.65, leaving 0.35 to penalize similarity with results already selected.
 
-It demonstrates the part of AI development that sits beyond prompting: information architecture, hybrid search, ranking, lifecycle policy, provenance, and honest evaluation of what recall has and has not been proven.
+This stage is why a repeated fact does not consume the entire answer. The system can keep the strongest version while making room for other useful context.
 
-**Architecture and technical description checked September 14, 2026.**
+### 6. Score relevance, importance, and freshness
+
+The current weights are 0.75 for fused relevance, 0.10 for stored importance, and 0.15 for freshness. Freshness uses exponential decay with a type specific time constant.
+
+Rules, architecture, and decisions use 3,650 day constants. Tools, configuration, and people use 730. General facts use 365. Insights use 180. Tasks use 90. Observability records use 7.
+
+The implementation names these values as half lives, but the formula does not include the factor required for a mathematical half life. I describe them as decay constants on this page because that matches the actual calculation.
+
+### 7. Optionally rerank
+
+A Voyage cross encoder path can rerank the final diverse candidates. It has an 800 millisecond timeout, a circuit breaker after three consecutive failures, a five minute backoff, a daily call cap, and graceful fallback to the local ordering.
+
+That path is currently dormant because its key is not provisioned. Normal search ends after MMR and typed freshness.
+
+### 8. Return the focused result
+
+The default interface emits five memories with type, project, date, importance, and score. The agent can then inspect the stored source or explicitly query Echo when those five are insufficient.
+
+## Memory types and authorship
+
+Hippocampus separates procedural, semantic, and episodic tiers while also preserving more specific record types such as rule, decision, fact, task, tool, insight, and observability.
+
+Authorship matters as much as type. Human curated rules and decisions should not be silently rewritten by an automated cleanup job. Machine extracted facts and procedures can merge when repeated evidence supports consolidation.
+
+That boundary lets automated extraction operate without contaminating deliberate policy. The adaptive store can improve while the human authored operating floor remains controlled.
+
+## How memory enters the system
+
+An hourly watcher scans completed sessions after a 30 minute idle gate. It extracts durable facts, decisions, tasks, and procedures instead of storing every sentence as a memory. A daily backstop processes sessions missed by the normal watcher.
+
+Watermarks record how far each session has been read. Tail resume behavior continues from the last processed position. SQLite write ahead logging supports concurrent readers and safer recovery.
+
+The raw transcript path is different. Meaningful messages are chunked, embedded, and added to Echo so that the original record remains searchable even when extraction chose not to create a curated memory.
+
+## Consolidation, retirement, and self maintenance
+
+A nightly consolidation task compares compatible memory types. Similar records at or above a cosine threshold of 0.93 can merge into a stronger survivor. Rules, architecture, and decisions remain frozen from this automated merge path.
+
+The survivor keeps the higher importance record, receives the merged statement and embedding, and can gain confidence when a learned procedure repeats. The retired row is marked consolidated and removed from vector matching. FTS5 is rebuilt as a consistency backstop.
+
+Old task and todo memories can retire after their useful window unless marked canonical or pinned. The system therefore manages accumulation instead of assuming the database can grow forever without affecting retrieval quality.
+
+## Failure behavior and honest limits
+
+<div class="engineering-grid">
+  <section>
+    <h3>Lexical failure</h3>
+    <p>If FTS5 is unavailable, search can continue with vector candidates. Exact identifier recall becomes weaker.</p>
+  </section>
+  <section>
+    <h3>Reranker failure</h3>
+    <p>The optional remote reranker degrades to the MMR and freshness ordering after timeout or circuit opening.</p>
+  </section>
+  <section>
+    <h3>Embedding failure</h3>
+    <p>Query embedding is the hard dependency. An OpenAI embedding outage currently stops a new semantic query.</p>
+  </section>
+  <section>
+    <h3>Retrieval uncertainty</h3>
+    <p>A relevant memory can still be missed or outdated. Source metadata and Echo provide an inspection path, not perfect recall.</p>
+  </section>
+</div>
+
+Hippocampus is a working architecture for a single user workstation, not a hosted memory product or a claim of unlimited scale. Its value is the explicit engineering: multiple stores, multiple retrievers, rank fusion, diversity, typed lifecycle policy, consolidation, provenance, and visible failure boundaries.

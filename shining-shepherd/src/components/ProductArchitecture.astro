@@ -1,0 +1,41 @@
+<figure class="system-map system-map-product" aria-labelledby="product-map-title">
+  <figcaption id="product-map-title">
+    <span class="map-kicker">Application architecture</span>
+    <strong>A check in crosses product, state, storage, and service boundaries</strong>
+    <span>The interface stays responsive while persistence, entitlements, analytics, and notifications remain separate concerns.</span>
+  </figcaption>
+
+  <div class="product-flow">
+    <section class="map-node map-node-accent">
+      <span class="map-index">INTERACTION</span>
+      <strong>Goal check in</strong>
+      <p>The interface captures intent and immediately reflects the new state.</p>
+      <small>Flutter widgets · motion · haptics</small>
+    </section>
+    <section class="map-node">
+      <span class="map-index">DOMAIN</span>
+      <strong>Habit rules</strong>
+      <p>Pure models calculate streaks, shields, milestones, and the correct celebration.</p>
+      <small>Dart models · typed results</small>
+    </section>
+    <section class="map-node">
+      <span class="map-index">STATE</span>
+      <strong>Reactive coordination</strong>
+      <p>Riverpod updates the home screen, calendar, purchase state, and dependent services.</p>
+      <small>Providers · async state · streams</small>
+    </section>
+    <section class="map-node">
+      <span class="map-index">PERSISTENCE</span>
+      <strong>Offline local data</strong>
+      <p>Hive stores goals and settings. SharedPreferences carries small recovery values.</p>
+      <small>Adapters · migrations · pending actions</small>
+    </section>
+  </div>
+
+  <div class="product-services">
+    <span><strong>RevenueCat</strong> purchases and entitlements</span>
+    <span><strong>AdMob</strong> consent and controlled ad delivery</span>
+    <span><strong>Notifications</strong> scheduled and background actions</span>
+    <span><strong>Firebase</strong> analytics and crash diagnostics</span>
+  </div>
+</figure>

@@ -18,6 +18,7 @@ const demo = data.demoUrl && data.demoUrl !== '/no-demo' ? data.demoUrl : null;
       <div class="case-dates">
         {data.publishedAt && <span>Published <time datetime={data.publishedAt}>{dateLabel(data.publishedAt)}</time></span>}
         {data.updatedAt && data.updatedAt !== data.publishedAt && <span>Updated <time datetime={data.updatedAt}>{dateLabel(data.updatedAt)}</time></span>}
+        {data.readTime && <span>{data.readTime}</span>}
       </div>
       {data.role && <p class="case-role"><strong>My role</strong> {data.role}</p>}
     </header>

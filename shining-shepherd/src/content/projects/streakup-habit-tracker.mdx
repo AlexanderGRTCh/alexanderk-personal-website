@@ -1,12 +1,15 @@
 ---
 title: "StreakUp Habit Tracker"
-description: "A shipped Flutter app that helps people build consistent daily and weekly habits."
+description: "A shipped Flutter product with offline state, typed habit logic, subscriptions, ads, notifications, analytics, localization, and release engineering for iOS and Android."
 thumbnail: "/assets/streakup-thumbnail.jpg"
+thumbnailAlt: "StreakUp habit tracker running on a mobile phone."
 tags: ["Flutter", "Dart", "Riverpod", "Hive", "RevenueCat", "AdMob", "iOS", "Android"]
 demoUrl: "https://alexandergrtch.github.io/StreakUp/"
+publishedAt: "2026-09-14"
 updatedAt: "2026-09-14"
-status: "Shipped"
-role: "Product design and engineering"
+readTime: "5 minute technical case study"
+status: "Shipped · active release work"
+role: "Product strategy, interaction design, Flutter engineering, monetization, testing, and store delivery."
 featured: true
 order: 3
 clientLinks:
@@ -16,32 +19,115 @@ clientLinks:
     url: "https://apps.apple.com/us/app/streakup-habit-tracker-goals/id6760596379"
 ---
 
-## A habit tracker built for real routines
+import ProductArchitecture from '../../components/ProductArchitecture.astro';
 
-StreakUp helps people repeat small actions without turning every miss into failure. It supports daily habits, weekly goals, one off tasks, reminders, streaks, milestones, and themes. The app is available on <a href="https://play.google.com/store/apps/details?id=com.AlexanderCH.habitracker2026" target="_blank" rel="noopener">Google Play</a> and the <a href="https://apps.apple.com/us/app/streakup-habit-tracker-goals/id6760596379" target="_blank" rel="noopener">App Store</a>.
+## A complete product, not a feature demo
 
-## What I built
+StreakUp helps people build daily and weekly habits, complete one time tasks, recover from missed days, and see progress without turning one break into failure.
 
-I designed and engineered the product across Flutter, iOS, and Android. Clear home screen cues show what needs attention and what is complete. Streak Shields preserve progress after a missed day when the user returns. Milestones, responsive celebrations, and personal bests make progress visible without hiding the work.
+I designed and engineered the product across Flutter, Android, and iOS. The work includes domain logic, reactive state, offline persistence, notifications, subscriptions, advertising, consent, analytics, crash diagnostics, localization, testing, release packaging, and both store submissions.
+
+The app is available on <a href="https://play.google.com/store/apps/details?id=com.AlexanderCH.habitracker2026" target="_blank" rel="noopener">Google Play</a> and the <a href="https://apps.apple.com/us/app/streakup-habit-tracker-goals/id6760596379" target="_blank" rel="noopener">App Store</a>.
+
+<div class="case-metrics">
+  <div class="case-metric"><strong>1.0.12 + 33</strong><span>current source version inspected</span></div>
+  <div class="case-metric"><strong>932</strong><span>declared test cases in the source tree</span></div>
+  <div class="case-metric"><strong>59</strong><span>Dart test files</span></div>
+  <div class="case-metric"><strong>35</strong><span>localization catalogs</span></div>
+</div>
+
+**Source inventory checked September 14, 2026.** The test number counts declarations in the repository. It is not presented as a fresh full suite pass.
+
+<ProductArchitecture />
+
+## Product behavior begins in the domain
+
+The central action is a check in, but the result is more than a Boolean value. The domain layer calculates the new streak, completion state, milestone eligibility, shield opportunity, comeback status, and the emotional tone the interface should present.
+
+A typed check in result carries those facts to the presentation layer. An emotion mapper selects among relief, momentum, gentle pressure, gratitude, resilience, and shield activation. Priority rules ensure that one event produces one coherent response. A milestone can outrank an ordinary celebration. A comeback can receive a different response from a routine day.
+
+This separation matters because the behavior can be tested without rendering the interface. The widgets animate a decision the domain already made instead of rebuilding business rules inside visual code.
+
+## Designing for real interruptions
+
+A habit system that assumes perfect daily behavior punishes the people it is meant to help. StreakUp models missed days, paused periods, daily goals, weekly targets, one time tasks, and protected gaps as distinct states.
+
+Streak Shields allow an eligible short gap to preserve a streak. The domain calculates the opportunity and the interface asks the user to decide. The calendar records a protected day differently from success, failure, or pause, so the history stays truthful.
+
+Weekly goals use completed weeks rather than raw check in totals when calculating milestone progress. This prevents a user with several check ins in one week from receiving a milestone intended to represent several weeks of consistency.
+
+The product also surfaces personal best proximity, milestone progress, today status, and recent weekly consistency. These signals come from the same domain state, which prevents the home screen and detail screen from disagreeing.
+
+## Reactive state without mixing responsibilities
+
+Riverpod coordinates state across goals, settings, purchases, and service initialization. Providers expose repositories and typed asynchronous state to the interface. Stream based premium state lets an entitlement change remove ads and unlock features without forcing the app to restart.
+
+The source is organized by feature with domain, data, and presentation boundaries. Goal models and repository contracts sit apart from Hive adapters and widgets. Settings follow the same pattern. Sharing has its own payload, provider, service, sheet, and card.
+
+This structure keeps a store SDK from becoming the owner of product rules. RevenueCat reports entitlement state. The app decides what that entitlement changes.
 
 <figure class="mx-auto" style="max-width: 195px;">
-  <img src="/assets/streakup-home-screen.jpg" alt="StreakUp home screen showing habits, progress, and weekly consistency" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
-  <figcaption class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">The home screen keeps today’s actions and recent consistency together.</figcaption>
+  <img src="/assets/streakup-home-screen.jpg" alt="StreakUp home screen showing goals, progress, and weekly consistency" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">The home screen combines today's actions, streak state, and recent consistency.</figcaption>
 </figure>
 
-## Engineering approach
+## Offline persistence and recovery
 
-Riverpod coordinates reactive state across goals, settings, purchases, and interface updates. Hive stores goals locally, so core tracking remains available without a connection. RevenueCat manages subscription entitlements, while AdMob supports the free experience. Local notifications let people act on reminders and process responses after reopening.
+Hive stores goals and settings locally through typed adapters. The core habit experience remains available without a network connection. SharedPreferences carries small values that need a lightweight recovery path, including pending notification actions and selected cached state.
 
-The code separates domain, data, and presentation concerns for easier maintenance. Shared Flutter code supports both platforms while preserving platform specific release requirements.
+Notification buttons can be pressed while the normal interface is not running. The background handler records the response, then the application processes the pending action after launch. This avoids relying on a fully initialized widget tree during background execution.
 
-I also handled store packaging, release coordination, and platform specific configuration.
+Local storage also changes the migration responsibility. Model updates must remain compatible with existing user data. Adapters, defaults, and recovery behavior are part of product reliability, not a detail hidden behind the interface.
+
+## Purchases and entitlement state
+
+RevenueCat supplies monthly, yearly, and lifetime offerings. Prices come from the store product rather than hardcoded display text. Purchase and restore flows resolve the selected package, update entitlement state, and expose failure without granting premium access early.
+
+Premium state controls unlimited goals, themes, and the advertising boundary. Cached entitlement information supports startup behavior, while provider refresh establishes current authority.
+
+The upgrade interface handles incomplete offerings. If one package is missing, available packages can still render. A dedicated resolution path fills monthly, annual, and lifetime slots by package type rather than relying on store ordering.
+
+## Advertising as a state machine
+
+AdMob integration includes consent, initialization gates, banner delivery, interstitial loading, retry behavior, cooldowns, and disposal. Premium users do not initialize or request ads after entitlement is verified.
+
+Interstitials appear only at eligible user initiated moments. The service tracks whether an ad is loaded, whether another show is active, the last show time, and repeated load failures. A two minute cooldown prevents rapid repetition.
+
+The app also records interrupted interstitial state as a bounded debt. That debt is considered at a later eligible action rather than forcing an ad during launch or splash, which would violate the intended placement contract.
+
+Optional rewarded ads use a separate lifecycle so a voluntary reward does not contaminate the ordinary interstitial gate.
+
+## Notifications, analytics, and diagnostics
+
+Local notifications support scheduled reminders and action responses. Time zone aware scheduling preserves the user's intended local time. Stable identifiers allow reminders to be updated or cancelled with their goals.
+
+Firebase Analytics and a product funnel layer record defined events for creation, check in, paywall exposure, purchase outcomes, and other operating signals. Consent and delivery coverage limit what those events can establish.
+
+Crashlytics is integrated for release diagnostics, with native collection controls reflected in current release notes. Analytics and crash tooling provide evidence for maintenance; they do not justify claims about retention, revenue, or user growth without the corresponding reports.
+
+## Testing the state space
+
+The current repository contains 932 declared tests across 59 Dart files. Coverage includes goal calculations, check in results, emotion mapping, milestone rules, shields, purchase package resolution, ad gates, notification actions, localization overflow, responsive phone layouts, and golden visual scenarios.
+
+The celebration scenario suite follows the complete path from check in result to emotion payload to selected overlay. It tests priority collisions such as a milestone and comeback occurring together. Localization sweeps place translated content into constrained layouts to catch text that breaks a screen.
+
+Golden tests capture important interface states including milestones, paywalls, shield prompts, and phone sizes. A separate release workflow has also used Firebase Test Lab for a real Android device crash and stability crawl. That crawl catches crashes and platform breakage, while domain and widget tests carry the behavior assertions.
+
+## Localization and platform delivery
+
+The source contains 35 localization catalogs, including right to left languages and several regional variants. Generated localization classes give the interface typed access to translated strings.
+
+Android and iOS share the Flutter application while retaining platform specific notification, purchase, privacy, tracking, signing, and store requirements. The current source version is 1.0.12 build 33.
+
+Release engineering includes signed Android bundles, iOS builds, store metadata, privacy declarations, dependency compatibility, and diagnostics. Shipping on both stores is part of the engineering proof because the product had to cross the platform boundaries that a local demo never encounters.
 
 <figure class="mx-auto" style="max-width: 195px;">
   <img src="/assets/streakup-calendar.jpg" alt="StreakUp calendar showing completed, missed, paused, and protected days" loading="lazy" class="w-full rounded-lg border border-gray-200 shadow-sm dark:border-gray-700" />
-  <figcaption class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">Calendar states explain progress without reducing it to one number.</figcaption>
+  <figcaption class="text-sm text-gray-600 dark:text-gray-400 text-center mt-2">Calendar states preserve the difference between success, a miss, a pause, and shield protection.</figcaption>
 </figure>
 
-## Result
+## What this project demonstrates
 
-StreakUp is a complete mobile product with store distribution and ongoing releases. It shows my work across product decisions, interaction design, application architecture, monetization, and delivery.
+StreakUp connects product thinking with software delivery. The same feature crosses domain rules, state, persistence, presentation, monetization, analytics, tests, and store policy.
+
+It demonstrates that I can make those boundaries work together, maintain them through ongoing releases, and use the product as real operating evidence for the [Agentic System](/projects/agentic-system) that supports its development.

@@ -15,6 +15,7 @@ const projects = defineCollection({
     updatedAt: z.string().optional(),
     status: z.string().optional(),
     role: z.string().optional(),
+    readTime: z.string().optional(),
     thumbnailAlt: z.string().optional(),
     clientLinks: z.array(z.object({ label: z.string(), url: z.string() })).optional(),
   }),
