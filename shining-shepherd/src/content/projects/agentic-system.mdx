@@ -11,6 +11,8 @@ status: "In daily use"
 role: "System design, implementation, integration and operation."
 ---
 
+import AgentArchitecture from '../../components/AgentArchitecture.astro';
+
 ## Keeping work moving across sessions
 
 A useful assistant needs more than a good answer. It needs the right history, access to tools and a way to recover unfinished work.
@@ -19,9 +21,11 @@ I built this environment around the work of developing products and running Ktis
 
 ## Follow one task
 
-When I resume a product task, the system first finds its project context. It can retrieve previous decisions, use the relevant tools and divide bounded work between agents. Findings return for review before I accept the result.
+When I resume a product task, the system finds its context and previous decisions. Work returns with findings I can inspect before accepting the result.
 
 I use this approach in work on [StreakUp](/projects/streakup-habit-tracker). It also supports recurring research, document preparation and operational checks. The useful outcome is continuity: less repeated explanation and a traceable record of the work.
+
+<AgentArchitecture />
 
 ## A measured improvement
 

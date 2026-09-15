@@ -48,9 +48,24 @@
 .lecture-flow li strong::before { content: counter(stages) ". "; color: #a7b4ff; }
 .lecture-flow li span { display: block; color: #c1cce0; font-size: .87rem; margin-top: .3rem; }
 .lecture-flow > p { color: #b1bfd3; font-size: .8rem; margin-top: 1.25rem; }
+.agent-architecture { background: #101d32; color: #f1f5f9; padding: clamp(1.15rem, 4vw, 2rem); border-radius: 12px; margin: 2rem 0; line-height: 1.5; }
+.agent-architecture figcaption { margin-bottom: 1.5rem; }
+.agent-architecture figcaption strong { display: block; font-size: 1.1rem; color: #fff; }
+.agent-architecture figcaption span { display: block; color: #b1bfd3; font-size: .85rem; margin-top: .3rem; }
+.agent-intent { text-align: center; padding: .7rem 0 1rem; border-bottom: 1px solid #596b88; }
+.agent-core { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+.agent-core > div { border: 1px solid #536582; border-radius: 8px; padding: 1rem; }
+.agent-core span { display: block; color: #a7b4ff; font-size: .75rem; margin-bottom: .55rem; }
+.agent-core strong { font-size: .98rem; }
+.agent-architecture p { font-size: .85rem; margin-top: .35rem; color: #c1cce0; }
+.agent-execution { text-align: center; padding: 1.25rem 0; }
+.agent-execution::before { content: '↓'; display: block; color: #a7b4ff; margin-bottom: .5rem; }
+.agent-review { text-align: center; background: #20394a; border: 1px solid #699e9e; border-radius: 8px; padding: 1rem; }
+.agent-review strong { color: #c8f2e2; }
 @media(max-width: 520px) {
   .case-header { margin-top: 1.5rem; }
   .memory-branches, .lecture-flow ol { grid-template-columns: 1fr; gap: .7rem; }
+  .agent-core { grid-template-columns: 1fr; gap: .7rem; }
   .case-body { font-size: 1rem; }
   .case-body h2 { font-size: 1.35rem; }
 }
