@@ -1,47 +1,189 @@
+---
+const gates = [
+  {
+    title: 'Source integrity',
+    check: 'Exact source audio, ordered timestamps, and verified input hashes.',
+    failure: 'Wrong source, stale inputs, or broken lineage.',
+    next: 'Reject the handoff and rebuild from verified inputs.',
+  },
+  {
+    title: 'Speech coverage',
+    check: 'An explicit outcome for every detected speech window.',
+    failure: 'Unaccounted speech or an incomplete decode.',
+    next: 'Recover affected windows and recheck the original speech map.',
+  },
+  {
+    title: 'Greek correction',
+    check: 'Valid segment IDs, bounded edits, and retrieval evidence for larger changes.',
+    failure: 'Malformed or excessive edits.',
+    next: 'Reject the edit, preserve raw Greek, and record the fallback for review.',
+  },
+  {
+    title: 'Translation integrity',
+    check: 'Complete, ordered passages and no unresolved translation failures.',
+    failure: 'Missing, duplicated, or stale passages, or failed content markers.',
+    next: 'Retry affected text and hold an incomplete revision.',
+  },
+  {
+    title: 'Meaning and source risk',
+    check: 'Every Greek and English pair, terminology, references, and source evidence.',
+    failure: 'Material errors, incomplete review, or deterministic high source risk.',
+    next: 'Record exact findings for repair. A ready review can advance.',
+  },
+  {
+    title: 'Repair and certification',
+    conditional: true,
+    check: 'Accepted source recovery, verified English, and current review evidence.',
+    failure: 'Failed recovery, meaning defects, or unresolved findings.',
+    next: 'Preserve accepted work, hold unresolved findings, and request fresh review explicitly.',
+  },
+  {
+    title: 'Release readiness',
+    check: 'A ready review, matching revisions, complete outputs, and valid media.',
+    failure: 'Outdated evidence or an inconsistent publication bundle.',
+    next: 'Block publication until checks pass. The operator controls release.',
+  },
+];
+---
+
 <figure class="system-map system-map-theophonia" aria-labelledby="theophonia-map-title">
   <figcaption id="theophonia-map-title">
-    <span class="map-kicker">Pipeline architecture</span>
-    <strong>Every stage must preserve the source</strong>
-    <span>Language models handle language. Deterministic state, evidence, and gates control the workflow.</span>
+    <span class="map-kicker">The control architecture</span>
+    <strong>Seven gates from recording to release</strong>
+    <span>Each check has a defined failure response. A repaired revision returns to review through an explicit certification step.</span>
   </figcaption>
 
-  <div class="map-track map-track-five" role="list">
-    <div class="map-node" role="listitem">
-      <span class="map-index">01</span>
-      <strong>Map the recording</strong>
-      <p>Voice activity detection locates speech and exposes missing coverage.</p>
-      <small>Audio clock · speech windows</small>
-    </div>
-    <div class="map-node" role="listitem">
-      <span class="map-index">02</span>
-      <strong>Transcribe Greek</strong>
-      <p>Whisper large v3 works in windows. Failed gaps return to transcription.</p>
-      <small>GPU speech recognition · coverage check</small>
-    </div>
-    <div class="map-node" role="listitem">
-      <span class="map-index">03</span>
-      <strong>Ground and translate</strong>
-      <p>Indexed scripture, liturgy, and patristic sources support specialist terms.</p>
-      <small>SQLite retrieval · stable passages</small>
-    </div>
-    <div class="map-node" role="listitem">
-      <span class="map-index">04</span>
-      <strong>Audit meaning</strong>
-      <p>Greek and English passages are reviewed together. Findings cite exact evidence.</p>
-      <small>Structured review · risk evidence</small>
-    </div>
-    <div class="map-node map-node-accent" role="listitem">
-      <span class="map-index">05</span>
-      <strong>Repair or hold</strong>
-      <p>Only affected passages rerun. Unresolved work cannot pass the release gate.</p>
-      <small>Targeted repair · fail closed output</small>
-    </div>
-  </div>
+  <ol class="gate-flow">
+    {gates.map((gate, index) => (
+      <li class:list={['gate-step', { 'gate-step-final': index === gates.length - 1 }]}>
+        <div class="gate-title">
+          <span class="map-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+          <h3>{gate.title}</h3>
+          {gate.conditional && <span class="gate-conditional">When repair is needed</span>}
+        </div>
+        <p class="gate-check"><span class="gate-label">Checks</span>{gate.check}</p>
+        <div class="gate-response">
+          <p><span class="gate-label">On failure</span>{gate.failure}</p>
+          <p><span class="gate-label gate-label-next">Next</span>{gate.next}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
 
-  <div class="map-spine">
-    <span>SQLite task ledger</span>
-    <span>SHA 256 artifact lineage</span>
-    <span>Leases and retries</span>
-    <span>Separate execution and quality states</span>
+  <div class="gate-invariant">
+    <strong>Completed work can still be held.</strong>
+    <span>Execution records what ran. Quality records what may advance.</span>
   </div>
 </figure>
+
+<style>
+  .system-map-theophonia figcaption {
+    max-width: 660px;
+  }
+
+  .gate-flow {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .gate-step {
+    border-top: 1px solid var(--map-line);
+    display: grid;
+    gap: 1.15rem;
+    grid-template-columns: 1fr 1.35fr 1.7fr;
+    padding: 1.15rem 0;
+  }
+
+  .gate-title h3 {
+    color: var(--map-bright);
+    font-size: .93rem;
+    line-height: 1.35;
+    margin: .35rem 0 0;
+  }
+
+  .gate-conditional {
+    color: var(--map-muted);
+    display: block;
+    font-size: .66rem;
+    line-height: 1.45;
+    margin-top: .45rem;
+  }
+
+  .gate-step p {
+    color: var(--map-muted);
+    font-size: .8rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .gate-label {
+    color: #dbe3ff;
+    display: block;
+    font-size: .61rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    margin-bottom: .28rem;
+    text-transform: uppercase;
+  }
+
+  .gate-response p + p {
+    margin-top: .7rem;
+  }
+
+  .gate-label-next,
+  .gate-step-final h3 {
+    color: var(--map-accent);
+  }
+
+  .gate-invariant {
+    background: rgba(25, 63, 67, .65);
+    border: 1px solid #5c918c;
+    border-radius: 8px;
+    color: var(--map-muted);
+    font-size: .8rem;
+    line-height: 1.5;
+    margin-top: .1rem;
+    padding: .9rem 1rem;
+  }
+
+  .gate-invariant strong {
+    color: var(--map-accent);
+    display: block;
+    margin-bottom: .2rem;
+  }
+
+  @media (max-width: 680px) {
+    .gate-step {
+      gap: .85rem 1.1rem;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .gate-title {
+      align-items: baseline;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .35rem .6rem;
+      grid-column: 1 / -1;
+    }
+
+    .gate-title h3,
+    .gate-conditional {
+      margin: 0;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .gate-step {
+      grid-template-columns: 1fr;
+    }
+
+    .gate-step p {
+      font-size: .83rem;
+    }
+
+    .gate-response p + p {
+      margin-top: .6rem;
+    }
+  }
+</style>

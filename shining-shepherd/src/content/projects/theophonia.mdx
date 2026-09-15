@@ -1,6 +1,6 @@
 ---
 title: "Theophonia"
-description: "A resumable AI pipeline that transcribes Greek lectures, grounds specialist language, translates to English, audits meaning, and repairs only the passages that fail review."
+description: "Repairs Greek speech recognition errors with source audio and reference evidence, translates to English, and holds uncertain work behind explicit quality gates."
 thumbnail: "/assets/theophonia-cover.svg"
 thumbnailAlt: "Theophonia architecture from Greek audio through transcription, retrieval, translation, review, and controlled release."
 tags: ["Speech AI", "Translation", "Python"]
@@ -10,16 +10,18 @@ publishedAt: "2026-09-14"
 updatedAt: "2026-09-14"
 readTime: "5 minute technical case study"
 status: "Working pipeline · active development"
-role: "Pipeline architecture, implementation, retrieval, quality controls, and operation."
+role: "Pipeline architecture, implementation, retrieval, quality gates, and operation."
 ---
 
 import LectureFlow from '../../components/LectureFlow.astro';
 
-## The problem is meaning, not transcription
+## Recover the words before trusting the translation
 
-Greek theological lectures contain scripture, liturgical phrases, historical names, and older forms of the language. Speech recognition can turn one unfamiliar term into plausible nonsense. A translation model may then turn that error into polished English, making the failure harder to notice.
+A Greek lecturer quotes an old text or uses an unfamiliar name. Speech recognition substitutes a plausible word, drops part of a sentence, or repeats a phrase. A translation model can turn that damaged transcript into fluent English, hiding the original mistake.
 
-I built Theophonia as an evidence preserving media pipeline rather than a chain of model calls. Every lecture becomes a set of versioned artifacts with stable passage identities, source timing, explicit quality states, and a release gate.
+I built Theophonia to recover those failures and make the result inspectable. It maps speech independently, corrects recognition errors with reference evidence, and returns to the exact audio window when the source needs another decode. Greek and English then face a bilingual review with a defined repair path.
+
+The engineering is in the gates around that work. Each handoff checks its inputs, each failure has a bounded response, and every accepted change keeps its connection to the recording. A successful model call alone cannot authorize release.
 
 <div class="case-metrics">
   <div class="case-metric"><strong>708</strong><span>lecture manifests inspected</span></div>
@@ -28,116 +30,60 @@ I built Theophonia as an evidence preserving media pipeline rather than a chain 
   <div class="case-metric"><strong>3</strong><span>passages changed in a traceable targeted repair</span></div>
 </div>
 
-**Evidence checked September 14, 2026.** These counts come from stage records in the local archive.
+**Evidence checked September 14, 2026.** These are recorded stage totals in the local archive. Completion counts do not certify publication or transcription accuracy.
+
+## How a lecture earns readiness
+
+Models interpret language. Deterministic code checks structure, evidence identity, coverage, and permission to advance. Some failures reject a proposed edit while preserving the source; unresolved quality failures hold the affected revision.
 
 <LectureFlow />
 
-## The complete pipeline
+## How misunderstood speech becomes a supported correction
 
-The architecture separates language work from workflow truth. Models interpret speech and text. Deterministic code decides which artifact is current, what may run next, and whether a lecture is eligible to leave the system.
+Recovery starts before language polish. One Silero voice activity detection pass creates an independent map of speech in the canonical recording. Whisper large v3 transcribes bounded groups of those windows. Coverage accounting requires an explicit outcome for every detected window, including an evidenced decision that no valid speech was recovered. Incomplete windows receive capped recovery attempts against the same map.
 
-| Stage | Engineering responsibility |
-|---|---|
-| Audio registration | Hash the canonical recording and establish its source clock |
-| Speech mapping | Use voice activity detection to locate speech before transcription |
-| Windowed transcription | Decode Greek audio in bounded windows with Whisper large v3 |
-| Coverage recovery | Compare detected speech with transcript coverage and reopen missed gaps |
-| Topic primer | Build lecture context for names, themes, scripture, and terminology |
-| Greek post edit | Correct recognition errors using retrieved evidence without replacing the source |
-| English translation | Translate stable passages while preserving alignment and terminology rules |
-| Source risk evidence | Identify passages where the audio or transcript needs closer inspection |
-| Full review | Compare Greek and English passage pairs and record structured findings |
-| Targeted repair | Rerun only supported failures and hold unresolved work from release |
+This exposes speech that could otherwise disappear silently. It also keeps a failed region from forcing another hour of successful transcription to run again. Source timestamps survive recovery, so recovered words return to their correct position.
 
-Accepted text can later feed subtitles and narration. Those stages use a generated media clock that remains separate from the source recording clock.
+For misunderstood words, a topic primer supplies lecture context and an indexed reference layer supplies candidate readings. The collections contain **36,437 scripture and liturgy anchors** and **7,458 patristic anchors**. Greek character trigrams allow approximate matching despite spelling, accent, and spacing differences. Distinctive words help separate a likely source from a merely familiar phrase.
 
-## Speech coverage before language polish
+The post editor has a concrete limit on how far it may rewrite a segment. Its normal edit distance cap is **25%**. A larger correction, capped at **50%**, requires all three retrieval checks: sufficient phrase overlap, distinctive word agreement, and a match among the highest ranked retrieved anchors. Malformed or excessive edits are rejected; the raw Greek remains available and the fallback is recorded.
 
-A transcript can look complete while missing speech. That is dangerous because every later stage operates on the available text and may never know that part of the lecture vanished.
+Those checks constrain a proposed correction. They cannot prove what was spoken. The system therefore preserves the raw transcript, corrected Greek, timing, and decoder evidence for later source risk assessment. The review model reads that evidence; direct audio recovery happens through the speech decoder, with listening adjudication available to the operator.
 
-Theophonia runs voice activity detection early to build an independent speech map. Transcription works in bounded windows. A coverage report compares the speech map with the decoded segments and identifies gaps that require recovery.
+## Translation and review check different failure modes
 
-This changes the failure model. Missing speech becomes an explicit coverage defect instead of a quiet absence. The pipeline can return to the affected source window before translation begins.
+Translation receives stable Greek passages, lecture context, and glossary guidance. Structural checks catch missing, duplicated, reordered, or stale passage identities. Failed translations receive up to three isolated retries. Successful passages remain reusable while unresolved text stays visible in a failure ledger and prevents translation readiness.
 
-Windowing also makes recovery cheaper. A failed region can rerun without discarding a successful hour of transcription. Stage state records which inputs and outputs belong together.
+Bilingual review then examines every Greek and English passage together. It checks meaning, terminology, omissions, additions, names, numbers, and unsupported readings. Retrieved references remain evidence bound to that revision. They do not become a second transcript.
 
-## Retrieval for specialist Greek
+The source risk layer also compares raw recognition with corrected Greek and uses decoder uncertainty where available. A deterministic high source risk finding blocks readiness even if the review model overlooks it. Minor findings remain visible without automatically holding an otherwise accepted lecture.
 
-Generic speech and translation models are not reliable authorities for specialist vocabulary. The pipeline therefore retrieves candidate evidence from indexed reference collections.
+This division matters. Glossary instructions guide the models; they are not a promise that every terminology rule is enforced by code. The blocking controls combine exact structural checks, source risk evidence, and a complete bilingual judgment.
 
-The reference layer includes **36,437 scripture and liturgy anchors** and **7,458 patristic anchors**. A phonetic Greek trigram index helps find a likely source even when the recognizer produced an imperfect spelling. Glossary rules capture preferred English terminology and known translation traps.
+## Repair has a defined scope and stopping point
 
-Retrieval supports a correction; it does not authorize one by itself. A candidate must agree with the audio context, the surrounding Greek, and the reference source. This three part evidence gate reduces the risk of replacing an unusual but correct phrase with a familiar quotation.
+A finding names the affected passage, evidence, severity, and required action. An English defect retranslates that passage. A source defect can trigger one tightly bounded decode from the exact canonical audio, followed by the configured Greek post editor. Raw recovery text is preserved as evidence; only the normalized result can enter a child revision.
 
-The topic primer gives later stages a compact view of likely names and themes. Greek post editing can then repair recognition errors with evidence. Translation receives the accepted Greek passages and terminology guidance rather than an unstructured lecture sized prompt.
+Recovery has its own acceptance checks for empty output, pathological repetition, known hallucination patterns, and implausible word density. The resulting English must then pass polarity checks and a separate whole passage semantic verifier against the accepted Greek. Material errors produce structured feedback for up to three translation attempts.
 
-> **Rejected shortcut.** A reference match cannot become the transcript merely because it is semantically plausible. The recording remains the authority.
+If an attempt fails, already accepted work survives. Any accepted Greek correction remains preserved, prior English is retained where translation failed, and unresolved findings stay held in an exact repair ledger. A later explicit retry can address only those unresolved findings.
 
-## Passage identity and artifact lineage
-
-Each lecture is divided into stable passages. Findings, translations, corrections, subtitles, and later narration can point to the same passage identity across stages.
-
-Every important artifact is bound to its inputs with SHA 256 hashes. A repair record can therefore show which transcript, policy, prompt, evidence set, and passage produced the new output. An old review cannot silently approve a newer translation.
-
-Immutable source artifacts and versioned derived artifacts create a useful boundary. The system preserves what entered the pipeline while allowing corrected products to advance.
-
-This lineage is what makes targeted repair safe. The system can change one supported passage and prove which surrounding text stayed untouched.
-
-## Review that produces actionable findings
-
-Full review compares Greek and English together. It looks for meaning drift, omissions, additions, terminology failures, suspicious source readings, and passages that sound fluent but are not supported.
-
-Findings use structured records rather than freeform criticism. A finding identifies the passage, risk, evidence, and requested action. The repair stage can then decide whether to retranslate the passage, reopen a source window, or hold the lecture for human judgment.
-
-A source risk path can request a new decode of the exact audio window when the transcript itself is uncertain. A translation defect can rerun only the affected English passage. The system avoids restarting full speech recognition when the source transcript is already accepted.
+**Repair completion is not review clearance.** The ordinary run stops at the repair boundary. An operator explicitly requests certification of the changed revision. Fresh review covers repaired passages and immediate neighbors only when every unaffected decision has provably identical evidence. Otherwise, the system falls back to a complete review. Release requires a current ready review and matching downstream artifacts.
 
 ## A repair that can be traced
 
-One recorded lecture repair produced three supported findings across three passages. The repair changed those passages, reused the accepted transcription, and recorded the result as ready.
+One recorded lecture repair changed three passages and reused the accepted transcription. Its repair record was marked ready. That demonstrates passage scoped correction and preserved lineage; the repair record alone does not establish final publication approval.
 
-That example demonstrates three important behaviors:
+Stable passage identities connect the finding, before and after text, source timing, and repair decision. SHA 256 hashes bind artifacts to the exact transcript, glossary, prompts, policies, and evidence that produced them. An old review cannot silently approve new text. Unchanged passages can remain reusable because their identities and evidence are checked.
 
-1. Review findings connect to stable passage identities.
-2. Repair scope follows the evidence instead of rerunning the full lecture.
-3. Quality state changes only after the repair artifact is recorded.
+The final bundle is checked again for a ready review, consistent revision hashes, complete passage coverage, and valid output media. Source timing and generated media timing remain separate, so a changed rendering cannot rewrite the recording's evidence clock. The operator controls the publication invocation.
 
-## Durable execution
+## Durable execution behind the quality gates
 
-Long AI workflows fail for ordinary reasons. A model times out. A worker stops. Two processes reach for the same task. A stage finishes with an artifact produced from an old input.
+The coordinator uses SQLite task state, renewable worker leases, and fencing tokens. A recovered worker cannot overwrite the result of a newer lease. Idempotency keys include stage versions, semantic inputs, and configuration, allowing completed work to be reused after an interruption. Retries stay local to the failed task.
 
-The execution layer uses SQLite task state, leases, idempotent operations, and stage local retries. A lease lets the system recover work from a dead worker. Idempotent task design lets a safe retry recognize completed output. Hash checks prevent mismatched artifacts from advancing.
+Execution status and quality disposition are separate records. A worker can finish successfully and persist a manual hold. That is a useful result: the operator receives a complete repair ledger instead of a crashed job or a falsely approved lecture.
 
-Execution status and quality disposition remain separate. A process can complete successfully while the content stays blocked. This avoids a common pipeline error where “the command returned zero” is mistaken for “the lecture is good.”
+The inspected archive demonstrates batch operation and a traceable repair, while the implementation shows the controls around those outputs. It does not establish a measured accuracy rate. A confident, plausible recognition error can still escape detection, which is why inspectable source evidence and operator judgment remain part of the system.
 
-<div class="engineering-grid">
-  <section>
-    <h3>Source clock</h3>
-    <p>Transcript segments and evidence retain timing from the canonical recording.</p>
-  </section>
-  <section>
-    <h3>Generated clock</h3>
-    <p>Narration and subtitle timing can change without rewriting source evidence.</p>
-  </section>
-  <section>
-    <h3>Execution state</h3>
-    <p>Queued, leased, running, complete, and failed describe what the worker did.</p>
-  </section>
-  <section>
-    <h3>Quality state</h3>
-    <p>Ready, held, and unresolved describe whether the content may advance.</p>
-  </section>
-</div>
-
-## Deterministic checks around model output
-
-Not every quality check needs another model. Local Python rules inspect terminology presence, forbidden translation forms, untranslated Greek markers, repeated text, passage counts, and artifact structure.
-
-The translation rule parser covers several rule families, including terms that must not appear alone and preferred wording over misleading alternatives. Unsupported rules are logged rather than silently treated as enforced.
-
-These checks are fast and repeatable. They catch known failure shapes before a more expensive review and produce machine readable diagnostics for the operator.
-
-## Engineering reach
-
-The inspected archive shows that transcription and translation operate at substantial batch scale. Review has completed for part of the collection. The targeted repair record proves passage scoped correction and artifact lineage on a real lecture.
-
-Theophonia demonstrates applied AI engineering across speech recognition, retrieval, translation, evaluation, state machines, provenance, retry design, and human release control. The same architecture can support research interviews, oral history, training archives, and other specialist recordings where a fluent result is not enough and the source must remain inspectable.
+I built the Python coordination and quality layer around speech recognition, indexed retrieval, language model adapters, and immutable artifacts. The result is a recoverable workflow for specialist recordings: errors can be located, corrections can be challenged, and every release decision can be traced to the version actually reviewed.
