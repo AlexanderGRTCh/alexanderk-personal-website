@@ -1,6 +1,7 @@
 
 ---
 import '../styles/global.css';
+const { title = 'Alexander Kemos | AI Engineer and Founder of Ktisis Arc', description = 'AI systems, speech and translation pipelines, and shipped apps. Selected work by Alexander Kemos, AI engineer and founder of Ktisis Arc in Vancouver.' } = Astro.props;
 
 const navItems = [
   { id: 'home', label: 'Home' },
@@ -36,7 +37,10 @@ const getHref = (id: string) => {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Alexander Kemos Portfolio</title>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta name="generator" content={Astro.generator} />
   </head>
   <body class="bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-white">

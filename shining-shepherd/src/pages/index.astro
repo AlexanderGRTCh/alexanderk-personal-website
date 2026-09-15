@@ -9,87 +9,29 @@ const featuredProjects = sortedProjects.filter((p) => p.data.featured);
 const highlightedProjects = (featuredProjects.length > 0 ? featuredProjects : sortedProjects).slice(0, 4);
 
 const skills = [
-  {
-    title: 'Languages',
-    items: [
-      'Python',
-      'Bash / Shell',
-      'Foundation: C++, Java, SQL',
-    ],
-  },
-  {
-    title: 'Frameworks & Infrastructure',
-    items: [
-      'Flutter / Dart · Riverpod · Hive',
-      'Node.js · Astro · Tailwind CSS',
-      'Docker · GitHub Actions · Vercel',
-      'AWS (EC2, Secrets Manager, GuardDuty, CloudTrail)',
-      'Terraform · Linux · Git / GitHub',
-      'Bandit · Trivy · pytest',
-    ],
-  },
-  {
-    title: 'AI Engineering',
-    items: [
-      'Anthropic API (Claude Opus, Sonnet)',
-      'Agent Orchestration and Tool Use',
-      'whisper.cpp (Local Speech-to-Text)',
-      'Playwright Browser Automation',
-      'Codex (OpenAI, VSCode and CLI)',
-      'Claude CLI (Agentic Development)',
-      'OpenClaw AI Agent (Self-hosted)',
-      '24/7 Production Deployment',
-    ],
-  },
-  {
-    title: 'Core Strengths',
-    items: [
-      'Mobile App Development (iOS + Android)',
-      'AI Agent Architecture and Orchestration',
-      'Production Systems and Reliability',
-      'DevSecOps and CI/CD Pipelines',
-      'Cloud Infrastructure and IaC',
-      'Full-Stack Web Delivery',
-      'System Automation and Scripting',
-      'Testing and Documentation',
-    ],
-  },
+  { title: 'Applied AI', items: ['Speech recognition and translation', 'Agent orchestration and tool use', 'Retrieval and memory', 'Evaluation and review workflows'] },
+  { title: 'Software delivery', items: ['Python and TypeScript', 'Flutter and Dart', 'Astro and Node.js', 'SQLite, testing and automation'] },
+  { title: 'Operating systems', items: ['Windows and Linux', 'Docker and GitHub Actions', 'AWS and Terraform', 'Monitoring and recovery'] },
 ];
-
 const myExperience = [
   {
-    title: '',
-    period: '2021 to present',
-    roles: [
-      {
-        title: 'DevSecOps & AI Automation Engineer',
-        company: 'Independent',
-        period: 'Early 2023 to present',
-        bullets: [
-          'Designed and operate a 24/7 multi-agent LLM system on self-hosted Linux infrastructure using Python, Node.js, Docker, and the Anthropic API (Claude Sonnet and Opus)',
-          'Developed <a href="https://alexandergrtch.github.io/StreakUp/" target="_blank" rel="noopener" class="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">StreakUp</a>, a cross-platform Flutter habit tracker published on Google Play and the App Store, with 701 passing tests, RevenueCat monetization, AdMob integration, and a 12-member international beta team',
-          'Designed and deployed a production DevSecOps pipeline on AWS using GitHub Actions, Terraform, Bandit, Trivy, and automated security gates',
-          'Delivered production websites using Astro and Tailwind CSS, maintaining 5-star reviews across all projects',
-        ],
-      },
-      {
-        title: 'Study and Development',
-        company: 'Independent',
-        period: '2021 to early 2023',
-        bullets: [
-          'Built algorithms, data structures, and small programs in C++, Java, and Python to master OOP, debugging, and core problem-solving while balancing studies and work',
-        ],
-      },
+    title: 'Independent product and client work',
+    period: 'Current work',
+    company: 'AI engineering and software development',
+    bullets: [
+      'Design and operate an AI working environment with shared memory, tools and human review.',
+      'Build Theophonia, a Greek lecture transcription, translation and quality review pipeline.',
+      'Develop and maintain StreakUp, available on Google Play and the App Store.',
+      'Deliver websites, applications and automation through <a href="https://www.ktisisarc.com/">Ktisis Arc</a>.',
     ],
   },
   {
-    title: 'Systems and Infrastructure',
-    company: 'Self-directed',
+    title: 'Systems and infrastructure',
     period: '2020 to present',
+    company: 'Independent projects',
     bullets: [
-      'Designed and maintained home and small office networks with VPN, DNS, and file sharing; zero downtime on self-hosted production services',
-      'Automated routine maintenance with Bash and Python scripts, reducing manual effort for health checks, log management, and system monitoring',
-      'Built and maintained systems from bare metal including OS configuration, driver management, and hardware diagnostics',
+      'Configure and maintain computers, networks and local services.',
+      'Automate recurring checks and preserve recovery paths when work is interrupted.',
     ],
   },
 ];
@@ -113,13 +55,14 @@ const myExperience = [
       <h1 class="text-balance text-4xl font-semibold leading-tight text-gray-900 sm:text-6xl dark:text-white">
         Hi, I'm <span class="text-gradient">Alexander Kemos</span>
       </h1>
+      <p class="hero-role">AI engineer and founder of <a href="https://www.ktisisarc.com/">Ktisis Arc</a></p>
       <p class="text-lg text-gray-600 dark:text-gray-300">
-        I build things that stay running. A production AI agent system on my own hardware, <a href="https://alexandergrtch.github.io/StreakUp/" target="_blank" rel="noopener" class="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">StreakUp</a> live on Google Play and the App Store, a secure DevSecOps pipeline on AWS. Not demos. Production.
+        I turn complicated work into useful software. From making Greek lectures accessible in English to building AI memory and shipping StreakUp, I design the workflow and the engineering behind it.
       </p>
       <div class="flex flex-col items-center justify-center gap-3 text-base font-medium sm:flex-row">
         <a class="btn-secondary" href="/projects">Explore projects</a>
         <a class="btn-secondary" href="https://github.com/AlexanderGRTCh" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn-secondary" href="#contact">Work with me</a>
+        <a class="btn-secondary" href="#contact">Projects and opportunities</a>
       </div>
     </div>
   </section>
@@ -127,26 +70,12 @@ const myExperience = [
   <section id="about" class="section">
     <div class="section-heading">
       <span class="section-kicker">About</span>
-      <h2 class="section-title">Where curiosity led</h2>
+      <h2 class="section-title">From an idea to something useful</h2>
       <p class="section-description">
-        Curiosity brought me to software. Shipping made it stick. I studied computer science at Langara, graduated in April 2025, then turned what I knew into products and systems people could actually use. Since then: client websites and web apps earning 5 star reviews, a production AI agent system running on my own hardware, <a href="https://alexandergrtch.github.io/StreakUp/" target="_blank" rel="noopener" class="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">StreakUp</a> live on Google Play and the App Store with 701 automated tests and a 12 member beta team, and a secure DevSecOps pipeline on AWS. I like ideas, but I care more about what survives contact with the real world. I build things that stay running.
+        I am based in Vancouver and studied computer science at Langara College.
+        Through Ktisis Arc, I build websites, apps and automation around how people work.
+        My own products give me direct experience of release decisions, maintenance and the business behind the software.
       </p>
-    </div>
-    <div class="grid gap-6 md:grid-cols-2">
-      <div class="card p-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">What drives me</h3>
-        <p class="mt-3 text-gray-600 dark:text-gray-300">
-          Curiosity, precision, and the discipline to ship.
-          I work best when the problem is real and the standard is high.
-        </p>
-      </div>
-      <div class="card p-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">What I'm exploring</h3>
-        <p class="mt-3 text-gray-600 dark:text-gray-300">
-          Multi-agent AI systems, mobile product development, and content automation pipelines.
-          Building things that reach real users and learning from what happens when they do.
-        </p>
-      </div>
     </div>
   </section>
 
@@ -155,13 +84,12 @@ const myExperience = [
       <span class="section-kicker">Projects</span>
       <h2 class="section-title">Selected work</h2>
       <p class="section-description">
-        Production systems and shipped apps.
-        Each project here is live, tested by real users, and built to keep running.
+        Four views of my work: applied AI, the system behind it, a shipped product and the memory that connects decisions.
       </p>
     </div>
 
     {highlightedProjects.length === 0 ? (
-      <p class="text-center text-gray-500">No projects yet&mdash;check back soon.</p>
+      <p class="text-center text-gray-500">Projects will appear here.</p>
     ) : (
       <div class="grid gap-6 md:grid-cols-2">
         {highlightedProjects.map((project) => (
@@ -172,15 +100,16 @@ const myExperience = [
                   src={project.data.thumbnail}
                   alt={project.data.title}
                   loading="lazy"
-                  class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                  class="h-full w-full object-contain bg-[#101d32]"
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent opacity-0 transition group-hover:opacity-100"></div>
               </div>
               <div class="p-6 pb-3">
+                <p class="project-status">{project.data.status}</p>
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{project.data.title}</h3>
                 <p class="mt-3 text-gray-600 dark:text-gray-300">{project.data.description}</p>
                 <div class="mt-4 flex flex-wrap gap-2">
-                  {project.data.tags.map((tag) => (
+                  {project.data.tags.slice(0, 3).map((tag) => (
                     <span class="pill">{tag}</span>
                   ))}
                 </div>
@@ -209,7 +138,7 @@ const myExperience = [
       <span class="section-kicker">Skills</span>
       <h2 class="section-title">Tools I reach for</h2>
       <p class="section-description">
-        A blend of modern frameworks, solid fundamentals, and collaborative practices that drive growth and consistent delivery.
+        The tools support the work: reliable workflows, clear interfaces and maintainable software.
       </p>
     </div>
     <div class="grid gap-6 md:grid-cols-3">
@@ -234,7 +163,8 @@ const myExperience = [
       <span class="section-kicker">Experience</span>
       <h2 class="section-title">Highlights from the journey</h2>
       <p class="section-description">
-        Roles that shaped my craft, strengthening engineering instincts, communication, and product intuition.
+        Building, shipping and learning from real operating constraints.
+      </p>
     </div>
     <div class="relative border-l border-gray-200 pl-8 dark:border-gray-700">
       {myExperience.map((item) => (
@@ -302,8 +232,7 @@ const myExperience = [
       <span class="section-kicker">Contact</span>
       <h2 class="section-title">Let's collaborate</h2>
       <p class="section-description">
-        I'm always excited to chat about new opportunities, open-source projects, or creative builds.
-        Drop a message and let's make something meaningful together.
+        Have a business process to improve or an AI engineering role to discuss? Tell me what you are trying to achieve.
       </p>
     </div>
     <div class="card p-8">

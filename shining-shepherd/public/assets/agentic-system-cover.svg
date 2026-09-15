@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-labelledby="title desc">
+ <title id="title">Agentic System</title><desc id="desc">From a request to work you can review.. Human judgment remains part of the workflow.</desc>
+ <rect width="1200" height="640" rx="20" fill="#101d32"/>
+ <style>@media(max-width:600px){.cover-detail{display:none}}</style><g font-family="Segoe UI,Arial,sans-serif">
+ <text class="cover-detail" x="68" y="88" font-size="19" letter-spacing="3" fill="#a8b5ff">ALEXANDER KEMOS / SELECTED WORK</text>
+ <text x="66" y="177" font-size="86" font-weight="600" letter-spacing="-2" fill="#ffffff">Agentic System</text>
+ <text class="cover-detail" x="68" y="228" font-size="25" fill="#c3cee1">From a request to work you can review.</text>
+ <rect x="68" y="298" width="330" height="148" rx="12" fill="#1c2c45" stroke="#607494"/><text x="92" y="349" font-size="42" fill="#ffffff">Context</text><text class="cover-detail" x="92" y="390" font-size="20" fill="#c3cee1">Rules and memory</text><path d="M405 372h22m-7-7 7 7-7 7" fill="none" stroke="#a8b5ff" stroke-width="3"/><rect x="434" y="298" width="330" height="148" rx="12" fill="#1c2c45" stroke="#607494"/><text x="458" y="349" font-size="42" fill="#ffffff">Tools</text><text class="cover-detail" x="458" y="390" font-size="20" fill="#c3cee1">Models and tools</text><path d="M771 372h22m-7-7 7 7-7 7" fill="none" stroke="#a8b5ff" stroke-width="3"/><rect x="800" y="298" width="330" height="148" rx="12" fill="#1c2c45" stroke="#607494"/><text x="824" y="349" font-size="42" fill="#ffffff">Review</text><text class="cover-detail" x="824" y="390" font-size="20" fill="#c3cee1">Evidence and decisions</text>
+ <path class="cover-detail" d="M68 501H1130" stroke="#435674"/>
+ <circle class="cover-detail" cx="77" cy="550" r="7" fill="#9ce0c8"/>
+ <text class="cover-detail" x="100" y="558" font-size="22" fill="#c6e5dc">Human judgment remains part of the workflow.</text>
+ </g></svg>

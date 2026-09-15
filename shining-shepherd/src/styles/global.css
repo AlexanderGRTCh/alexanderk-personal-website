@@ -2,6 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Case studies: compact editorial pages with readable, responsive process diagrams. */
+.hero-role { margin-top: -1rem; font-size: 1.05rem; font-weight: 600; }
+.hero-role a, .timeline-content a { color: #4f46e5; text-decoration: underline; text-underline-offset: 4px; }
+.project-status { color: #64748b; font-size: .72rem; font-weight: 600; line-height: 1.6; margin-bottom: .5rem; }
+.case-study { max-width: 760px; margin: 0 auto; }
+.case-back { display: inline-block; color: #4f46e5; font-size: .9rem; font-weight: 600; }
+.case-header { margin: 2rem 0 1.8rem; }
+.case-status { color: #526075; font-size: .78rem; font-weight: 600; letter-spacing: .04em; }
+.case-header h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); font-weight: 650; line-height: 1.08; letter-spacing: -.045em; margin: .65rem 0 1rem; }
+.case-deck { max-width: 650px; font-size: clamp(1.08rem, 2.5vw, 1.3rem); color: #526075; line-height: 1.55; }
+.case-dates { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; color: #64748b; font-size: .78rem; margin-top: 1.1rem; }
+.case-role { font-size: .84rem; color: #526075; margin-top: .8rem; }
+.case-role strong { margin-right: .5rem; color: #1e293b; }
+.case-cover { margin: 1.75rem 0 2rem; }
+.case-cover img { width: 100%; height: auto; max-height: 360px; object-fit: contain; border-radius: 12px; background: #101d32; }
+.case-body { font-size: 1.02rem; line-height: 1.75; }
+.case-body h2 { font-size: 1.45rem; letter-spacing: -.02em; margin-top: 2.3rem; }
+.case-body h3 { font-size: 1.1rem; }
+.case-body img { display: block; max-width: 100%; height: auto; border-radius: 8px; margin: 1.5rem auto; }
+.case-body details { border: 1px solid #dce2ea; border-radius: 10px; padding: 1rem 1.2rem; margin: 1.8rem 0; }
+.case-body summary { cursor: pointer; font-weight: 650; color: #334155; }
+.case-body details p { margin-top: 1rem; }
+.case-footer { border-top: 1px solid #dce2ea; margin-top: 2.5rem; padding-top: 1.5rem; font-size: .88rem; color: #526075; }
+.case-footer p { margin: 1.25rem 0 .6rem; }
+.case-footer p a { text-decoration: underline; text-underline-offset: 3px; }
+.case-links { display: flex; flex-wrap: wrap; gap: .65rem; }
+.memory-flow, .lecture-flow { background: #101d32; color: #f1f5f9; padding: clamp(1.15rem, 4vw, 2rem); border-radius: 12px; margin: 2rem 0; line-height: 1.5; }
+.memory-flow figcaption, .lecture-flow figcaption { margin-bottom: 1.5rem; }
+.memory-flow figcaption strong, .lecture-flow figcaption strong { display: block; font-size: 1.1rem; color: #fff; }
+.memory-flow figcaption span, .lecture-flow figcaption span { display: block; color: #b1bfd3; font-size: .85rem; margin-top: .3rem; }
+.memory-question { border-bottom: 1px solid #596b88; padding: 0 0 .8rem; text-align: center; font-weight: 600; }
+.memory-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+.memory-branches > div { border: 1px solid #536582; border-radius: 8px; padding: 1rem; position: relative; }
+.flow-label { display: block; color: #a7b4ff; font-size: .75rem; margin-bottom: .55rem; }
+.memory-branches strong { font-size: .98rem; color: #fff; }
+.memory-branches p, .memory-merge p, .memory-result p { font-size: .85rem; margin-top: .3rem; color: #c1cce0; }
+.memory-merge { border-top: 1px solid #596b88; margin-top: 1rem; padding: 1rem 0; text-align: center; }
+.memory-result { background: #20394a; border: 1px solid #699e9e; border-radius: 8px; padding: 1rem; text-align: center; }
+.memory-result strong { color: #c8f2e2; }
+.memory-footnote { color: #b1bfd3; font-size: .78rem; margin-top: 1rem; text-align: center; }
+.lecture-flow ol { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; counter-reset: stages; }
+.lecture-flow li { border-top: 1px solid #536582; padding: 1rem 0 .25rem; counter-increment: stages; }
+.lecture-flow li strong { color: #fff; display: block; font-size: 1rem; }
+.lecture-flow li strong::before { content: counter(stages) ". "; color: #a7b4ff; }
+.lecture-flow li span { display: block; color: #c1cce0; font-size: .87rem; margin-top: .3rem; }
+.lecture-flow > p { color: #b1bfd3; font-size: .8rem; margin-top: 1.25rem; }
+@media(max-width: 520px) {
+  .case-header { margin-top: 1.5rem; }
+  .memory-branches, .lecture-flow ol { grid-template-columns: 1fr; gap: .7rem; }
+  .case-body { font-size: 1rem; }
+  .case-body h2 { font-size: 1.35rem; }
+}
+@media(prefers-color-scheme: dark) {
+  .case-deck, .case-role, .case-footer, .case-dates, .case-status, .project-status { color: #b6c2d5; }
+  .case-role strong, .case-body summary { color: #e2e8f0; }
+  .case-back, .hero-role a, .timeline-content a { color: #a5b4fc; }
+  .case-body details, .case-footer { border-color: #40506b; }
+}
+@media(prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
 @layer base {
   body {
     @apply antialiased;
@@ -59,7 +122,7 @@
   }
 
   .card-img {
-    @apply h-52 w-full object-cover;
+    @apply h-52 w-full object-contain bg-[#101d32];
   }
 
   .pill {

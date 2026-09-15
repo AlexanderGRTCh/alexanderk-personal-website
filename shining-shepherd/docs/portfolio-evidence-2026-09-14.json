@@ -1,0 +1,17 @@
+{
+  "verifiedOn": "2026-09-14",
+  "scope": "Local V2 lecture output manifests, not a fresh pipeline run or a release certification.",
+  "manifestCount": 708,
+  "recordedStageStates": {
+    "AR:incomplete": 339,
+    "LT:complete": 706,
+    "Metaphonia:incomplete": 708,
+    "AR:complete": 369,
+    "LT:incomplete": 2
+  },
+  "exampleRepair": {
+    "changedPassages": 3,
+    "fullLectureRetranscription": false,
+    "recordSha256": "6f7aa0f5af952623dafce2943bfbd8e8dedc972b11846750a04a163f31030897"
+  }
+}

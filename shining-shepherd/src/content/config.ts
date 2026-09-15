@@ -11,6 +11,11 @@ const projects = defineCollection({
     featured: z.boolean().optional(),
     hidden: z.boolean().optional(),
     order: z.number().optional(),
+    publishedAt: z.string().optional(),
+    updatedAt: z.string().optional(),
+    status: z.string().optional(),
+    role: z.string().optional(),
+    thumbnailAlt: z.string().optional(),
     clientLinks: z.array(z.object({ label: z.string(), url: z.string() })).optional(),
   }),
 });

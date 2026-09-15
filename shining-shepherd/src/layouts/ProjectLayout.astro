@@ -1,0 +1,38 @@
+---
+import Layout from './Layout.astro';
+const { project } = Astro.props;
+const { Content } = await project.render();
+const data = project.data;
+const dateLabel = (value: string) => new Intl.DateTimeFormat('en-CA', {
+  month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC',
+}).format(new Date(`${value}T12:00:00Z`));
+const demo = data.demoUrl && data.demoUrl !== '/no-demo' ? data.demoUrl : null;
+---
+<Layout title={`${data.title} | Alexander Kemos`} description={data.description}>
+  <article class="case-study">
+    <a href="/projects" class="case-back">← All projects</a>
+    <header class="case-header">
+      {data.status && <p class="case-status">{data.status}</p>}
+      <h1>{data.title}</h1>
+      <p class="case-deck">{data.description}</p>
+      <div class="case-dates">
+        {data.publishedAt && <span>Published <time datetime={data.publishedAt}>{dateLabel(data.publishedAt)}</time></span>}
+        {data.updatedAt && data.updatedAt !== data.publishedAt && <span>Updated <time datetime={data.updatedAt}>{dateLabel(data.updatedAt)}</time></span>}
+      </div>
+      {data.role && <p class="case-role"><strong>My role</strong> {data.role}</p>}
+    </header>
+    <figure class="case-cover">
+      <img src={data.thumbnail} alt={data.thumbnailAlt || data.title} width="1200" height="640" decoding="async" />
+    </figure>
+    <div class="prose case-body"><Content /></div>
+    <footer class="case-footer">
+      <div class="case-links">
+        {demo && <a href={demo} class="btn-secondary" target="_blank" rel="noopener">Explore the project ↗</a>}
+        {data.clientLinks?.map((link) => <a href={link.url} class="btn-secondary" target="_blank" rel="noopener">{link.label} ↗</a>)}
+        {data.githubUrl && <a href={data.githubUrl} class="btn-secondary" target="_blank" rel="noopener">View code ↗</a>}
+      </div>
+      <p>I build AI systems, apps and practical software through <a href="https://www.ktisisarc.com/">Ktisis Arc</a>.</p>
+      <a class="case-back" href="/#contact">Discuss a project or an engineering role →</a>
+    </footer>
+  </article>
+</Layout>

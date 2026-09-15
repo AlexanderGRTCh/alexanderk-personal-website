@@ -1,0 +1,50 @@
+---
+title: "Theophonia"
+description: "Making Greek lectures accessible in English, with checks that keep meaning intact."
+thumbnail: "/assets/theophonia-cover.svg"
+thumbnailAlt: "Theophonia: Greek audio becomes a transcript, reviewed translation and a lecture package."
+tags: ["Speech AI", "Translation", "Python"]
+featured: true
+order: 1
+publishedAt: "2026-09-14"
+updatedAt: "2026-09-14"
+status: "Working pipeline · release work continues"
+role: "Pipeline architecture, implementation, quality controls and operation."
+---
+
+import LectureFlow from '../../components/LectureFlow.astro';
+
+## The problem worth solving
+
+A recording can preserve a lecture while leaving another audience unable to understand it. Theophonia works through Greek speech, specialist terminology and English translation to close that gap.
+
+The difficult part is preserving meaning through several imperfect AI stages. A fluent sentence can still misrepresent the speaker. I built the workflow around finding and repairing those problems.
+
+<LectureFlow />
+
+## What is working
+
+The local archive contains **706 completed transcription and translation packages** and **369 completed review stages**, across 708 lecture manifests. These are recorded stage completions, not a claim that every lecture is approved for release.
+
+**Evidence checked September 14, 2026.** The latest manifest in this snapshot was updated August 23. The manifests do not establish completed narration. Audio and final release remain separate gates.
+
+## A repair you can trace
+
+One recorded lecture repair changed three passages and marked the repaired result ready. It reused the existing transcription. The repair record binds the changes to the accepted source text.
+
+That is the practical value: accepted work survives, and attention returns to the passages that need it. An unfinished stage stays visible instead of being mistaken for a finished lecture.
+
+<details>
+<summary>Engineering decisions</summary>
+
+Speech detection checks coverage before translation. Reference retrieval helps correct specialist terms. Review compares Greek and English passages, with targeted repairs for supported findings.
+
+The execution layer uses SQLite task state, stable passage identifiers and hashes that identify exact artifacts. Retries operate on individual stages. Source recording time and generated narration time remain separate.
+
+I built the execution and quality layers around existing speech and language models. Listening checks and human release decisions remain necessary.
+
+</details>
+
+## Why this matters beyond lectures
+
+Training archives, research interviews and specialist recordings face similar problems. This project shows how I turn a complicated process into inspectable software, with a clear place for human judgment.

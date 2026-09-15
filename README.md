@@ -5,6 +5,8 @@ A clean, fast portfolio that showcases projects, skills, and contact details in 
 Overview
 This site presents featured and archived projects, short playbooks in MDX, and a contact form routed through a privacy friendly form backend. It is designed to be easy to extend and simple to deploy to any static host.
 
+Portfolio editing and publication guidance: [Editorial guide](shining-shepherd/docs/PORTFOLIO_EDITORIAL.md). Latest release and review: [Work log](shining-shepherd/docs/WORK_LOG.md).
+
 Key Features
 Responsive layout with a compact top navigation, an animated active pill, and strong dark appearance support
 Content driven pages for Projects and Playbooks using Astro Content collections and MDX
