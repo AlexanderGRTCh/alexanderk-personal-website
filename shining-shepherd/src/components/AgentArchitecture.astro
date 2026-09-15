@@ -1,10 +1,41 @@
-<figure class="agent-architecture" aria-labelledby="agent-architecture-title">
-  <figcaption id="agent-architecture-title"><strong>The working system behind a task</strong><span>Shared context, model choice and a clear review boundary.</span></figcaption>
-  <div class="agent-intent"><strong>You set the task and scope</strong></div>
-  <div class="agent-core">
-    <div><span>Shared context</span><strong>Rules and project map</strong><p>Relevant memories from SQLite</p></div>
-    <div><span>Active agent</span><strong>Claude or Codex</strong><p>Interprets the task and coordinates work</p></div>
+<figure class="system-map system-map-agents" aria-labelledby="agent-map-title">
+  <figcaption id="agent-map-title">
+    <span class="map-kicker">System architecture</span>
+    <strong>One operating system for two AI providers</strong>
+    <span>The model can change while rules, memory, tools, review, and recovery remain shared.</span>
+  </figcaption>
+
+  <div class="agent-entry">
+    <span>Task</span>
+    <strong>Boot loads the smallest useful context</strong>
+    <p>A root map routes the agent to project rules, memory, and specialist instructions only when needed.</p>
   </div>
-  <div class="agent-execution"><strong>Tools and optional specialist agents</strong><p>MCP and local scripts connect the work to files and services.</p></div>
-  <div class="agent-review"><strong>Review findings and accept decisions</strong><p>Saved run state supports recovery. Human judgment closes the loop.</p></div>
+
+  <div class="agent-planes" role="list">
+    <section class="map-node" role="listitem">
+      <span class="map-index">CONTEXT</span>
+      <strong>Shared protocol</strong>
+      <p>Rules, project maps, procedural memory, decisions, and searchable transcripts.</p>
+      <small>Markdown · SQLite · FTS5 · sqlite vec</small>
+    </section>
+    <section class="map-node map-node-model" role="listitem">
+      <span class="map-index">EXECUTION</span>
+      <strong>Claude or Codex</strong>
+      <p>Provider adapters expose the same tools and allow specialist agents to work in bounded scopes.</p>
+      <small>Python · MCP · local scripts</small>
+    </section>
+    <section class="map-node" role="listitem">
+      <span class="map-index">ASSURANCE</span>
+      <strong>Adversarial review</strong>
+      <p>Providers critique the same artifact, cluster findings, vote, and record accepted decisions.</p>
+      <small>Schemas · bounded rounds · decision log</small>
+    </section>
+  </div>
+
+  <div class="map-spine">
+    <span>Persistent run ledger</span>
+    <span>Duplicate work guard</span>
+    <span>Cost circuit breaker</span>
+    <span>Heartbeats and recovery</span>
+  </div>
 </figure>

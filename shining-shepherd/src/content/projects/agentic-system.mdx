@@ -1,49 +1,53 @@
 ---
 title: "Agentic System"
-description: "An AI working environment that remembers decisions, coordinates tasks and keeps work reviewable."
+description: "A Windows native orchestration platform where Claude and Codex share rules, hybrid memory, MCP tools, persistent run state, and adversarial review."
 thumbnail: "/assets/agentic-system-cover.svg"
-thumbnailAlt: "A task moves through context, tools and review, with memory supporting the workflow."
+thumbnailAlt: "Agentic System architecture showing shared context, two model providers, tools, review, and operational recovery."
 tags: ["AI Agents", "Python", "MCP"]
 featured: true
 order: 2
+publishedAt: "2026-09-14"
 updatedAt: "2026-09-14"
 status: "In daily use"
-role: "System design, implementation, integration and operation."
+role: "System design, implementation, integration, and operation."
 ---
 
 import AgentArchitecture from '../../components/AgentArchitecture.astro';
 
-## Keeping work moving across sessions
+## An AI system built to keep working
 
-A useful assistant needs more than a good answer. It needs the right history, access to tools and a way to recover unfinished work.
+A model can answer a prompt. A working engineering system must also recover the right project context, use tools safely, coordinate specialists, survive interruptions, and show what happened.
 
-I built this environment around the work of developing products and running Ktisis Arc. It supports Claude and Codex through shared rules, memory and tools. The active core runs on Windows. Its earlier Linux gateway informed the design.
-
-## Follow one task
-
-When I resume a product task, the system finds its context and previous decisions. Work returns with findings I can inspect before accepting the result.
-
-I use this approach in work on [StreakUp](/projects/streakup-habit-tracker). It also supports recurring research, document preparation and operational checks. The useful outcome is continuity: less repeated explanation and a traceable record of the work.
+I built this Windows native environment for product development and the daily work of Ktisis Arc. Claude and Codex run on top of the same provider neutral protocol. The model can change without rebuilding the memory, tools, project rules, or review process around it.
 
 <AgentArchitecture />
 
-## A measured improvement
+## From request to reviewable work
 
-The original workspace map loaded **8,316 text tokens**. The replacement root map loaded **773**, with topic indexes opened as needed. That reduced the root context by **90.7%** at the September 7 implementation snapshot.
+Boot starts with a lean protocol and a root map. The map points to project indexes, operating rules, skills, and memory routes. The agent opens only the context required for the current task.
 
-A bounded lookup check exposed two routing weaknesses, which I corrected. Targeted checks then resolved them. This establishes a smaller starting context and working routes in those cases. It does not measure billing savings or prove equal recall across every task.
+When earlier decisions matter, the [Hippocampus memory layer](/projects/hippocampus) combines keyword and semantic retrieval. MCP servers and local scripts connect the agent to files, services, commands, and structured tools. Specialist agents can work on bounded parts of a larger task while a primary agent owns the final integration.
 
-<details>
-<summary>Engineering decisions</summary>
+For sensitive or complex artifacts, Claude and Codex can review the same work from different provider perspectives. Findings use a shared schema, similar issues are clustered, and bounded rounds stop when another pass adds nothing material. Accepted decisions enter a durable log.
 
-A shared boot protocol separates essential rules from optional project context. Current context is reused; missing sources are reported. The [Hippocampus memory layer](/projects/hippocampus) combines keyword and semantic retrieval in SQLite.
+## The engineering underneath
 
-Tools are exposed through MCP and local scripts. Provider adapters keep vendor behavior separate from the shared workflow. Review can compare findings from different providers, while persisted run state supports recovery.
+Python coordinates the platform. SQLite stores memory, transcript indexes, task state, and run history. FTS5 and sqlite vec support hybrid retrieval. MCP gives models a consistent tool boundary. Windows services and scheduled tasks run background capture, health checks, and recovery jobs.
 
-Bounded execution, duplicate checks and liveness monitoring help contain work. The system still needs an operator to resolve failures and approve consequential decisions. Earlier review records include token cost estimates, not independently billed savings.
+A persistent run ledger allows interrupted workflows to resume. Duplicate work checks prevent accidental parallel copies. A cost circuit breaker limits bounded operations. Heartbeats and liveness checks surface work that has stalled instead of leaving it invisible.
 
-</details>
+Raw conversations enter a separate searchable archive. An hourly watcher extracts useful facts, decisions, and procedures after sessions become idle, with a daily backstop. The curated memory remains focused while the original record stays available.
 
-## What I bring to a business
+## Measured context reduction
 
-I can connect an existing process to AI while preserving its context and review points. The same engineering judgment matters in a client workflow: choosing what to automate, what to measure and where a person must decide.
+The earlier workspace map loaded **8,316 text tokens**. The replacement root map loaded **773**, a **90.7 percent reduction** at the September 7, 2026 implementation snapshot.
+
+The complete default boot path fell from **13,821 tokens to 2,614**. A cold comparison that included the required lookup routes fell from **16,633 to 5,470**. Sixteen bounded lookup cases exposed one missed route, which I corrected before all sixteen resolved.
+
+This measures context loaded by the protocol. It does not claim a matching reduction in the provider bill, faster responses in every task, or perfect recall.
+
+## Proof through shipped work
+
+The platform is not a dashboard concept. I use it to develop [StreakUp](/projects/streakup-habit-tracker), operate Theophonia, maintain this portfolio, prepare documents, and run recurring checks.
+
+For an employer, it demonstrates AI systems engineering across orchestration, retrieval, tooling, evaluation, observability, and recovery. For a client, it shows the same practical judgment Ktisis Arc brings to business software: automate the repeatable work, preserve the evidence, and keep consequential decisions reviewable.

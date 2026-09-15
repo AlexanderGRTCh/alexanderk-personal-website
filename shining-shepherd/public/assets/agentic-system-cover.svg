@@ -1,12 +1,59 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-labelledby="title desc">
- <title id="title">Agentic System</title><desc id="desc">From a request to work you can review.. Human judgment remains part of the workflow.</desc>
- <rect width="1200" height="640" rx="20" fill="#101d32"/>
- <style>@media(max-width:600px){.cover-detail{display:none}}</style><g font-family="Segoe UI,Arial,sans-serif">
- <text class="cover-detail" x="68" y="88" font-size="19" letter-spacing="3" fill="#a8b5ff">ALEXANDER KEMOS / SELECTED WORK</text>
- <text x="66" y="177" font-size="86" font-weight="600" letter-spacing="-2" fill="#ffffff">Agentic System</text>
- <text class="cover-detail" x="68" y="228" font-size="25" fill="#c3cee1">From a request to work you can review.</text>
- <rect x="68" y="298" width="330" height="148" rx="12" fill="#1c2c45" stroke="#607494"/><text x="92" y="349" font-size="42" fill="#ffffff">Context</text><text class="cover-detail" x="92" y="390" font-size="20" fill="#c3cee1">Rules and memory</text><path d="M405 372h22m-7-7 7 7-7 7" fill="none" stroke="#a8b5ff" stroke-width="3"/><rect x="434" y="298" width="330" height="148" rx="12" fill="#1c2c45" stroke="#607494"/><text x="458" y="349" font-size="42" fill="#ffffff">Tools</text><text class="cover-detail" x="458" y="390" font-size="20" fill="#c3cee1">Models and tools</text><path d="M771 372h22m-7-7 7 7-7 7" fill="none" stroke="#a8b5ff" stroke-width="3"/><rect x="800" y="298" width="330" height="148" rx="12" fill="#1c2c45" stroke="#607494"/><text x="824" y="349" font-size="42" fill="#ffffff">Review</text><text class="cover-detail" x="824" y="390" font-size="20" fill="#c3cee1">Evidence and decisions</text>
- <path class="cover-detail" d="M68 501H1130" stroke="#435674"/>
- <circle class="cover-detail" cx="77" cy="550" r="7" fill="#9ce0c8"/>
- <text class="cover-detail" x="100" y="558" font-size="22" fill="#c6e5dc">Human judgment remains part of the workflow.</text>
- </g></svg>
+  <title id="title">Agentic System architecture</title>
+  <desc id="desc">Claude and Codex operate through shared protocol, memory, tools, review, and recovery.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b1729"/><stop offset="1" stop-color="#17264d"/></linearGradient>
+    <radialGradient id="core"><stop stop-color="#285c5a"/><stop offset="1" stop-color="#163440"/></radialGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M42 0H0V42" fill="none" stroke="#8090b0" stroke-opacity=".08"/></pattern>
+  </defs>
+  <rect width="1200" height="640" rx="22" fill="url(#bg)"/>
+  <rect width="1200" height="640" rx="22" fill="url(#grid)"/>
+  <g font-family="Segoe UI,Arial,sans-serif">
+    <text x="64" y="70" font-size="17" font-weight="700" letter-spacing="3" fill="#9ca9ff">ORCHESTRATION · MEMORY · EVALUATION</text>
+    <text x="62" y="151" font-size="72" font-weight="650" letter-spacing="-2" fill="#fff">Agentic System</text>
+    <text x="64" y="194" font-size="23" fill="#c7d3e5">A provider neutral operating layer for AI work</text>
+
+    <g transform="translate(64 270)">
+      <rect width="214" height="128" rx="14" fill="#172a47" stroke="#536987"/>
+      <text x="20" y="33" font-size="13" font-weight="700" fill="#9ca9ff">PROVIDER 01</text>
+      <text x="20" y="76" font-size="29" font-weight="650" fill="#fff">Claude</text>
+      <text x="20" y="105" font-size="15" fill="#aebcd0">First party CLI</text>
+    </g>
+    <g transform="translate(64 420)">
+      <rect width="214" height="128" rx="14" fill="#172a47" stroke="#536987"/>
+      <text x="20" y="33" font-size="13" font-weight="700" fill="#9ca9ff">PROVIDER 02</text>
+      <text x="20" y="76" font-size="29" font-weight="650" fill="#fff">Codex</text>
+      <text x="20" y="105" font-size="15" fill="#aebcd0">First party CLI</text>
+    </g>
+
+    <g transform="translate(398 260)">
+      <rect width="382" height="298" rx="22" fill="url(#core)" stroke="#6da99f" stroke-width="2"/>
+      <text x="191" y="39" text-anchor="middle" font-size="13" font-weight="700" letter-spacing="2" fill="#86e8c4">SHARED OPERATING CORE</text>
+      <text x="191" y="80" text-anchor="middle" font-size="28" font-weight="650" fill="#fff">One protocol</text>
+      <g fill="#142941" stroke="#56718a">
+        <rect x="28" y="112" width="150" height="58" rx="9"/><rect x="204" y="112" width="150" height="58" rx="9"/>
+        <rect x="28" y="190" width="150" height="58" rx="9"/><rect x="204" y="190" width="150" height="58" rx="9"/>
+      </g>
+      <g fill="#fff" font-size="17" font-weight="600" text-anchor="middle">
+        <text x="103" y="148">Rules + maps</text><text x="279" y="148">Hybrid memory</text>
+        <text x="103" y="226">MCP + scripts</text><text x="279" y="226">Run ledger</text>
+      </g>
+      <text x="191" y="277" text-anchor="middle" font-size="15" fill="#9fe7cf">Persistent context and recovery</text>
+    </g>
+
+    <g transform="translate(900 270)">
+      <rect width="236" height="278" rx="18" fill="#13243e" stroke="#536987"/>
+      <text x="22" y="36" font-size="13" font-weight="700" fill="#9ca9ff">ASSURANCE</text>
+      <text x="22" y="79" font-size="25" font-weight="650" fill="#fff">Cross provider</text>
+      <text x="22" y="110" font-size="25" font-weight="650" fill="#fff">review</text>
+      <path d="M22 139H214" stroke="#536987"/>
+      <text x="22" y="173" font-size="16" fill="#b9c7d9">Structured findings</text>
+      <text x="22" y="204" font-size="16" fill="#b9c7d9">Clustering and votes</text>
+      <text x="22" y="235" font-size="16" fill="#b9c7d9">Bounded rounds</text>
+      <text x="22" y="260" font-size="14" fill="#86e8c4">Human decision</text>
+    </g>
+
+    <path d="M278 334H390M278 484H390M780 409H892" stroke="#9ca9ff" stroke-width="3"/>
+    <path d="M382 328l9 6-9 6M382 478l9 6-9 6M884 403l9 6-9 6" fill="none" stroke="#9ca9ff" stroke-width="3"/>
+  </g>
+</svg>

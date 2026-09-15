@@ -1,11 +1,36 @@
-<figure class="memory-flow" aria-labelledby="memory-title">
-  <figcaption id="memory-title"><strong>From a question to useful context</strong><span>A simplified view of the memory retrieval path.</span></figcaption>
-  <div class="memory-question">Your question</div>
-  <div class="memory-branches">
-    <div><span class="flow-label">Search by words</span><strong>Find the exact name</strong><p>Identifiers, phrases and filenames</p></div>
-    <div><span class="flow-label">Search by meaning</span><strong>Find the relevant idea</strong><p>Related decisions and past context</p></div>
+<figure class="system-map system-map-memory" aria-labelledby="memory-map-title">
+  <figcaption id="memory-map-title">
+    <span class="map-kicker">Retrieval architecture</span>
+    <strong>Exact words and related meaning meet in one ranking</strong>
+    <span>The pipeline keeps useful context while removing repeated or stale results.</span>
+  </figcaption>
+
+  <div class="memory-query"><span>Question</span><strong>What did we decide, and why?</strong></div>
+
+  <div class="memory-retrievers" role="list">
+    <section class="map-node" role="listitem">
+      <span class="map-index">LEXICAL</span>
+      <strong>FTS5 with BM25</strong>
+      <p>Finds exact names, commands, phrases, and file references.</p>
+      <small>Top 30 candidates</small>
+    </section>
+    <section class="map-node" role="listitem">
+      <span class="map-index">SEMANTIC</span>
+      <strong>Exact cosine search</strong>
+      <p>Finds related decisions even when the question uses different words.</p>
+      <small>sqlite vec · top 30 candidates</small>
+    </section>
   </div>
-  <div class="memory-merge"><strong>Combine and select</strong><p>Merge rankings. Reduce repetition. Weigh importance and freshness.</p></div>
-  <div class="memory-result"><strong>Relevant memories reach the agent</strong><p>A focused selection, with stored sources available to inspect.</p></div>
-  <p class="memory-footnote">Need the original conversation? Search the transcript archive separately.</p>
+
+  <div class="memory-ranking" role="list">
+    <span role="listitem"><strong>RRF</strong> merges both rankings</span>
+    <span role="listitem"><strong>MMR</strong> reduces repetition</span>
+    <span role="listitem"><strong>Decay</strong> weighs type and freshness</span>
+    <span role="listitem"><strong>Result</strong> returns five memories</span>
+  </div>
+
+  <div class="memory-stores">
+    <div><span>Curated Brain</span><strong>Rules · facts · decisions</strong></div>
+    <div><span>Echo archive</span><strong>Original transcript chunks</strong></div>
+  </div>
 </figure>

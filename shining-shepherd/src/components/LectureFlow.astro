@@ -1,10 +1,47 @@
-<figure class="lecture-flow" aria-labelledby="lecture-flow-title">
-  <figcaption id="lecture-flow-title"><strong>One recording, several careful decisions</strong><span>The lecture workflow, simplified.</span></figcaption>
-  <ol>
-    <li><strong>Listen</strong><span>Locate speech and produce a Greek transcript.</span></li>
-    <li><strong>Understand</strong><span>Check terminology and translate the meaning.</span></li>
-    <li><strong>Review</strong><span>Compare passages and hold unresolved problems.</span></li>
-    <li><strong>Prepare</strong><span>Create subtitles and narration from accepted text.</span></li>
-  </ol>
-  <p>Human listening and release decisions remain part of the process.</p>
+<figure class="system-map system-map-theophonia" aria-labelledby="theophonia-map-title">
+  <figcaption id="theophonia-map-title">
+    <span class="map-kicker">Pipeline architecture</span>
+    <strong>Every stage must preserve the source</strong>
+    <span>Language models handle language. Deterministic state, evidence, and gates control the workflow.</span>
+  </figcaption>
+
+  <div class="map-track map-track-five" role="list">
+    <div class="map-node" role="listitem">
+      <span class="map-index">01</span>
+      <strong>Map the recording</strong>
+      <p>Voice activity detection locates speech and exposes missing coverage.</p>
+      <small>Audio clock · speech windows</small>
+    </div>
+    <div class="map-node" role="listitem">
+      <span class="map-index">02</span>
+      <strong>Transcribe Greek</strong>
+      <p>Whisper large v3 works in windows. Failed gaps return to transcription.</p>
+      <small>GPU speech recognition · coverage check</small>
+    </div>
+    <div class="map-node" role="listitem">
+      <span class="map-index">03</span>
+      <strong>Ground and translate</strong>
+      <p>Indexed scripture, liturgy, and patristic sources support specialist terms.</p>
+      <small>SQLite retrieval · stable passages</small>
+    </div>
+    <div class="map-node" role="listitem">
+      <span class="map-index">04</span>
+      <strong>Audit meaning</strong>
+      <p>Greek and English passages are reviewed together. Findings cite exact evidence.</p>
+      <small>Structured review · risk evidence</small>
+    </div>
+    <div class="map-node map-node-accent" role="listitem">
+      <span class="map-index">05</span>
+      <strong>Repair or hold</strong>
+      <p>Only affected passages rerun. Unresolved work cannot pass the release gate.</p>
+      <small>Targeted repair · fail closed output</small>
+    </div>
+  </div>
+
+  <div class="map-spine">
+    <span>SQLite task ledger</span>
+    <span>SHA 256 artifact lineage</span>
+    <span>Leases and retries</span>
+    <span>Separate execution and quality states</span>
+  </div>
 </figure>

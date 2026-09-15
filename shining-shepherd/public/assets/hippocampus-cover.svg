@@ -1,12 +1,57 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-labelledby="title desc">
- <title id="title">Hippocampus</title><desc id="desc">Useful memory, with a route back to the source.. A memory layer built for daily work.</desc>
- <rect width="1200" height="640" rx="20" fill="#101d32"/>
- <style>@media(max-width:600px){.cover-detail{display:none}}</style><g font-family="Segoe UI,Arial,sans-serif">
- <text class="cover-detail" x="68" y="88" font-size="19" letter-spacing="3" fill="#a8b5ff">ALEXANDER KEMOS / SELECTED WORK</text>
- <text x="66" y="177" font-size="86" font-weight="600" letter-spacing="-2" fill="#ffffff">Hippocampus</text>
- <text class="cover-detail" x="68" y="228" font-size="25" fill="#c3cee1">Useful memory, with a route back to the source.</text>
- <rect x="68" y="298" width="330" height="148" rx="12" fill="#1c2c45" stroke="#607494"/><text x="92" y="349" font-size="42" fill="#ffffff">Search</text><text class="cover-detail" x="92" y="390" font-size="20" fill="#c3cee1">Two ways to search</text><path d="M405 372h22m-7-7 7 7-7 7" fill="none" stroke="#a8b5ff" stroke-width="3"/><rect x="434" y="298" width="330" height="148" rx="12" fill="#1c2c45" stroke="#607494"/><text x="458" y="349" font-size="42" fill="#ffffff">Select</text><text class="cover-detail" x="458" y="390" font-size="20" fill="#c3cee1">Relevant context</text><path d="M771 372h22m-7-7 7 7-7 7" fill="none" stroke="#a8b5ff" stroke-width="3"/><rect x="800" y="298" width="330" height="148" rx="12" fill="#1c2c45" stroke="#607494"/><text x="824" y="349" font-size="42" fill="#ffffff">Recall</text><text class="cover-detail" x="824" y="390" font-size="20" fill="#c3cee1">Inspect the source</text>
- <path class="cover-detail" d="M68 501H1130" stroke="#435674"/>
- <circle class="cover-detail" cx="77" cy="550" r="7" fill="#9ce0c8"/>
- <text class="cover-detail" x="100" y="558" font-size="22" fill="#c6e5dc">A memory layer built for daily work.</text>
- </g></svg>
+  <title id="title">Hippocampus hybrid retrieval</title>
+  <desc id="desc">Lexical and semantic retrieval merge through rank fusion, diversity selection, and type aware decay.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b1729"/><stop offset="1" stop-color="#17264d"/></linearGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M42 0H0V42" fill="none" stroke="#8090b0" stroke-opacity=".08"/></pattern>
+  </defs>
+  <rect width="1200" height="640" rx="22" fill="url(#bg)"/>
+  <rect width="1200" height="640" rx="22" fill="url(#grid)"/>
+  <g font-family="Segoe UI,Arial,sans-serif">
+    <text x="64" y="70" font-size="17" font-weight="700" letter-spacing="3" fill="#9ca9ff">HYBRID RETRIEVAL · SQLITE · PROVENANCE</text>
+    <text x="62" y="151" font-size="72" font-weight="650" letter-spacing="-2" fill="#fff">Hippocampus</text>
+    <text x="64" y="194" font-size="23" fill="#c7d3e5">Focused memory without loading every conversation</text>
+
+    <g transform="translate(64 286)">
+      <rect width="178" height="156" rx="14" fill="#173f40" stroke="#65a197"/>
+      <text x="20" y="34" font-size="13" font-weight="700" fill="#86e8c4">QUERY</text>
+      <text x="20" y="78" font-size="22" font-weight="650" fill="#fff">What did</text>
+      <text x="20" y="108" font-size="22" font-weight="650" fill="#fff">we decide?</text>
+    </g>
+
+    <g transform="translate(322 250)">
+      <rect width="214" height="96" rx="12" fill="#172a47" stroke="#536987"/>
+      <text x="18" y="30" font-size="13" font-weight="700" fill="#9ca9ff">LEXICAL</text>
+      <text x="18" y="63" font-size="22" font-weight="650" fill="#fff">FTS5 + BM25</text>
+      <text x="18" y="84" font-size="13" fill="#aebcd0">Exact words · top 30</text>
+      <rect y="132" width="214" height="96" rx="12" fill="#172a47" stroke="#536987"/>
+      <text x="18" y="162" font-size="13" font-weight="700" fill="#9ca9ff">SEMANTIC</text>
+      <text x="18" y="195" font-size="22" font-weight="650" fill="#fff">sqlite vec</text>
+      <text x="18" y="216" font-size="13" fill="#aebcd0">Exact cosine · top 30</text>
+    </g>
+
+    <g transform="translate(618 286)">
+      <rect width="234" height="156" rx="14" fill="#172a47" stroke="#536987"/>
+      <text x="20" y="34" font-size="13" font-weight="700" fill="#9ca9ff">RANKING PIPELINE</text>
+      <text x="20" y="75" font-size="21" font-weight="650" fill="#fff">RRF 60</text>
+      <text x="20" y="108" font-size="21" font-weight="650" fill="#fff">MMR diversity</text>
+      <text x="20" y="137" font-size="15" fill="#aebcd0">Type aware freshness</text>
+    </g>
+
+    <g transform="translate(934 250)">
+      <rect width="202" height="228" rx="16" fill="#173f40" stroke="#65a197"/>
+      <text x="18" y="33" font-size="13" font-weight="700" fill="#86e8c4">FIVE MEMORIES</text>
+      <rect x="18" y="55" width="166" height="22" rx="5" fill="#2c6962"/>
+      <rect x="18" y="89" width="142" height="22" rx="5" fill="#2c6962"/>
+      <rect x="18" y="123" width="156" height="22" rx="5" fill="#2c6962"/>
+      <rect x="18" y="157" width="126" height="22" rx="5" fill="#2c6962"/>
+      <rect x="18" y="191" width="150" height="22" rx="5" fill="#2c6962"/>
+    </g>
+
+    <path d="M242 364H310M536 298H603M536 430H603M852 364H919" stroke="#9ca9ff" stroke-width="3"/>
+    <path d="M302 358l9 6-9 6M595 292l9 6-9 6M595 424l9 6-9 6M911 358l9 6-9 6" fill="none" stroke="#9ca9ff" stroke-width="3"/>
+    <text x="64" y="540" font-size="16" fill="#aebcd0">Curated Brain for rules and decisions</text>
+    <text x="424" y="540" font-size="16" fill="#aebcd0">Echo archive for original transcripts</text>
+    <text x="812" y="540" font-size="16" fill="#86e8c4">Source remains inspectable</text>
+  </g>
+</svg>

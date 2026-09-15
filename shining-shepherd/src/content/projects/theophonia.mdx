@@ -1,50 +1,49 @@
 ---
 title: "Theophonia"
-description: "Making Greek lectures accessible in English, with checks that keep meaning intact."
+description: "A resumable AI pipeline that transcribes Greek lectures, grounds specialist language, translates to English, audits meaning, and repairs only the passages that fail review."
 thumbnail: "/assets/theophonia-cover.svg"
-thumbnailAlt: "Theophonia: Greek audio becomes a transcript, reviewed translation and a lecture package."
+thumbnailAlt: "Theophonia architecture from Greek audio through transcription, retrieval, translation, review, and controlled release."
 tags: ["Speech AI", "Translation", "Python"]
 featured: true
 order: 1
 publishedAt: "2026-09-14"
 updatedAt: "2026-09-14"
 status: "Working pipeline · release work continues"
-role: "Pipeline architecture, implementation, quality controls and operation."
+role: "Pipeline architecture, implementation, quality controls, and operation."
 ---
 
 import LectureFlow from '../../components/LectureFlow.astro';
 
-## The problem worth solving
+## The engineering problem
 
-A recording can preserve a lecture while leaving another audience unable to understand it. Theophonia works through Greek speech, specialist terminology and English translation to close that gap.
+Greek theological lectures contain names, scripture, liturgical phrases, and older forms of the language. Speech recognition can turn one unfamiliar term into plausible nonsense. A translation model may then make that error sound fluent in English.
 
-The difficult part is preserving meaning through several imperfect AI stages. A fluent sentence can still misrepresent the speaker. I built the workflow around finding and repairing those problems.
+I built Theophonia to prevent that chain from becoming an invisible failure. It treats every lecture as a set of versioned artifacts with passage level evidence, explicit quality states, and a release gate.
 
 <LectureFlow />
 
-## What is working
+## How the pipeline works
 
-The local archive contains **706 completed transcription and translation packages** and **369 completed review stages**, across 708 lecture manifests. These are recorded stage completions, not a claim that every lecture is approved for release.
+The pipeline first creates a speech map with voice activity detection. Whisper large v3 transcribes the recording in windows, and a coverage check sends missed speech back for recovery before language work begins.
 
-**Evidence checked September 14, 2026.** The latest manifest in this snapshot was updated August 23. The manifests do not establish completed narration. Audio and final release remain separate gates.
+The Greek transcript is divided into stable passages. A terminology stage retrieves likely scripture, liturgy, and patristic references from indexed SQLite corpora. Those sources support post editing and translation without allowing retrieved text to silently replace the recording.
 
-## A repair you can trace
+Greek and English then enter a structured review. Each finding points to a passage and its evidence. A supported finding can trigger a focused repair of that passage, including a new source window decode when needed. Accepted transcription outside the finding stays intact.
 
-One recorded lecture repair changed three passages and marked the repaired result ready. It reused the existing transcription. The repair record binds the changes to the accepted source text.
+## Why the state model matters
 
-That is the practical value: accepted work survives, and attention returns to the passages that need it. An unfinished stage stays visible instead of being mistaken for a finished lecture.
+Long AI pipelines fail in ordinary ways: a process stops, a model times out, a worker repeats a task, or an old artifact reaches a new stage. The execution layer uses a SQLite task ledger, leases, idempotent stages, local retries, and SHA 256 hashes that bind outputs to their inputs.
 
-<details>
-<summary>Engineering decisions</summary>
+Execution status and quality disposition remain separate. A task can finish computing while its lecture remains blocked for review. The source recording clock also remains separate from generated narration timing, so subtitles and later audio cannot rewrite the original evidence.
 
-Speech detection checks coverage before translation. Reference retrieval helps correct specialist terms. Review compares Greek and English passages, with targeted repairs for supported findings.
+## Evidence from the working archive
 
-The execution layer uses SQLite task state, stable passage identifiers and hashes that identify exact artifacts. Retries operate on individual stages. Source recording time and generated narration time remain separate.
+At the September 14, 2026 snapshot, the local archive contained **708 lecture manifests**, **706 completed transcription and translation packages**, and **369 completed review stages**.
 
-I built the execution and quality layers around existing speech and language models. Listening checks and human release decisions remain necessary.
+One recorded repair provides a smaller proof. Review produced three supported findings in three passages. The repair changed those passages, reused the accepted transcription, and recorded the resulting quality disposition as ready. The system did not restart the lecture from the beginning.
 
-</details>
+These numbers describe completed stages, not public releases. Narration and final publication were still incomplete across the snapshot. Human listening and release approval remain required.
 
-## Why this matters beyond lectures
+## What this demonstrates
 
-Training archives, research interviews and specialist recordings face similar problems. This project shows how I turn a complicated process into inspectable software, with a clear place for human judgment.
+Theophonia combines speech recognition, retrieval, translation, evaluation, workflow state, and failure recovery in one operating system. It is a concrete example of how I approach applied AI: preserve evidence, make failures visible, rerun the smallest safe unit, and keep a person at the final decision.

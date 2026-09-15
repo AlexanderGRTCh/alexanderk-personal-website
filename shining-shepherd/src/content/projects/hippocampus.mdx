@@ -1,49 +1,55 @@
 ---
 title: "Hippocampus"
-description: "Memory that helps an AI assistant find earlier decisions without rereading everything."
+description: "A hybrid AI memory engine combining FTS5, exact vector search, rank fusion, diversity selection, and type aware decay inside SQLite."
 thumbnail: "/assets/hippocampus-cover.svg"
-thumbnailAlt: "Hippocampus: a question searches words and meaning to recover relevant memory."
+thumbnailAlt: "Hippocampus retrieval architecture showing lexical and semantic search merged into a focused memory result."
 tags: ["AI Memory", "Retrieval", "SQLite"]
 featured: true
 order: 4
+publishedAt: "2026-09-14"
 updatedAt: "2026-09-14"
 status: "In daily use · architecture case study"
-role: "Memory architecture, retrieval implementation and operating workflow."
+role: "Memory architecture, retrieval implementation, and operating workflow."
 ---
 
 import MemoryFlow from '../../components/MemoryFlow.astro';
 
-## Remember the decision, keep the source
+## Memory without loading every conversation
 
-Repeating the same background wastes time. Loading every past conversation makes the next task harder to focus on.
+An AI assistant needs past decisions, rules, and project context. Sending every old conversation into every new task wastes context and makes the useful details harder to find.
 
-Hippocampus is the memory layer inside my [Agentic System](/projects/agentic-system). It keeps concise facts and decisions alongside a separately searchable conversation archive. That gives me a focused starting point and a route back to the original context.
+Hippocampus is the retrieval layer inside my [Agentic System](/projects/agentic-system). It keeps curated memory and the raw transcript archive in one SQLite database while treating them as separate sources with separate search paths.
 
 <MemoryFlow />
 
-## Why one search is not enough
+## The retrieval pipeline
 
-A filename needs an exact match. A question about a past decision may use different words. I combine both search methods, then reduce repetitive results.
+Every query runs through two retrievers. FTS5 with BM25 finds exact names, commands, phrases, and file references. sqlite vec performs exact cosine distance search to find related meaning when the query uses different language.
 
-Memory also ages differently. An operating rule should remain useful longer than a temporary task update. The ranking considers memory type, importance and freshness alongside relevance.
+Each retriever contributes up to 30 candidates. Reciprocal rank fusion merges the two rankings with a constant of 60. Maximal marginal relevance then reduces near duplicates and keeps up to 10 diverse candidates. The final scoring step weighs relevance, importance, memory type, and freshness before returning five memories.
 
-The result is a system I use to recover project context. Retrieval can still miss something important, so source inspection remains part of the workflow.
+That sequence solves different failure modes. Lexical search protects precise identifiers. Semantic search recovers concepts. Rank fusion avoids trusting one score scale. Diversity selection prevents five versions of the same memory from occupying the result.
 
-<details>
-<summary>Engineering decisions</summary>
+## Memory types behave differently
 
-Python coordinates FTS5 keyword search and cosine vector search through the SQLite vector extension. Reciprocal rank fusion merges their rankings. Maximal marginal relevance reduces repetition before the final selection.
+The curated store separates procedural, semantic, and episodic memory. A durable operating rule should remain useful longer than a temporary task update, so freshness uses exponential decay constants chosen by type.
 
-Curated memory and transcript tables share one SQLite database, but use separate retrieval paths. An archive search is explicit. Stored facts and exact conversation text serve different needs.
+Those constants are decay windows, not mathematical half lives. The distinction matters because the ranking formula should be described as it is implemented.
 
-Freshness uses exponential decay with constants chosen by memory type. These constants are decay windows, not mathematical half lives. Vector lookup uses exact distance search; this implementation does not claim approximate indexing at large scale.
+The raw Echo archive serves a different purpose. It keeps searchable transcript chunks for cases where the exact conversation matters. Archive search is explicit, so a large historical record does not flood normal memory retrieval.
 
-Storage is local. Creating query embeddings can call a cloud service, so retrieval is not fully offline. A further reranking stage exists, but is optional and documented as dormant.
+## Technical boundaries
 
-</details>
+The database and ranking logic run locally in Python with SQLite, FTS5, and sqlite vec. Query embeddings can use a cloud service, so the search path is not fully offline.
 
-## Built for a real working environment
+Vector retrieval is exact distance search. This design does not claim an approximate index or unlimited scale. A further model based reranking stage exists as an optional dormant path and is not part of the normal result.
 
-This architecture comes from my daily working environment, with private records excluded. It demonstrates retrieval design and its tradeoffs. It is not a promise of perfect recall or a publicly released memory service.
+Retrieval can still miss an important memory or surface an outdated one. Stored source metadata makes inspection possible, and the agent can search the transcript archive when the curated result is insufficient.
 
-**Technical description checked September 14, 2026.** The diagrams explain the current design; no speed or accuracy benchmark is claimed here.
+## Why I built it
+
+Hippocampus turns memory into an engineering subsystem with explicit stores, ranking stages, and limitations. I use it in daily work to recover project decisions without repeatedly explaining the whole environment.
+
+It demonstrates the part of AI development that sits beyond prompting: information architecture, hybrid search, ranking, lifecycle policy, provenance, and honest evaluation of what recall has and has not been proven.
+
+**Architecture and technical description checked September 14, 2026.**
