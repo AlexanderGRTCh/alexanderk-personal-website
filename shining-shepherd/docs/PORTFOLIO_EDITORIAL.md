@@ -40,6 +40,8 @@ Visible public copy uses no dash punctuation. Do not use arrow glyphs, arrow ent
 
 ## Release workflow
 
+Requested site changes include commit, push, and production verification unless Alexander explicitly says local only or asks not to deploy.
+
 Build with **npm run build**. Inspect desktop and mobile pixels in the real browser. Verify dates, diagrams, image loads, internal links, and rendered copy. Preserve the contact form without submitting a test message.
 
 Production uses the GitHub main branch and Cloudflare Pages integration. Verify the deployed commit and the custom domain after pushing. An independent reviewer assesses what a business reader and an engineering hiring manager can learn from the finished pages.
