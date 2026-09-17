@@ -4,7 +4,9 @@
 
 Restored the detailed Cloud Security Pipeline article from its pre September 14 revision while keeping the current four project homepage selection. Added StreakUp's dated total of 182 downloads across iOS and Android to the case study. Removed arrow glyphs, entities, generated CSS arrows, and SVG arrowheads across the published site, and added the no arrow rule to the editorial guide.
 
-Local validation: the production build passed. Source, public assets, and generated output contain no arrow glyphs, arrow entities, or SVG marker arrowheads. The affected Cloud Security Pipeline and StreakUp pages were visually inspected at desktop width and with Pixel mobile emulation; the revised copy, images, and four card metric grid render without clipping.
+Restored the detailed Tennis Momentum Match Engine article from its pre September 14 revision while keeping it in the project archive. Replaced the StreakUp store banner with a landscape product cover that shows the home and calendar experiences in a reliable vector composition.
+
+Local validation: the production build passed. Source, public assets, and generated output contain no arrow glyphs, arrow entities, or SVG marker arrowheads. The affected Cloud Security Pipeline, Tennis Momentum Match Engine, and StreakUp pages were visually inspected at desktop width and with Pixel mobile emulation; the revised copy, screenshots, cover, and four card metric grid render without clipping.
 
 ## September 14, 2026
 

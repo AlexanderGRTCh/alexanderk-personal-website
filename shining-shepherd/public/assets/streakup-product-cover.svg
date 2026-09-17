@@ -1,0 +1,115 @@
+<svg width="1200" height="640" viewBox="0 0 1200 640" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">StreakUp habit tracker</title>
+  <desc id="desc">StreakUp home and calendar screens on a dark green product cover.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#09140d"/>
+      <stop offset="0.55" stop-color="#12271a"/>
+      <stop offset="1" stop-color="#1f4a2c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#a8f0a0" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#a8f0a0" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="640" rx="26" fill="url(#background)"/>
+  <circle cx="1080" cy="110" r="260" fill="url(#glow)"/>
+  <circle cx="545" cy="620" r="250" fill="url(#glow)" opacity="0.45"/>
+  <path d="M58 558 C202 489 333 552 480 493" fill="none" stroke="#b7e9af" stroke-opacity="0.15" stroke-width="2"/>
+  <path d="M48 584 C211 520 350 590 522 526" fill="none" stroke="#b7e9af" stroke-opacity="0.08" stroke-width="2"/>
+
+  <g transform="translate(72 78)">
+    <rect width="116" height="116" rx="31" fill="#132419" stroke="#c8f4bf" stroke-opacity="0.28"/>
+    <rect x="21" y="21" width="74" height="74" rx="24" fill="#1d3323" stroke="#e4ffdc" stroke-opacity="0.38" stroke-width="2"/>
+    <path d="M39 58 L53 72 L79 43" fill="none" stroke="#f2ffed" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <text x="72" y="258" fill="#f5fff2" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="72" font-weight="750" letter-spacing="-2">StreakUp</text>
+  <text x="74" y="306" fill="#c8e0c4" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="27" font-weight="520">Build habits. Protect streaks.</text>
+
+  <g font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="650">
+    <rect x="72" y="359" width="166" height="46" rx="23" fill="#e7f7e2"/>
+    <text x="155" y="389" text-anchor="middle" fill="#17351f">iOS and Android</text>
+    <rect x="250" y="359" width="166" height="46" rx="23" fill="#274f31" stroke="#8fc58a" stroke-opacity="0.55"/>
+    <text x="333" y="389" text-anchor="middle" fill="#e5f7e1">Shipped product</text>
+  </g>
+
+  <text x="74" y="478" fill="#f0faed" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="25" font-weight="650">Daily and weekly goals</text>
+  <text x="74" y="518" fill="#b8d0b5" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="21">Offline progress, shields, milestones, and reminders</text>
+
+  <g filter="url(#shadow)" transform="rotate(-5 751 343)">
+    <rect x="626" y="91" width="250" height="504" rx="43" fill="#071009" stroke="#86b780" stroke-opacity="0.42" stroke-width="3"/>
+    <rect x="642" y="107" width="218" height="472" rx="32" fill="#101810"/>
+    <text x="662" y="141" fill="#eef6ec" font-family="Inter, -apple-system, sans-serif" font-size="12" font-weight="700">Exercise</text>
+    <rect x="656" y="160" width="190" height="68" rx="10" fill="#1c251c"/>
+    <text x="751" y="184" fill="#dce9d8" font-family="Inter, -apple-system, sans-serif" font-size="10" font-style="italic" text-anchor="middle">Small steps become momentum.</text>
+    <text x="751" y="205" fill="#8eb68a" font-family="Inter, -apple-system, sans-serif" font-size="8" text-anchor="middle">Daily encouragement</text>
+    <rect x="656" y="244" width="190" height="218" rx="12" fill="#1b241b"/>
+    <text x="674" y="270" fill="#f1f7ef" font-family="Inter, -apple-system, sans-serif" font-size="11" font-weight="700">March 2026</text>
+    <g fill="#7f8d7f" font-family="Inter, -apple-system, sans-serif" font-size="7" text-anchor="middle">
+      <text x="678" y="292">S</text><text x="703" y="292">M</text><text x="728" y="292">T</text><text x="753" y="292">W</text><text x="778" y="292">T</text><text x="803" y="292">F</text><text x="828" y="292">S</text>
+    </g>
+    <g stroke="#dbe8d8" stroke-opacity="0.5" stroke-width="1">
+      <circle cx="678" cy="317" r="9" fill="#cceac8"/><circle cx="703" cy="317" r="9" fill="#d8edd4"/><circle cx="728" cy="317" r="9" fill="#e5b9c2"/><circle cx="753" cy="317" r="9" fill="#e9c4cb"/><circle cx="778" cy="317" r="9" fill="#cde8c9"/><circle cx="803" cy="317" r="9" fill="#e9bdc6"/><circle cx="828" cy="317" r="9" fill="#cceac8"/>
+      <circle cx="678" cy="345" r="9" fill="#e7bcc5"/><circle cx="703" cy="345" r="9" fill="#cde9c9"/><circle cx="728" cy="345" r="9" fill="#54ba60"/><circle cx="753" cy="345" r="9" fill="#273127"/><circle cx="778" cy="345" r="9" fill="#d8e9d5"/><circle cx="803" cy="345" r="9" fill="#c7e6c4"/><circle cx="828" cy="345" r="9" fill="#e7bbc4"/>
+    </g>
+    <rect x="670" y="389" width="162" height="34" rx="17" fill="none" stroke="#779074"/>
+    <text x="751" y="410" fill="#b9ceb5" font-family="Inter, -apple-system, sans-serif" font-size="9" text-anchor="middle">Pause goal</text>
+    <rect x="666" y="484" width="170" height="52" rx="10" fill="#172017"/>
+    <rect x="678" y="499" width="96" height="7" rx="3.5" fill="#e8f1e5" fill-opacity="0.78"/>
+    <rect x="678" y="516" width="134" height="6" rx="3" fill="#7f907c" fill-opacity="0.75"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="763" y="52" width="286" height="576" rx="49" fill="#071009" stroke="#b8e6b0" stroke-opacity="0.58" stroke-width="3"/>
+    <rect x="781" y="70" width="250" height="540" rx="36" fill="#0d140e"/>
+    <rect x="866" y="81" width="80" height="18" rx="9" fill="#020503"/>
+    <text x="797" y="121" fill="#f1f8ef" font-family="Inter, -apple-system, sans-serif" font-size="13" font-weight="700">StreakUp</text>
+    <circle cx="1007" cy="116" r="8" fill="none" stroke="#d8e7d5" stroke-width="2"/>
+    <rect x="797" y="139" width="218" height="77" rx="12" fill="#173b22"/>
+    <circle cx="821" cy="164" r="14" fill="none" stroke="#57c661" stroke-width="3"/>
+    <path d="M814 164 L820 170 L830 157" fill="none" stroke="#8be292" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="844" y="160" fill="#87dc8d" font-family="Inter, -apple-system, sans-serif" font-size="10" font-weight="700">All caught up</text>
+    <text x="844" y="176" fill="#a8c7a4" font-family="Inter, -apple-system, sans-serif" font-size="8">16 total check ins</text>
+    <rect x="844" y="190" width="140" height="5" rx="2.5" fill="#5c765a"/>
+
+    <g font-family="Inter, -apple-system, sans-serif">
+      <rect x="797" y="231" width="218" height="102" rx="12" fill="#171e17" stroke="#9a6f2f" stroke-width="1.5"/>
+      <text x="811" y="254" fill="#f0f6ee" font-size="12" font-weight="700">Exercise</text>
+      <rect x="945" y="243" width="56" height="24" rx="12" fill="#34763e"/>
+      <text x="973" y="259" fill="#effaeb" font-size="8" text-anchor="middle">Done</text>
+      <rect x="811" y="274" width="100" height="8" rx="4" fill="#f1a928"/>
+      <rect x="811" y="293" width="176" height="6" rx="3" fill="#415142"/>
+      <rect x="811" y="293" width="116" height="6" rx="3" fill="#91cf8d"/>
+      <text x="811" y="317" fill="#a8b9a5" font-size="8">9 check ins</text>
+      <text x="986" y="317" fill="#dce9d9" font-size="8" text-anchor="end">66%</text>
+
+      <rect x="797" y="347" width="218" height="102" rx="12" fill="#171e17" stroke="#9a6f2f" stroke-width="1.5"/>
+      <text x="811" y="370" fill="#f0f6ee" font-size="12" font-weight="700">Save $5 a day</text>
+      <rect x="945" y="359" width="56" height="24" rx="12" fill="#34763e"/>
+      <text x="973" y="375" fill="#effaeb" font-size="8" text-anchor="middle">Done</text>
+      <rect x="811" y="390" width="83" height="8" rx="4" fill="#f1a928"/>
+      <rect x="811" y="409" width="176" height="6" rx="3" fill="#415142"/>
+      <rect x="811" y="409" width="18" height="6" rx="3" fill="#91cf8d"/>
+      <text x="811" y="433" fill="#a8b9a5" font-size="8">7 days</text>
+      <text x="986" y="433" fill="#dce9d9" font-size="8" text-anchor="end">1%</text>
+
+      <rect x="797" y="463" width="218" height="84" rx="12" fill="#172018" stroke="#386844" stroke-width="1.5"/>
+      <text x="811" y="488" fill="#c8d7c5" font-size="11" text-decoration="line-through">Get birthday gift for wife</text>
+      <rect x="811" y="502" width="74" height="17" rx="8.5" fill="#285b33"/>
+      <text x="848" y="514" fill="#acdbaa" font-size="7" text-anchor="middle">Completed</text>
+
+      <rect x="917" y="558" width="84" height="34" rx="17" fill="#a8e2a1"/>
+      <text x="959" y="579" fill="#17351f" font-size="10" font-weight="700" text-anchor="middle">Add goal</text>
+    </g>
+  </g>
+
+  <rect x="1063" y="144" width="76" height="352" rx="38" fill="#d3f2cc" fill-opacity="0.07"/>
+  <circle cx="1101" cy="182" r="10" fill="#b8e6b0" fill-opacity="0.52"/>
+  <circle cx="1101" cy="220" r="10" fill="#b8e6b0" fill-opacity="0.28"/>
+  <circle cx="1101" cy="258" r="10" fill="#b8e6b0" fill-opacity="0.14"/>
+</svg>
