@@ -36,7 +36,7 @@ Hippocampus follows the current retrieval implementation. Brain and Echo use sep
 
 StreakUp uses the live source repository and public store destinations. Test declaration counts are source counts unless a full test run is explicitly recorded. Revenue, retention, conversion, and user growth are not inferred.
 
-Visible public copy uses no dash punctuation. Technical identifiers are rewritten in readable form where possible.
+Visible public copy uses no dash punctuation. Do not use arrow glyphs, arrow entities, or decorative arrowheads anywhere on the site, including links, diagrams, generated CSS content, and error pages. Technical identifiers are rewritten in readable form where possible.
 
 ## Release workflow
 

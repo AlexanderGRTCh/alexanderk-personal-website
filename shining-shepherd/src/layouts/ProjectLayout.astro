@@ -10,7 +10,7 @@ const demo = data.demoUrl && data.demoUrl !== '/no-demo' ? data.demoUrl : null;
 ---
 <Layout title={`${data.title} | Alexander Kemos`} description={data.description}>
   <article class="case-study">
-    <a href="/projects" class="case-back">← All projects</a>
+    <a href="/projects" class="case-back">All projects</a>
     <header class="case-header">
       {data.status && <p class="case-status">{data.status}</p>}
       <h1>{data.title}</h1>
@@ -28,12 +28,12 @@ const demo = data.demoUrl && data.demoUrl !== '/no-demo' ? data.demoUrl : null;
     <div class="prose case-body"><Content /></div>
     <footer class="case-footer">
       <div class="case-links">
-        {demo && <a href={demo} class="btn-secondary" target="_blank" rel="noopener">Explore the project ↗</a>}
-        {data.clientLinks?.map((link) => <a href={link.url} class="btn-secondary" target="_blank" rel="noopener">{link.label} ↗</a>)}
-        {data.githubUrl && <a href={data.githubUrl} class="btn-secondary" target="_blank" rel="noopener">View code ↗</a>}
+        {demo && <a href={demo} class="btn-secondary" target="_blank" rel="noopener">Explore the project</a>}
+        {data.clientLinks?.map((link) => <a href={link.url} class="btn-secondary" target="_blank" rel="noopener">{link.label}</a>)}
+        {data.githubUrl && <a href={data.githubUrl} class="btn-secondary" target="_blank" rel="noopener">View code</a>}
       </div>
       <p>I build AI systems, apps and practical software through <a href="https://www.ktisisarc.com/">Ktisis Arc</a>.</p>
-      <a class="case-back" href="/#contact">Discuss a project or an engineering role →</a>
+      <a class="case-back" href="/#contact">Discuss a project or an engineering role</a>
     </footer>
   </article>
 </Layout>

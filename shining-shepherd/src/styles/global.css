@@ -85,16 +85,6 @@
   padding: .95rem;
   position: relative;
 }
-.map-track .map-node:not(:last-child)::after {
-  content: "→";
-  color: #aeb8ff;
-  font-size: .95rem;
-  position: absolute;
-  right: -.58rem;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-}
 .map-node strong { color: #fff; display: block; font-size: .92rem; line-height: 1.3; margin-top: .5rem; }
 .map-node p, .agent-entry p { color: var(--map-muted); font-size: .76rem; line-height: 1.5; margin: .4rem 0 0; }
 .map-node small { border-top: 1px solid rgba(82, 100, 127, .65); color: #91a2bb; display: block; font-size: .64rem; line-height: 1.4; margin-top: .8rem; padding-top: .65rem; }
@@ -131,24 +121,12 @@
 .memory-stores span { color: #8fa0ba; display: block; font-size: .66rem; text-transform: uppercase; letter-spacing: .1em; }
 .memory-stores strong { color: var(--map-accent); display: block; font-size: .78rem; margin-top: .25rem; }
 .product-flow { display: grid; gap: .7rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.product-flow .map-node:not(:last-child)::after {
-  color: #aeb8ff;
-  content: "→";
-  font-size: .95rem;
-  position: absolute;
-  right: -.58rem;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-}
 .product-services { border-top: 1px solid var(--map-line); display: grid; gap: .5rem 1rem; grid-template-columns: 1fr 1fr; margin-top: 1rem; padding-top: 1rem; }
 .product-services span { color: #aab8cc; font-size: .7rem; }
 .product-services strong { color: #fff; }
 @media(max-width: 520px) {
   .case-header { margin-top: 1.5rem; }
   .map-track-five, .agent-planes, .memory-retrievers, .product-flow { grid-template-columns: 1fr; }
-  .map-track .map-node:not(:last-child)::after { bottom: -.8rem; left: 50%; right: auto; top: auto; transform: translateX(-50%) rotate(90deg); }
-  .product-flow .map-node:not(:last-child)::after { bottom: -.8rem; left: 50%; right: auto; top: auto; transform: translateX(-50%) rotate(90deg); }
   .map-spine, .memory-ranking { grid-template-columns: 1fr 1fr; }
   .case-metrics, .engineering-grid, .product-services { grid-template-columns: 1fr 1fr; }
   .case-body table { display: block; overflow-x: auto; }
