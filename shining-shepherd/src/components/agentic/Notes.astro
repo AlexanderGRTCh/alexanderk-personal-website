@@ -1,0 +1,9 @@
+---
+// Visible "for builders" depth layer beside a diagram. Styles: src/styles/agentic-system.css
+interface Props { label?: string }
+const { label = 'For builders' } = Astro.props;
+---
+<aside class="ags-notes">
+  <p class="ags-notes-label">{label}</p>
+  <div class="ags-notes-body"><slot /></div>
+</aside>

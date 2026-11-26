@@ -1,59 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-labelledby="title desc">
-  <title id="title">Agentic System architecture</title>
-  <desc id="desc">Claude and Codex operate through shared protocol, memory, tools, review, and recovery.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Agentic System: the model changes, the workspace stays</title>
+  <desc id="desc">Claude, Codex, Qwen and reviewers connected to one shared workspace of rules, memory and tools. Alexander approves what ships.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0b1729"/><stop offset="1" stop-color="#17264d"/></linearGradient>
-    <radialGradient id="core"><stop stop-color="#285c5a"/><stop offset="1" stop-color="#163440"/></radialGradient>
-    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M42 0H0V42" fill="none" stroke="#8090b0" stroke-opacity=".08"/></pattern>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0c1628"/><stop offset="1" stop-color="#18264b"/></linearGradient>
+    <radialGradient id="glow" cx=".78" cy=".5" r=".45"><stop stop-color="#6366f1" stop-opacity=".32"/><stop offset="1" stop-color="#6366f1" stop-opacity="0"/></radialGradient>
+    <linearGradient id="core" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2a6a64"/><stop offset="1" stop-color="#173844"/></linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#8090b0" stroke-opacity=".07"/></pattern>
   </defs>
-  <rect width="1200" height="640" rx="22" fill="url(#bg)"/>
-  <rect width="1200" height="640" rx="22" fill="url(#grid)"/>
+  <rect width="1200" height="520" fill="#101d32"/>
+  <rect width="1200" height="520" fill="url(#bg)"/>
+  <rect width="1200" height="520" fill="url(#grid)"/>
+  <rect width="1200" height="520" fill="url(#glow)"/>
+
   <g font-family="Segoe UI,Arial,sans-serif">
-    <text x="64" y="70" font-size="17" font-weight="700" letter-spacing="3" fill="#9ca9ff">ORCHESTRATION · MEMORY · EVALUATION</text>
-    <text x="62" y="151" font-size="72" font-weight="650" letter-spacing="-2" fill="#fff">Agentic System</text>
-    <text x="64" y="194" font-size="23" fill="#c7d3e5">A provider neutral operating layer for AI work</text>
-
-    <g transform="translate(64 270)">
-      <rect width="214" height="128" rx="14" fill="#172a47" stroke="#536987"/>
-      <text x="20" y="33" font-size="13" font-weight="700" fill="#9ca9ff">PROVIDER 01</text>
-      <text x="20" y="76" font-size="29" font-weight="650" fill="#fff">Claude</text>
-      <text x="20" y="105" font-size="15" fill="#aebcd0">First party CLI</text>
-    </g>
-    <g transform="translate(64 420)">
-      <rect width="214" height="128" rx="14" fill="#172a47" stroke="#536987"/>
-      <text x="20" y="33" font-size="13" font-weight="700" fill="#9ca9ff">PROVIDER 02</text>
-      <text x="20" y="76" font-size="29" font-weight="650" fill="#fff">Codex</text>
-      <text x="20" y="105" font-size="15" fill="#aebcd0">First party CLI</text>
+    <text x="64" y="104" font-size="22" font-weight="700" letter-spacing="5" fill="#a5b0ff">AGENTIC SYSTEM</text>
+    <text x="62" y="200" font-size="58" font-weight="650" letter-spacing="-1.5" fill="#ffffff">The model changes.</text>
+    <text x="62" y="272" font-size="58" font-weight="650" letter-spacing="-1.5" fill="#8ff0cc">The workspace stays.</text>
+    <text x="64" y="334" font-size="26" fill="#c7d3e5">Rules, memory and tools, so whichever</text>
+    <text x="64" y="368" font-size="26" fill="#c7d3e5">model leads can pick up where I left off.</text>
+    <g transform="translate(64 400)">
+      <rect width="400" height="64" rx="32" fill="#ffffff" fill-opacity=".08" stroke="#8ff0cc" stroke-opacity=".6" stroke-width="2"/>
+      <circle cx="34" cy="32" r="9" fill="#8ff0cc"/>
+      <text x="58" y="43" font-size="31" font-weight="650" fill="#e6fff6">I approve what ships</text>
     </g>
 
-    <g transform="translate(398 260)">
-      <rect width="382" height="298" rx="22" fill="url(#core)" stroke="#6da99f" stroke-width="2"/>
-      <text x="191" y="39" text-anchor="middle" font-size="13" font-weight="700" letter-spacing="2" fill="#86e8c4">SHARED OPERATING CORE</text>
-      <text x="191" y="80" text-anchor="middle" font-size="28" font-weight="650" fill="#fff">One protocol</text>
-      <g fill="#142941" stroke="#56718a">
-        <rect x="28" y="112" width="150" height="58" rx="9"/><rect x="204" y="112" width="150" height="58" rx="9"/>
-        <rect x="28" y="190" width="150" height="58" rx="9"/><rect x="204" y="190" width="150" height="58" rx="9"/>
-      </g>
-      <g fill="#fff" font-size="17" font-weight="600" text-anchor="middle">
-        <text x="103" y="148">Rules + maps</text><text x="279" y="148">Hybrid memory</text>
-        <text x="103" y="226">MCP + scripts</text><text x="279" y="226">Run ledger</text>
-      </g>
-      <text x="191" y="277" text-anchor="middle" font-size="15" fill="#9fe7cf">Persistent context and recovery</text>
+    <circle cx="922" cy="262" r="196" fill="none" stroke="#8ea0c4" stroke-opacity=".16" stroke-width="2"/>
+    <circle cx="922" cy="262" r="128" fill="none" stroke="#8ea0c4" stroke-opacity=".12" stroke-width="2"/>
+    <g stroke="#7f93b8" stroke-opacity=".55" stroke-width="2.5">
+      <line x1="775" y1="118" x2="922" y2="262"/>
+      <line x1="1068" y1="118" x2="922" y2="262"/>
+      <line x1="775" y1="406" x2="922" y2="262"/>
+      <line x1="1068" y1="406" x2="922" y2="262"/>
     </g>
 
-    <g transform="translate(900 270)">
-      <rect width="236" height="278" rx="18" fill="#13243e" stroke="#536987"/>
-      <text x="22" y="36" font-size="13" font-weight="700" fill="#9ca9ff">ASSURANCE</text>
-      <text x="22" y="79" font-size="25" font-weight="650" fill="#fff">Cross provider</text>
-      <text x="22" y="110" font-size="25" font-weight="650" fill="#fff">review</text>
-      <path d="M22 139H214" stroke="#536987"/>
-      <text x="22" y="173" font-size="16" fill="#b9c7d9">Structured findings</text>
-      <text x="22" y="204" font-size="16" fill="#b9c7d9">Clustering and votes</text>
-      <text x="22" y="235" font-size="16" fill="#b9c7d9">Bounded rounds</text>
-      <text x="22" y="260" font-size="14" fill="#86e8c4">Human decision</text>
-    </g>
+    <rect x="812" y="200" width="220" height="124" rx="22" fill="url(#core)" stroke="#78c4b4" stroke-width="2"/>
+    <text x="922" y="252" text-anchor="middle" font-size="30" font-weight="650" fill="#ffffff">Shared</text>
+    <text x="922" y="290" text-anchor="middle" font-size="30" font-weight="650" fill="#ffffff">workspace</text>
 
-    <path d="M278 334H390M278 484H390M780 409H892" stroke="#9ca9ff" stroke-width="3"/>
-    <path d="M382 328l9 6-9 6M382 478l9 6-9 6M884 403l9 6-9 6" fill="none" stroke="#9ca9ff" stroke-width="3"/>
+    <g font-size="32" font-weight="650" text-anchor="middle">
+      <rect x="690" y="86" width="170" height="64" rx="32" fill="#16294a" stroke="#8b97ff" stroke-width="2"/>
+      <text x="775" y="129" fill="#ffffff">Claude</text>
+      <rect x="983" y="86" width="170" height="64" rx="32" fill="#16294a" stroke="#8b97ff" stroke-width="2"/>
+      <text x="1068" y="129" fill="#ffffff">Codex</text>
+      <rect x="690" y="374" width="170" height="64" rx="32" fill="#16294a" stroke="#78c4b4" stroke-width="2"/>
+      <text x="775" y="417" fill="#ffffff">Qwen</text>
+      <rect x="967" y="374" width="202" height="64" rx="32" fill="#16294a" stroke="#78c4b4" stroke-width="2"/>
+      <text x="1068" y="417" fill="#ffffff">Reviewers</text>
+    </g>
   </g>
 </svg>

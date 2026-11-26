@@ -1,0 +1,39 @@
+---
+// Agentic System, section 03: the bounded two provider review loop. Styles: src/styles/agentic-system.css
+const steps = [
+  { t: 'Both review', d: 'Claude and Codex critique the same work separately' },
+  { t: 'Common format', d: 'Findings filed the same way' },
+  { t: 'Group', d: 'Overlapping concerns merged' },
+  { t: 'Stop when dry', d: 'A bounded round that adds nothing material ends it' },
+];
+const runs = [
+  { cost: '$0.62', rounds: 3 },
+  { cost: '$0.17', rounds: 2 },
+];
+---
+<figure class="ags-review" aria-labelledby="ags-review-cap">
+  <figcaption id="ags-review-cap" class="ags-fig-cap">
+    <span class="ags-fig-kicker">For a harder look at a design</span>
+    <strong>Two providers, one findings format, a round limit</strong>
+  </figcaption>
+  <ol class="ags-loop">
+    {steps.map((s, i) => (
+      <li><span class="ags-loop-n" aria-hidden="true">{i + 1}</span><strong>{s.t}</strong><span>{s.d}</span></li>
+    ))}
+  </ol>
+  <div class="ags-runs">
+    <p class="ags-runs-head">Two recorded runs</p>
+    <ul>
+      {runs.map((r) => (
+        <li>
+          <strong>{r.cost}</strong>
+          <span class="ags-rounds" role="img" aria-label={`${r.rounds} rounds`}>
+            {Array.from({ length: r.rounds }, () => <i></i>)}
+          </span>
+          <span>{r.rounds} rounds</span>
+        </li>
+      ))}
+    </ul>
+    <p class="ags-caveat">What these show: the cost of these two runs. What they do not show: that two providers beat one strong model on the same budget.</p>
+  </div>
+</figure>

@@ -1,0 +1,20 @@
+---
+// Opening contrast: what a chat loses versus what the workspace keeps. Styles: src/styles/agentic-system.css
+const lost = ['The reasoning', 'The decisions', 'The half finished task'];
+const kept = ['Shared rules', 'Memory of past sessions', 'Tools and project maps'];
+---
+<figure class="ags-premise" aria-labelledby="ags-premise-cap">
+  <figcaption id="ags-premise-cap" class="ags-sr">What a closed chat loses and what the shared workspace keeps.</figcaption>
+  <div class="ags-pcol ags-pcol-lost">
+    <p class="ags-pcol-head">A chat window</p>
+    <p class="ags-pcol-sub">Closes, and takes with it</p>
+    <ul>{lost.map((item) => <li>{item}</li>)}</ul>
+  </div>
+  <div class="ags-parrow" aria-hidden="true"><span>instead</span></div>
+  <div class="ags-pcol ags-pcol-kept">
+    <p class="ags-pcol-head">This workspace</p>
+    <p class="ags-pcol-sub">Stays open between sessions and models</p>
+    <ul>{kept.map((item) => <li>{item}</li>)}</ul>
+    <p class="ags-pcol-foot">I return, say where I left off, and the agent finds what it needs.</p>
+  </div>
+</figure>

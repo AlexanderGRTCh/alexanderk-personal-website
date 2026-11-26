@@ -1,0 +1,28 @@
+---
+// Agentic System, section 05: where agent work stops and my decision starts. Styles: src/styles/agentic-system.css
+const agentSteps = ['Search', 'Compare', 'Test', 'Propose'];
+---
+<figure class="ags-gate" aria-labelledby="ags-gate-cap">
+  <figcaption id="ags-gate-cap" class="ags-fig-cap">
+    <span class="ags-fig-kicker">The release path</span>
+    <strong>Agents prepare. A person decides. One release, one allowance.</strong>
+  </figcaption>
+  <ol class="ags-gate-flow">
+    <li class="ags-gate-zone ags-gate-agents">
+      <span class="ags-zone-label">Agents</span>
+      <ul class="ags-gate-steps">{agentSteps.map((s) => <li>{s}</li>)}</ul>
+      <span class="ags-zone-note">Reviewers record the evidence behind each finding.</span>
+    </li>
+    <li class="ags-gate-zone ags-gate-me">
+      <span class="ags-zone-label">Me</span>
+      <strong>Accept or reject</strong>
+      <span class="ags-zone-note">I choose which changes go in and authorize a release.</span>
+    </li>
+    <li class="ags-gate-zone ags-gate-ship">
+      <span class="ags-zone-label">Release</span>
+      <strong>Short lived, single use allowance</strong>
+      <span class="ags-zone-note">Covers one exact command and is used up on its first run.</span>
+    </li>
+  </ol>
+  <p class="ags-fig-foot">Enforced in my Codex launcher: a hook checks recognized release commands before they run.</p>
+</figure>

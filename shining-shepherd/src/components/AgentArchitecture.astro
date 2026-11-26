@@ -1,41 +1,63 @@
-<figure class="system-map system-map-agents" aria-labelledby="agent-map-title">
-  <figcaption id="agent-map-title">
-    <span class="map-kicker">System architecture</span>
-    <strong>One operating system for two AI providers</strong>
-    <span>The model can change while rules, memory, tools, review, and recovery remain shared.</span>
+---
+// Agentic System, section 03: who does what, drawn as tiers. Markup only.
+// Styles live in src/styles/agentic-system.css, loaded by src/pages/projects/agentic-system.astro.
+// Each role keeps its own scope label; do not collapse them into a generic "limit".
+const leads = [
+  { name: 'Claude', does: 'Leads a session with the shared rules, memory and tools.', tag: 'In review', scope: 'Critiques the work independently of Codex.' },
+  { name: 'Codex', does: 'Leads sessions under the same rules. Can hand Qwen a scoped code question or edit.', tag: 'Before accepting', scope: 'Checks the diff and runs validation on any edit.' },
+];
+const specialists = [
+  { name: 'Qwen', role: 'Supervised coding worker', does: 'Answers a specific code question or prepares an edit. I also use it directly in its desktop app.', tag: 'Bounds', scope: 'Limits on time, turns and tool calls.' },
+  { name: 'Profiles', role: 'Specialists by instruction', does: 'A mobile game design specialist; a comprehension reviewer who reads as a first time listener.', tag: 'Returns', scope: 'Each defines its evidence and what it returns.' },
+  { name: 'Whisper', role: 'Local transcription', does: 'Telegram voice messages, transcribed on my GPU with faster Whisper large v3.', tag: 'Output', scope: 'The transcript becomes the instruction.' },
+];
+const shared = ['One rule set', 'Project maps', 'Memory and transcript search', '12 MCP tools', 'Decision log'];
+---
+<figure class="ags-team" aria-labelledby="ags-team-cap">
+  <figcaption id="ags-team-cap" class="ags-fig-cap">
+    <span class="ags-fig-kicker">Who does what</span>
+    <strong>Three tiers, each role with a defined scope</strong>
   </figcaption>
 
-  <div class="agent-entry">
-    <span>Task</span>
-    <strong>Boot loads the smallest useful context</strong>
-    <p>A root map routes the agent to project rules, memory, and specialist instructions only when needed.</p>
+  <div class="ags-tier ags-tier-human">
+    <span class="ags-tier-tag">Decides</span>
+    <div class="ags-person">
+      <span class="ags-mark" aria-hidden="true">A</span>
+      <div>
+        <strong>Alexander</strong>
+        <span>Reads the evidence, accepts or rejects changes, authorizes releases.</span>
+      </div>
+    </div>
   </div>
 
-  <div class="agent-planes" role="list">
-    <section class="map-node" role="listitem">
-      <span class="map-index">CONTEXT</span>
-      <strong>Shared protocol</strong>
-      <p>Rules, project maps, procedural memory, decisions, and searchable transcripts.</p>
-      <small>Markdown · SQLite · FTS5 · sqlite vec</small>
-    </section>
-    <section class="map-node map-node-model" role="listitem">
-      <span class="map-index">EXECUTION</span>
-      <strong>Claude or Codex</strong>
-      <p>Provider adapters expose the same tools and allow specialist agents to work in bounded scopes.</p>
-      <small>Python · MCP · local scripts</small>
-    </section>
-    <section class="map-node" role="listitem">
-      <span class="map-index">ASSURANCE</span>
-      <strong>Adversarial review</strong>
-      <p>Providers critique the same artifact, cluster findings, vote, and record accepted decisions.</p>
-      <small>Schemas · bounded rounds · decision log</small>
-    </section>
+  <div class="ags-tier ags-tier-leads">
+    <span class="ags-tier-tag">Lead sessions</span>
+    <ul class="ags-leads">
+      {leads.map((l) => (
+        <li class="ags-lead">
+          <strong>{l.name}</strong>
+          <span class="ags-does">{l.does}</span>
+          <span class="ags-limit"><b>{l.tag}</b>{l.scope}</span>
+        </li>
+      ))}
+    </ul>
+    <div class="ags-shared">
+      <span class="ags-shared-label">Shared by both leads</span>
+      <ul>{shared.map((s) => <li>{s}</li>)}</ul>
+    </div>
   </div>
 
-  <div class="map-spine">
-    <span>Persistent run ledger</span>
-    <span>Duplicate work guard</span>
-    <span>Cost circuit breaker</span>
-    <span>Heartbeats and recovery</span>
+  <div class="ags-tier ags-tier-spec">
+    <span class="ags-tier-tag">Scoped tasks</span>
+    <ul class="ags-specialists">
+      {specialists.map((s) => (
+        <li class="ags-spec">
+          <strong>{s.name}</strong>
+          <span class="ags-spec-role">{s.role}</span>
+          <span class="ags-does">{s.does}</span>
+          <span class="ags-limit"><b>{s.tag}</b>{s.scope}</span>
+        </li>
+      ))}
+    </ul>
   </div>
 </figure>

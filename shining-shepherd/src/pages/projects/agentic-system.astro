@@ -1,0 +1,112 @@
+---
+// Dedicated page for the Agentic System case study.
+// This case study owns its route and loads the styles for its MDX components.
+import { getEntryBySlug } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/agentic-system.css';
+
+const project = await getEntryBySlug('projects', 'agentic-system');
+if (!project) {
+  throw new Response('Not found', { status: 404 });
+}
+const { Content } = await project.render();
+const data = project.data;
+const firstCovered = data.firstCoveredAt ?? data.publishedAt;
+const dateLabel = (value: string) => new Intl.DateTimeFormat('en-CA', {
+  month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC',
+}).format(new Date(`${value}T12:00:00Z`));
+
+const chapters = [
+  { id: 'memory', n: '01', title: 'Memory', line: 'Transcripts and decisions' },
+  { id: 'rules', n: '02', title: 'Rules', line: 'Fetched by subject, not all at once' },
+  { id: 'team', n: '03', title: 'Team', line: 'Two leads, scoped specialists' },
+  { id: 'context', n: '04', title: 'Context', line: 'Smaller start, measured lookups' },
+  { id: 'decision', n: '05', title: 'Decision', line: 'Agents propose, I approve' },
+];
+---
+<Layout title={`${data.title} | Alexander Kemos`} description={data.description}>
+  <article class="ags">
+    <a href="/projects" class="ags-back">All projects</a>
+
+    <header class="ags-hero">
+      {data.status && <p class="ags-status"><span class="ags-live" aria-hidden="true"></span>{data.status}</p>}
+      <h1>{data.title}</h1>
+      <p class="ags-deck">{data.description}</p>
+      <div class="ags-meta">
+        {firstCovered && <span>First covered <time datetime={firstCovered}>{dateLabel(firstCovered)}</time></span>}
+        {data.updatedAt && data.updatedAt !== firstCovered && <span>Updated <time datetime={data.updatedAt}>{dateLabel(data.updatedAt)}</time></span>}
+        {data.readTime && <span>{data.readTime}</span>}
+      </div>
+      {data.role && <p class="ags-role"><strong>My role</strong> {data.role}</p>}
+    </header>
+
+    <figure class="ags-stage">
+      <div class="ags-stage-copy">
+        <p class="ags-stage-kicker">The idea in one picture</p>
+        <p class="ags-stage-line">The model changes.<br /><span>The workspace stays.</span></p>
+        <p class="ags-stage-sub">Whichever model leads reads the same rules, memory and tools, so it can pick up my work where I left off.</p>
+      </div>
+      <div
+        class="ags-model"
+        role="img"
+        aria-label="Claude or Codex can take the lead slot. Both work on one shared workspace of rules, memory, tools and a decision log. Qwen, reviewer profiles and Whisper take scoped tasks. Alexander approves what ships."
+      >
+        <div class="ags-model-tier">
+          <span class="ags-tier-label">Lead slot, swappable</span>
+          <div class="ags-chips">
+            <span class="ags-chip ags-chip-lead">Claude</span>
+            <span class="ags-swap" aria-hidden="true">or</span>
+            <span class="ags-chip ags-chip-lead">Codex</span>
+          </div>
+        </div>
+        <div class="ags-core">
+          <span class="ags-core-title">Shared workspace</span>
+          <span class="ags-core-layers">
+            <span>Rules</span><span>Memory</span><span>Tools</span><span>Decision log</span>
+          </span>
+        </div>
+        <div class="ags-model-tier">
+          <span class="ags-tier-label">Scoped specialists</span>
+          <div class="ags-chips">
+            <span class="ags-chip">Qwen</span>
+            <span class="ags-chip">Reviewer profiles</span>
+            <span class="ags-chip">Whisper</span>
+          </div>
+        </div>
+        <div class="ags-model-gate"><span class="ags-gate-dot"></span>I approve what ships</div>
+      </div>
+      <figcaption class="ags-sr">An overview diagram of the Agentic System.</figcaption>
+    </figure>
+
+    <nav class="ags-map" aria-label="Sections of this case study">
+      <p class="ags-map-head">Explore the system</p>
+      <ol>
+        {chapters.map((c) => (
+          <li>
+            <a href={`#${c.id}`}>
+              <span class="ags-map-n">{c.n}</span>
+              <strong>{c.title}</strong>
+              <span class="ags-map-line">{c.line}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <div class="ags-body">
+      <Content />
+    </div>
+
+    <footer class="ags-end">
+      <div class="ags-end-inner">
+        <p class="ags-end-kicker">Go deeper</p>
+        <p class="ags-end-line">The memory engine behind section 01 has its own case study.</p>
+        <div class="ags-end-links">
+          <a class="ags-btn ags-btn-primary" href="/projects/hippocampus">Read the Hippocampus case study</a>
+          <a class="ags-btn" href="/#contact">Discuss a project or an engineering role</a>
+        </div>
+        <a href="/projects" class="ags-back">All projects</a>
+      </div>
+    </footer>
+  </article>
+</Layout>

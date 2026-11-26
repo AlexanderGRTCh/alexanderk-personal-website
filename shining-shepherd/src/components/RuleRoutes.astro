@@ -1,0 +1,80 @@
+---
+// Agentic System, section 02: how instructions reach a session. Markup only.
+// Styles live in src/styles/agentic-system.css, loaded by src/pages/projects/agentic-system.astro.
+const routes = [
+  {
+    subject: 'Web motion',
+    ask: '“Check this animation.”',
+    guide: 'Motion guide',
+    method: 'Step through the animation at repeatable times.',
+    evidence: 'Captured frames showing when each element appears and how it moves.',
+    narrows: 'Scene uses WebGL? The web design guide adds rendering guidance.',
+  },
+  {
+    subject: 'Mobile app',
+    ask: '“Verify this screen.”',
+    guide: 'Flutter guide',
+    method: 'Separate a screen with an approved reference from a new one.',
+    evidence: 'An image diff of what changed, or a list of visible defects with reasons.',
+  },
+  {
+    subject: 'Story',
+    ask: '“Would a new listener follow this?”',
+    guide: 'Comprehension reviewer',
+    method: 'Trace people, events and motives in the order a listener hears them.',
+    evidence: 'The passage where a listener would first have to guess why something happened.',
+    narrows: 'Need fidelity too? A second profile checks the retelling kept the source meaning.',
+  },
+];
+---
+<figure class="ags-rules" aria-labelledby="ags-rules-cap">
+  <figcaption id="ags-rules-cap" class="ags-fig-cap">
+    <span class="ags-fig-kicker">How instructions arrive</span>
+    <strong>A thin layer is always on. The rest is fetched by subject.</strong>
+  </figcaption>
+
+  <div class="ags-supply">
+    <div class="ags-supply-col ags-supply-auto">
+      <p class="ags-supply-head"><span class="ags-pill ags-pill-indigo">Always on</span>Loaded by hooks</p>
+      <ul>
+        <li><b>At startup</b>Current safety and communication rules</li>
+        <li><b>With every request</b>A short reminder of the key rules</li>
+      </ul>
+    </div>
+    <div class="ags-supply-col ags-supply-fetch">
+      <p class="ags-supply-head"><span class="ags-pill ags-pill-mint">On demand</span>Fetched when the subject needs it</p>
+      <ul>
+        <li><b>Project map</b>Points to this project’s files and guides</li>
+        <li><b>Procedure search</b>The agent describes the task and searches stored procedures</li>
+        <li><b>Named workflow</b>Points straight to its own guide</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="ags-matrix-title">Same verb, three different jobs</p>
+  <div class="ags-matrix" role="table" aria-label="Three review requests, the guide each one opens, and the evidence it returns">
+    <div class="ags-mrow ags-mhead" role="row">
+      <span role="columnheader">Request</span>
+      <span role="columnheader">Opens</span>
+      <span role="columnheader">Brings back</span>
+    </div>
+    {routes.map((r) => (
+      <div class="ags-mrow" role="row">
+        <div class="ags-mcell ags-mask" role="cell">
+          <span class="ags-msubject">{r.subject}</span>
+          <strong>{r.ask}</strong>
+        </div>
+        <div class="ags-mcell ags-mguide" role="cell">
+          <span class="ags-mlabel">Opens</span>
+          <strong>{r.guide}</strong>
+          <span>{r.method}</span>
+        </div>
+        <div class="ags-mcell ags-mevidence" role="cell">
+          <span class="ags-mlabel">Brings back</span>
+          <span class="ags-mbody">{r.evidence}</span>
+          {r.narrows && <span class="ags-mnarrow">{r.narrows}</span>}
+        </div>
+      </div>
+    ))}
+  </div>
+</figure>

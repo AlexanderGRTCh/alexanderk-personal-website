@@ -4,7 +4,7 @@ import ProjectLayout from '../../layouts/ProjectLayout.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
-  return projects.filter((project) => !/^project[1-4]$/.test(project.slug)).map((project) => ({
+  return projects.filter((project) => project.slug !== 'agentic-system' && !/^project[1-4]$/.test(project.slug)).map((project) => ({
     params: { slug: project.slug },
   }));
 }

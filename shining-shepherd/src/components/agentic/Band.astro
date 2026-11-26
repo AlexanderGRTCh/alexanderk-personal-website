@@ -1,0 +1,13 @@
+---
+// Full-bleed chapter band for the Agentic System page. Styles: src/styles/agentic-system.css
+interface Props { id: string; n: string; kicker: string; title: string; lede?: string; tone?: string }
+const { id, n, kicker, title, lede, tone = 'plain' } = Astro.props;
+---
+<section id={id} class={`ags-band ags-tone-${tone}`} aria-labelledby={`${id}-title`}>
+  <header class="ags-band-head">
+    <p class="ags-eyebrow"><span class="ags-num">{n}</span>{kicker}</p>
+    <h2 id={`${id}-title`}>{title}</h2>
+    {lede && <p class="ags-lede">{lede}</p>}
+  </header>
+  <slot />
+</section>

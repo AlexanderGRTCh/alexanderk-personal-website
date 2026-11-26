@@ -1,0 +1,56 @@
+---
+// Agentic System, section 01: how a recall query travels. Markup only.
+// Styles live in src/styles/agentic-system.css, loaded by src/pages/projects/agentic-system.astro.
+---
+<figure class="ags-recall" aria-labelledby="ags-recall-cap">
+  <figcaption id="ags-recall-cap" class="ags-fig-cap">
+    <span class="ags-fig-kicker">How a lookup travels</span>
+    <strong>One question, two kinds of search, one short answer list</strong>
+  </figcaption>
+
+  <div class="ags-recall-grid">
+    <div class="ags-recall-query">
+      <span class="ags-step-label">Example question</span>
+      <strong>“What did we decide about this?”</strong>
+    </div>
+
+    <ol class="ags-recall-lanes">
+      <li class="ags-lane ags-lane-exact">
+        <span class="ags-step-label">Exact keywords</span>
+        <strong>Finds the literal term</strong>
+        <span>Such as a domain name, spelled exactly</span>
+      </li>
+      <li class="ags-lane ags-lane-meaning">
+        <span class="ags-step-label">Meaning</span>
+        <strong>Finds the same idea in other words</strong>
+        <span>A decision I describe differently today</span>
+      </li>
+    </ol>
+
+    <div class="ags-recall-merge">
+      <span class="ags-step-label">Merge and trim</span>
+      <strong>Ranked together</strong>
+      <span>Near duplicates removed so new information is not crowded out</span>
+    </div>
+
+    <div class="ags-recall-out">
+      <span class="ags-step-label">Result</span>
+      <strong>A short list the agent can act on</strong>
+      <span class="ags-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    </div>
+  </div>
+
+  <div class="ags-stores">
+    <div class="ags-store ags-store-echo">
+      <span class="ags-store-name">Echo</span>
+      <span class="ags-store-what">Original session transcripts, kept as they were said</span>
+      <span class="ags-store-num"><strong>200,796</strong> searchable transcript chunks</span>
+    </div>
+    <div class="ags-store ags-store-hippo">
+      <span class="ags-store-name">Hippocampus</span>
+      <span class="ags-store-what">Curated rules, facts, decisions and procedures</span>
+      <span class="ags-store-num"><strong>25,863</strong> memory rows</span>
+    </div>
+  </div>
+  <p class="ags-fig-foot">Counts from the September 14, 2026 inspection. They show scale, not accuracy.</p>
+</figure>

@@ -1,137 +1,107 @@
 ---
 title: "Agentic System"
-description: "A Windows native orchestration platform where Claude and Codex share rules, hybrid memory, MCP tools, persistent run state, and adversarial review."
+description: "A shared workspace of rules, memory and tools for Claude, Codex, Qwen and specialist reviewers, so whichever model leads can pick up my work where I left off."
 thumbnail: "/assets/agentic-system-cover.svg"
-thumbnailAlt: "Agentic System architecture showing shared context, two model providers, tools, review, and operational recovery."
+thumbnailAlt: "The model changes, the workspace stays: Claude, Codex, Qwen and reviewers connected to one shared workspace, with Alexander approving what ships."
 tags: ["AI Agents", "Python", "MCP"]
 featured: true
 order: 2
-publishedAt: "2026-09-14"
-updatedAt: "2026-09-14"
-readTime: "5 minute technical case study"
+publishedAt: "2026-02-25"
+updatedAt: "2026-11-25"
+readTime: "5 minute read"
 status: "In daily use"
-role: "System architecture, implementation, integration, and daily operation."
+role: "Design, implementation and daily operation of the whole system."
 ---
 
+{/* Rendered by src/pages/projects/agentic-system.astro, which loads src/styles/agentic-system.css. */}
+
+import Band from '../../components/agentic/Band.astro';
+import Notes from '../../components/agentic/Notes.astro';
+import Premise from '../../components/agentic/Premise.astro';
+import CrossReview from '../../components/agentic/CrossReview.astro';
+import DecisionGate from '../../components/agentic/DecisionGate.astro';
+import SessionRecall from '../../components/SessionRecall.astro';
+import RuleRoutes from '../../components/RuleRoutes.astro';
 import AgentArchitecture from '../../components/AgentArchitecture.astro';
+import ContextBudget from '../../components/ContextBudget.astro';
 
-## The system behind the AI work
+<Band id="premise" n="00" kicker="The problem" tone="plain" title="Picking up a project where I left off" lede="While revising this site, I remembered discussing the article but had lost the chat. I asked an agent to find it. A search for the website domain recovered the discussion, and a comparison with the live page showed which edits were still unpublished.">
 
-A model can answer a prompt. A dependable engineering environment must also recover project context, select tools, coordinate specialists, survive interruptions, control cost, and preserve a record that a person can inspect.
+<Premise />
 
-I built this Windows native system to support product development and the daily operation of Ktisis Arc. Claude and Codex run on top of the same provider neutral protocol. The active model can change while the rules, memory, tools, project maps, and review process remain shared.
+<Notes label="Where it runs">
 
-<div class="case-metrics">
-  <div class="case-metric"><strong>25,863</strong><span>memory rows in the September 14 snapshot</span></div>
-  <div class="case-metric"><strong>200,796</strong><span>searchable transcript chunks</span></div>
-  <div class="case-metric"><strong>12</strong><span>named tools exposed through MCP</span></div>
-  <div class="case-metric"><strong>78</strong><span>top level Python utilities in the tool layer</span></div>
-</div>
+It runs on my Windows workstation and carries my daily work on StreakUp, Theophonia, research and this portfolio. Claude and Codex both work inside it under the same rules, memory and tools. The model is the part I can swap. The workspace is the part that remembers.
+
+</Notes>
+
+</Band>
+
+<Band id="memory" n="01" kicker="Memory" tone="archive" title="Finding the source of a decision" lede="Echo lets an agent look up the original conversation. Hippocampus lets it retrieve a rule, decision or procedure in the words of the current task.">
+
+<SessionRecall />
+
+<Notes>
+
+- **Two stores, two jobs.** Echo keeps what was actually said. The curated layer, Hippocampus, keeps what was decided: rules, facts, decisions and procedures.
+- **Hybrid retrieval.** Keyword search and vector search run side by side. Their result lists are fused by rank, then a diversity pass trims near duplicates.
+- **Full mechanics** of ranking and freshness are in the [Hippocampus case study](/projects/hippocampus).
+
+</Notes>
+
+</Band>
+
+<Band id="rules" n="02" kicker="Rules" tone="routes" title="Rules arrive with the subject" lede="“Review this” means different work for an animation, a screen or a story. So only a thin layer of rules is always loaded; the rest is fetched when the subject calls for it.">
+
+<RuleRoutes />
+
+<Notes>
+
+- **Described for a Codex session.** A startup hook loads the current safety and communication rules; every new request carries a short reminder.
+- **Procedures live in my Brain database.** The agent describes the task and retrieves the matching procedure, or follows the project map or a named workflow to its guide.
+- **Retrieval narrows again inside a subject**, as the second lines in the table show.
+
+</Notes>
+
+</Band>
+
+<Band id="team" n="03" kicker="Team" tone="network" title="A team with distinct jobs" lede="No single model does everything. Two session leads share one workspace, specialists get scoped tasks from them, and one person makes the final call.">
 
 <AgentArchitecture />
 
-## How the system evolved
+<CrossReview />
 
-The architecture did not appear in one pass. Each stage solved a problem exposed by actual use.
+<Notes>
 
-<div class="journey-list">
-  <section>
-    <h3>1. Persistent gateway</h3>
-    <p>The first version was a long lived agent gateway running in Docker inside WSL Ubuntu. It established messaging, tools, persistent state, and work that could continue across conversations.</p>
-  </section>
-  <section>
-    <h3>2. Windows native core</h3>
-    <p>I rebuilt the active path around the machine I operate every day. Windows services, Task Scheduler, local storage, GPU access, Telegram, and first party command line agents replaced the old gateway.</p>
-  </section>
-  <section>
-    <h3>3. Compounding memory</h3>
-    <p>Procedural, semantic, and episodic memory gained a separate raw transcript archive. Scheduled extraction, consolidation, and retrieval let the system recover decisions without loading every conversation.</p>
-  </section>
-  <section>
-    <h3>4. One protocol, two providers</h3>
-    <p>I separated the operating brain from the model vendor. Claude and Codex now source the same rule floor and can be selected for a session or a bounded specialist task.</p>
-  </section>
-  <section>
-    <h3>5. Provider diverse review</h3>
-    <p>Structured review lets the providers critique the same artifact, challenge findings, combine related issues, and stop after a bounded round adds nothing material.</p>
-  </section>
-</div>
+- **Swappable leads.** Claude and Codex run through their own first party command line tools on one provider neutral protocol. Provider specific behavior lives in thin adapters, so switching the lead changes the model, not the rules.
+- **Supervised worker.** When Codex hands Qwen an edit, a heartbeat records Qwen’s activity without copying the prompt or source code into the monitoring log.
 
-The original Docker gateway is retired. A separate Linux desktop still runs in Docker as an operator environment. A portable core has a reviewed blueprint, but it is not presented as a running deployment.
+</Notes>
 
-## Follow a real task through the system
+</Band>
 
-A request can begin in a terminal or arrive through Telegram. Voice input is converted and transcribed locally with faster Whisper large v3 on the GPU. The transcript becomes the instruction, so speech does not require a separate manual handoff.
+<Band id="context" n="04" kicker="Context" tone="measure" title="A smaller starting context" lede="Loading fewer instructions leaves more room for the work. I tested whether the smaller project map still led the agent to the right files.">
 
-Boot loads the smallest rule floor that can operate safely. A root map routes the agent to the project index, relevant procedures, skills, and memory only when the task needs them. The agent can then call MCP tools or direct scripts for search, files, browser capture, transcription, monitoring, and maintenance.
+<ContextBudget />
 
-Before parallel work expands, a duplicate guard checks whether equivalent work is already running. A cost circuit breaker applies the configured limit. Specialist agents receive bounded scopes and append structured findings to shared state. The primary agent reviews their output and relevant diffs before an accepted decision enters the durable log.
+<Notes>
 
-Heartbeats make liveness observable. Scheduled monitoring detects stale state and sends escalating Telegram alerts when work appears stuck. The run ledger supports recovery after an interrupted process. These controls contain and expose failure; they do not remove operator responsibility.
+- **Before.** My earlier workspace loaded a large map of every project up front, whether the task touched them or not.
+- **After.** A small root map routes the agent to topic material when the task needs it.
+- **The test.** Size alone was not the goal, so I also checked whether the smaller map still led to the right material.
 
-> **Why this architecture matters.** The model is one replaceable execution component. Context, evidence, tools, and decisions remain part of the system instead of disappearing inside a chat window.
+</Notes>
 
-## Context routing and measured boot reduction
+</Band>
 
-The earlier workspace loaded a large general map before the task was known. That spent context on unrelated projects and made every session pay for information it might never use.
+<Band id="decision" n="05" kicker="Decision" tone="gate" title="Where the decision stays" lede="Agents in this system search, compare, test and propose. They do not decide what ships.">
 
-The replacement uses a small root map with selective topic routes. At the September 7, 2026 implementation snapshot:
+<DecisionGate />
 
-| Measurement | Earlier path | Selective path | Result |
-|---|---:|---:|---|
-| Root map text | 8,316 tokens | 773 tokens | 90.7 percent less |
-| Default boot floor | 13,821 tokens | 2,614 tokens | 81.1 percent less |
-| Cold lookup comparison | 16,633 tokens | 5,470 tokens | Smaller start with routed lookup |
+<Notes label="Why it matters">
 
-Sixteen bounded lookup cases tested whether the smaller map could still find required material. The first candidate resolved fifteen. The missed route was corrected, then all sixteen targeted cases resolved.
+A worker can prepare an edit and its tests without ever holding standing permission to publish.
 
-This is evidence for the tested routes and context size. It is not a universal recall benchmark, a latency benchmark, or proof that the provider bill falls by the same percentage.
+</Notes>
 
-## Memory that stays useful
-
-The [Hippocampus memory layer](/projects/hippocampus) keeps curated rules, facts, decisions, and procedures separate from the Echo transcript archive. A normal memory query combines FTS5 keyword retrieval with exact vector similarity, then fuses and diversifies the rankings.
-
-An hourly watcher processes sessions after an idle window. A daily backstop catches work the normal schedule missed. Watermarks, tail resume behavior, and SQLite write ahead logging let extraction continue after interruption without starting the corpus again.
-
-The September 14 database inspection found 25,863 memory rows and 200,796 transcript chunks. Those counts show operating scale, not retrieval accuracy. Source inspection remains available when the focused result is incomplete.
-
-## Tools, skills, and provider adapters
-
-MCP exposes twelve named capabilities through a stable interface. The local tool directory contains 78 top level Python utilities, and the skill registry contains 60 directories in the same snapshot. The surface covers memory, context, transcription, browser work, monitoring, document delivery, and maintenance.
-
-Provider adapters keep Claude specific and Codex specific behavior outside the shared protocol. Both use their first party command line tools and plan based authentication. This makes provider switching practical and keeps the rule system independent from one API contract.
-
-The wider environment is still hybrid. Models, embeddings, search, and selected services can use the cloud. Local storage, orchestration, GPU transcription, state, and many tools run on the workstation.
-
-## Adversarial review as an engineering subsystem
-
-The review layer is more than asking a second model for an opinion. Each reviewer produces findings in a common schema. The system validates the records, clusters overlapping concerns, records agreement, and allows another bounded round when material disagreement remains.
-
-Two historical operating runs recorded costs of **$0.62 for three rounds** and **$0.17 for two rounds**. They demonstrate that the mechanism ran with a dry stop, minimal seats, and a round cap. They do not prove that two providers always beat one strong model at the same budget.
-
-This system has reviewed its own memory changes and agent team designs. That is useful because the architecture can apply its assurance process to the machinery that defines the process.
-
-## Reliability and operating boundaries
-
-<div class="engineering-grid">
-  <section>
-    <h3>Persistent state</h3>
-    <p>SQLite and appendable run artifacts keep memory, task progress, findings, and decisions available after the model session ends.</p>
-  </section>
-  <section>
-    <h3>Bounded execution</h3>
-    <p>Duplicate checks, cost limits, scoped workers, and round caps constrain expansion before it becomes invisible or expensive.</p>
-  </section>
-  <section>
-    <h3>Observable failure</h3>
-    <p>Heartbeats, scheduled checks, and Telegram alerts expose stalled work and preserve a route for recovery.</p>
-  </section>
-  <section>
-    <h3>Human authority</h3>
-    <p>Agents contribute evidence and proposed changes. I remain responsible for consequential decisions, release approval, and failure resolution.</p>
-  </section>
-</div>
-
-The system is in daily use for StreakUp, Theophonia, this portfolio, research, document production, and operational checks. It demonstrates engineering across orchestration, retrieval, provider abstraction, evaluation, observability, and recovery.
-
-For Ktisis Arc, the same design discipline applies to client work: automate the repeatable parts, preserve the source of a decision, expose failure, and keep control with the business owner.
+</Band>

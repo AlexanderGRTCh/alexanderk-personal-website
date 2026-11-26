@@ -1,0 +1,78 @@
+---
+// Agentic System, section 04: startup tokens and the routing test. Markup only.
+// Styles live in src/styles/agentic-system.css, loaded by src/pages/projects/agentic-system.astro.
+// Benchmark wording is fixed by the owner: earlier map 16/16; smaller route 15/16 on the first
+// pass; 16/16 correct in total after a targeted recheck. Bars are proportional to real counts.
+const pairs = [
+  { label: 'Default startup floor', before: 13821, after: 2614 },
+  { label: 'Root map', before: 8316, after: 773 },
+];
+const max = 13821;
+const fmt = (n: number) => n.toLocaleString('en-US');
+const width = (n: number) => `${((n / max) * 100).toFixed(2)}%`;
+const less = (b: number, a: number) => Math.round((1 - a / b) * 100);
+
+const stages = [
+  { name: 'Earlier full map', score: '16 of 16', state: Array(16).fill('ok'), note: 'Baseline before the change' },
+  { name: 'Smaller route, first pass', score: '15 of 16', state: [...Array(15).fill('ok'), 'miss'], note: 'One case not yet correct' },
+  { name: 'After a targeted recheck', score: '16 of 16', state: [...Array(15).fill('ok'), 'fixed'], note: 'Correct outcomes in total' },
+];
+---
+<figure class="ags-budget" aria-labelledby="ags-budget-cap">
+  <figcaption id="ags-budget-cap" class="ags-fig-cap">
+    <span class="ags-fig-kicker">Measured at the September 7, 2026 snapshot</span>
+    <strong>Read less at startup, then prove the agent still finds things</strong>
+  </figcaption>
+
+  <div class="ags-budget-grid">
+    <div class="ags-tokens">
+      <p class="ags-sub">Tokens read before any work begins</p>
+      {pairs.map((p) => (
+        <div class="ags-pair">
+          <p class="ags-pair-head"><span>{p.label}</span><em>{less(p.before, p.after)}% fewer tokens</em></p>
+          <div class="ags-brow">
+            <span class="ags-who">Earlier</span>
+            <span class="ags-track"><span class="ags-fill ags-fill-old" style={`width:${width(p.before)}`}></span></span>
+            <span class="ags-val">{fmt(p.before)}</span>
+          </div>
+          <div class="ags-brow">
+            <span class="ags-who">Selective</span>
+            <span class="ags-track"><span class="ags-fill ags-fill-new" style={`width:${width(p.after)}`}></span></span>
+            <span class="ags-val ags-val-strong">{fmt(p.after)}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="ags-routing">
+      <p class="ags-sub">Routing test, 16 bounded lookups</p>
+      <ol class="ags-stages">
+        {stages.map((s) => (
+          <li class="ags-stage-row">
+            <div class="ags-stage-top">
+              <span class="ags-stage-name">{s.name}</span>
+              <strong>{s.score}</strong>
+            </div>
+            <span
+              class="ags-dots"
+              role="img"
+              aria-label={`${s.name}: ${s.score} correct. ${s.note}.`}
+            >
+              {s.state.map((d) => <i class={`ags-d ags-d-${d}`}></i>)}
+            </span>
+            <span class="ags-stage-note">{s.note}</span>
+          </li>
+        ))}
+      </ol>
+      <ul class="ags-legend" aria-hidden="true">
+        <li><i class="ags-d ags-d-ok"></i>Correct</li>
+        <li><i class="ags-d ags-d-miss"></i>Not yet correct</li>
+        <li><i class="ags-d ags-d-fixed"></i>Correct after recheck</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="ags-fig-foot ags-scope">
+    <b>Scope.</b> Evidence for these routes at this context size. Not a universal recall benchmark, not a latency measurement, and not a claim that my bill fell by the same percentage.
+  </p>
+</figure>
