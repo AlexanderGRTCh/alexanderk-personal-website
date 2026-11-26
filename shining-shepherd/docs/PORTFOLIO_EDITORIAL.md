@@ -2,7 +2,7 @@
 
 Updated September 14, 2026.
 
-The portfolio presents Alexander as an AI engineer and founder of Ktisis Arc. Flagship project pages are layered technical case studies. A regular reader should understand the problem and value in the opening minute. A technical reader should then be able to inspect the actual architecture, implementation choices, operating behavior, evidence, and limits without opening hidden sections.
+The portfolio presents Alexander as an AI Systems Developer and founder of Ktisis Arc. Flagship project pages are layered technical case studies. A regular reader should understand the problem and value in the opening minute. A technical reader should then be able to inspect the actual architecture, implementation choices, operating behavior, evidence, and limits without opening hidden sections.
 
 ## Flagship case study protocol
 

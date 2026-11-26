@@ -3,6 +3,7 @@ import Layout from './Layout.astro';
 const { project } = Astro.props;
 const { Content } = await project.render();
 const data = project.data;
+const firstCovered = data.firstCoveredAt ?? data.publishedAt;
 const dateLabel = (value: string) => new Intl.DateTimeFormat('en-CA', {
   month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC',
 }).format(new Date(`${value}T12:00:00Z`));
@@ -16,8 +17,8 @@ const demo = data.demoUrl && data.demoUrl !== '/no-demo' ? data.demoUrl : null;
       <h1>{data.title}</h1>
       <p class="case-deck">{data.description}</p>
       <div class="case-dates">
-        {data.publishedAt && <span>Published <time datetime={data.publishedAt}>{dateLabel(data.publishedAt)}</time></span>}
-        {data.updatedAt && data.updatedAt !== data.publishedAt && <span>Updated <time datetime={data.updatedAt}>{dateLabel(data.updatedAt)}</time></span>}
+        {firstCovered && <span>{data.firstCoveredAt || data.updatedAt !== data.publishedAt ? 'First covered' : 'Published'} <time datetime={firstCovered}>{dateLabel(firstCovered)}</time></span>}
+        {data.updatedAt && data.updatedAt !== firstCovered && <span>Updated <time datetime={data.updatedAt}>{dateLabel(data.updatedAt)}</time></span>}
         {data.readTime && <span>{data.readTime}</span>}
       </div>
       {data.role && <p class="case-role"><strong>My role</strong> {data.role}</p>}
